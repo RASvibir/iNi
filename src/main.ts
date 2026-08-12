@@ -1,5 +1,6 @@
 import "./style.css";
 
+const SOLOIST = "https://soloist.ai/uxu";
 const UXU_COMMONS = "https://rasvibir.github.io/uXu/";
 const UXU_REPO = "https://github.com/RASvibir/uXu";
 const INI_REPO = "https://github.com/RASvibir/iNi";
@@ -31,10 +32,12 @@ app.innerHTML = `
         <p class="hero__support reveal">
           A name, a protocol, and a community boundary — defined by how you
           document origin, authorship, lineage, and custody. Not a company
-          label. Not required to use uXu.
+          label. Not required to use uXu. This page is a mirror; primary public
+          notes live on Soloist.
         </p>
         <div class="cta-row reveal">
-          <a class="btn btn--primary" href="#practice">Practice iNi</a>
+          <a class="btn btn--primary" href="${SOLOIST}">Public notes (Soloist)</a>
+          <a class="btn btn--ghost" href="#practice">Practice iNi</a>
           <a class="btn btn--ghost" href="${UXU_COMMONS}">Visit uXu</a>
         </div>
       </div>
@@ -81,14 +84,14 @@ app.innerHTML = `
         <h2 class="section__title" id="practice-title">How to practice iNi</h2>
         <p class="section__lede">
           Joining means adopting the protocol — not earning a badge. You do not
-          need this page to opt in. Prefer the console, or open a pull request
-          in this community repo.
+          need this mirror or Soloist to opt in. Prefer the console, or open a
+          pull request in the community repo.
         </p>
         <ol class="practice-steps">
           <li>
             <div>
               <strong>Open 0?0</strong>
-              <p>Start at the uXu commons, then Quick Nav → iNi Provenance (or type <code>INI</code>).</p>
+              <p>Start at the uXu commons, then Quick Nav → iNi Provenance (or type <code>INI</code>). Optional notes: <a href="${SOLOIST}">soloist.ai/uxu</a> (<code>INI SITE</code>).</p>
             </div>
           </li>
           <li>
@@ -126,6 +129,10 @@ app.innerHTML = `
         <p class="section__eyebrow">Doors</p>
         <h2 class="section__title" id="links-title">Links</h2>
         <div class="links-grid">
+          <a href="${SOLOIST}">
+            <strong>Public notes (Soloist)</strong>
+            <span>Primary community face — practice, FAQ, contact</span>
+          </a>
           <a href="${UXU_COMMONS}">
             <strong>uXu commons</strong>
             <span>Live archive door — opens 0?0</span>
@@ -135,8 +142,8 @@ app.innerHTML = `
             <span>Software, templates, RTFM · MIT</span>
           </a>
           <a href="${INI_REPO}">
-            <strong>iNi community repo</strong>
-            <span>Charter, articles, and this site</span>
+            <strong>Community paper trail</strong>
+            <span>Charter, articles, authorizations via PR</span>
           </a>
         </div>
       </div>
@@ -172,12 +179,20 @@ app.innerHTML = `
             <p>0?0 is the root archive interface inside uXu — the console where you browse the registry, open manuals, and run commands. It’s a tool for navigating the commons, not the name of the community.</p>
           </details>
           <details>
-            <summary>How do I opt in without this website?</summary>
+            <summary>How do I join the provenance community?</summary>
+            <p>Practice the protocol — no Soloist account required. Read <a href="${SOLOIST}">soloist.ai/uxu</a>, opt in on <a href="${UXU_COMMONS}">0?0</a> (Quick Nav → iNi Provenance or type <code>INI</code>), and optionally open a PR under <code>content/articles/</code> in <a href="${INI_REPO}">RASvibir/iNi</a>. Join means honesty about origin and custody, not enrollment.</p>
+          </details>
+          <details>
+            <summary>How do I opt in without a website?</summary>
             <p>Start at <a href="${UXU_COMMONS}">the uXu commons</a>. That opens 0?0. Use Quick Nav → iNi Provenance (or type <code>INI</code>). Document provenance on your archive, then opt in when that documentation is real and maintained. Self-attestation only.</p>
           </details>
           <details>
             <summary>Can I add articles or authorizations from the repo?</summary>
-            <p>Yes. Open a pull request under <code>content/articles/</code> (and follow <code>CONTRIBUTING.md</code>). Console commands on 0?0 remain the primary archive path; this repo is the community paper trail.</p>
+            <p>Yes. Open a pull request under <code>content/articles/</code> (and follow <code>CONTRIBUTING.md</code>). Console commands on 0?0 remain the primary archive path; the repo is the community paper trail.</p>
+          </details>
+          <details>
+            <summary>What is this GitHub Pages site?</summary>
+            <p>An optional mirror of the community copy and a source for a later Web3 door. Primary public notes remain <a href="${SOLOIST}">soloist.ai/uxu</a>.</p>
           </details>
           <details>
             <summary>What is /qtp_[devo]?</summary>
@@ -192,6 +207,7 @@ app.innerHTML = `
         <p class="section__eyebrow">Reach</p>
         <h2 class="section__title" id="contact-title">Contact</h2>
         <p>Questions about iNi practice: <a href="mailto:${CONTACT}">${CONTACT}</a></p>
+        <p>Primary public notes: <a href="${SOLOIST}">soloist.ai/uxu</a></p>
         <p>Software &amp; original docs: MIT. Media stays under its own terms.</p>
       </div>
     </section>
@@ -199,7 +215,7 @@ app.innerHTML = `
 
   <footer class="site-footer">
     <div class="site-footer__inner">
-      <p><a class="brand" href="#top">iNi</a> · practice beside <a href="${UXU_COMMONS}">uXu</a></p>
+      <p><a class="brand" href="#top">iNi</a> · mirror beside <a href="${SOLOIST}">Soloist</a> · practice beside <a href="${UXU_COMMONS}">uXu</a></p>
       <p><a href="${INI_REPO}">GitHub</a> · <a href="${UXU_REPO}">uXu repo</a></p>
     </div>
   </footer>
@@ -223,7 +239,6 @@ if (reduceMotion) {
     { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
   );
   revealEls.forEach((el) => observer.observe(el));
-  // Hero should animate on load
   requestAnimationFrame(() => {
     app.querySelectorAll<HTMLElement>(".hero .reveal").forEach((el) => {
       el.classList.add("is-visible");

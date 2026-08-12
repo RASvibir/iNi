@@ -38,14 +38,18 @@ uXu  (public collection)
 
 | Surface | Role |
 |---------|------|
+| **Public notes (primary)** | https://soloist.ai/uxu — practice, FAQ, contact |
 | **This repo** | Community paper trail — charter, articles, authorizations via PR |
-| **Community site** | https://rasvibir.github.io/iNi/ |
-| **Optional Solo notes** | https://soloist.ai/uxu (may lag this repo) |
+| **Pages mirror** | https://rasvibir.github.io/iNi/ — optional mirror / future Web3 source |
+
+How joining works: [COMMUNITY.md](../COMMUNITY.md).
 
 On 0?0: open Quick Nav **iNi Provenance**, then the panel link, or type
 **`INI SITE`**. Opt-in itself still happens in your archive / on the console —
 you do not need a website to practice iNi. The console stays a protocol tool;
 pages are not membership gates.
+
+**Web3:** parked for later — not required to start the provenance community.
 
 ## The provenance protocol
 
@@ -131,6 +135,8 @@ In your archive `data.json`:
 ## Contact
 
 Questions about iNi practice: **rasip@chloreform.org**
+
+Primary public notes: **https://soloist.ai/uxu**
 
 uXu software & original docs: **MIT**. Provenance fields document honesty;
 they do not rewrite media copyright.

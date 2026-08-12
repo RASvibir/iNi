@@ -5,8 +5,9 @@ iNi is community by **practice**, not membership theater.
 ## Ways to contribute
 
 1. **Archive protocol (preferred for opt-in)** — on [0?0](https://rasvibir.github.io/uXu/), use Quick Nav → iNi Provenance (or type `INI`) and fill `uxu.ini` fields in your archive.
-2. **Community paper trail** — open a PR that adds a Markdown note under `content/articles/`.
-3. **Site / docs** — improve the public site or charter; keep voice honest and non-corporate.
+2. **Community paper trail** — open a PR that adds a Markdown note under `content/articles/` (see acceptance criteria in that folder’s README).
+3. **Docs** — improve [COMMUNITY.md](COMMUNITY.md), the charter, or the Soloist paste pack; keep voice honest and non-corporate.
+4. **Pages mirror** — optional; primary public notes remain [soloist.ai/uxu](https://soloist.ai/uxu).
 
 ## Article PRs
 
