@@ -35,5 +35,5 @@ legal certificate, not membership enrollment.
 
 ## Example
 
-See [2026-08-12-ini-beside-uxu.md](2026-08-12-ini-beside-uxu.md) for a seed
-charter attestation.
+- Seed charter note: [2026-08-12-ini-beside-uxu.md](2026-08-12-ini-beside-uxu.md)
+- First archive attestation: [2026-08-12-cybercat-sunflower-provenance.md](2026-08-12-cybercat-sunflower-provenance.md) (`CyberCat_Sunflower.uXu.0001`)

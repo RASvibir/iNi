@@ -5,9 +5,12 @@
   "description": "iNi community site and provenance paper trail beside the uXu archive commons",
   "type": "module",
   "scripts": {
+    "predev": "node scripts/build-i.mjs",
     "dev": "vite",
+    "prebuild": "node scripts/build-i.mjs",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:i": "node scripts/build-i.mjs"
   },
   "devDependencies": {
     "typescript": "~6.0.2",

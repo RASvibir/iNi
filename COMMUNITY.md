@@ -12,16 +12,26 @@ badge, not joining a company, not passing an enrollment gate.
 Self-attestation only. A registry cue signals honesty — not enforcement and not
 legal chain-of-custody.
 
-## Three doors
+## Doors
 
 | Door | Role |
 |------|------|
 | **[soloist.ai/uxu](https://soloist.ai/uxu)** | Primary public notes — practice, FAQ, contact |
 | **[uXu / 0?0](https://rasvibir.github.io/uXu/)** | Protocol path — Quick Nav → iNi Provenance (or type `INI`) |
 | **This repo** | Community paper trail — charter, articles, authorizations via PR |
+| **[I pages](https://rasvibir.github.io/iNi/#/i)** | Opt-in public faces — display as **I am {name}** |
 
-You do **not** need Soloist or this repo to opt in. The console and your archive
-`data.json` are enough.
+You do **not** need Soloist, an I page, or this repo to opt in. The console and
+your archive `data.json` are enough.
+
+## I pages
+
+Self-attested showcases (websites, archives, work, outreach — whatever you want
+to share). Not membership enrollment.
+
+- Browse: https://rasvibir.github.io/iNi/#/i  
+- Add: PR under `content/i/` (see that folder’s README)  
+- Example: **I am Victor Birkle**
 
 ## Norms
 
@@ -37,10 +47,10 @@ You do **not** need Soloist or this repo to opt in. The console and your archive
 Visitor → soloist.ai/uxu (notes)
        → rasvibir.github.io/uXu (0?0 → INI)
             → archive data.json opt-in
-       → github.com/RASvibir/iNi (optional PR article)
+       → github.com/RASvibir/iNi (articles · I pages via PR)
 ```
 
-Optional public notes and paper-trail PRs explain practice. Neither is a
+Optional public notes, I pages, and paper-trail PRs explain practice. None is a
 membership gate.
 
 ## Contact

@@ -5,9 +5,10 @@ iNi is community by **practice**, not membership theater.
 ## Ways to contribute
 
 1. **Archive protocol (preferred for opt-in)** — on [0?0](https://rasvibir.github.io/uXu/), use Quick Nav → iNi Provenance (or type `INI`) and fill `uxu.ini` fields in your archive.
-2. **Community paper trail** — open a PR that adds a Markdown note under `content/articles/` (see acceptance criteria in that folder’s README).
-3. **Docs** — improve [COMMUNITY.md](COMMUNITY.md), the charter, or the Soloist paste pack; keep voice honest and non-corporate.
-4. **Pages mirror** — optional; primary public notes remain [soloist.ai/uxu](https://soloist.ai/uxu).
+2. **Community paper trail** — open a PR that adds a Markdown note under `content/articles/` (see that folder’s README).
+3. **I page** — open a PR under `content/i/` so you appear as **I am Your Name** (freeform showcase — not enrollment).
+4. **Docs** — improve [COMMUNITY.md](COMMUNITY.md), the charter, or the Soloist paste pack; keep voice honest and non-corporate.
+5. **Pages mirror** — optional; primary public notes remain [soloist.ai/uxu](https://soloist.ai/uxu).
 
 ## Article PRs
 
@@ -17,6 +18,15 @@ iNi is community by **practice**, not membership theater.
 4. Open a pull request describing what you are attesting
 
 Do **not** claim legal chain-of-custody. Do **not** treat a merge as enrollment.
+
+## I page PRs
+
+1. Fork this repo
+2. Copy `content/i/_TEMPLATE.md` → `content/i/{slug}.md`
+3. Set `name`, `slug`, `attested_at` — write whatever you want in the body
+4. Open a pull request
+
+Merged I pages appear at https://rasvibir.github.io/iNi/#/i as **I am {name}**.
 
 ## Voice
 

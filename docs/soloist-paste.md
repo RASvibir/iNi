@@ -41,7 +41,7 @@ Optional third / text link:
 
 ---
 
-## Links section — add “Community paper trail”
+## Links section — add “Community paper trail” + I pages
 
 **Heading:** Community paper trail  
 
@@ -51,6 +51,14 @@ Charter, practice notes, and authorizations live as pull requests in the iNi com
 **Link label:** RASvibir/iNi  
 **URL:** https://github.com/RASvibir/iNi  
 
+**Heading:** I pages  
+
+**Body:**  
+Opt-in public faces for the provenance community. Each reads **I am {name}** — freeform showcase (sites, archives, work, outreach), not a membership badge.
+
+**Button / link label:** `Browse I pages`  
+**URL:** https://rasvibir.github.io/iNi/#/i  
+
 Keep existing links:
 
 - uXu commons — https://rasvibir.github.io/uXu/  
@@ -59,12 +67,17 @@ Keep existing links:
 
 ---
 
-## FAQ — add this question
+## FAQ — add these questions
 
 **Q: How do I join the provenance community?**  
 
 **A:**  
-Practice the protocol — no account required on this site. Read these notes, then open the uXu commons (https://rasvibir.github.io/uXu/) → 0?0 → Quick Nav → iNi Provenance (or type `INI`). Document origin, authorship, lineage, and custody on your archive, set `uxu.ini.optIn: true`, and tag iNi when that documentation is real and maintained. Optionally open a pull request under `content/articles/` at https://github.com/RASvibir/iNi. Join means honesty about origin and custody — not enrollment theater.
+Practice the protocol — no account required on this site. Read these notes, then open the uXu commons (https://rasvibir.github.io/uXu/) → 0?0 → Quick Nav → iNi Provenance (or type `INI`). Document origin, authorship, lineage, and custody on your archive, set `uxu.ini.optIn: true`, and tag iNi when that documentation is real and maintained. Optionally open a pull request under `content/articles/` at https://github.com/RASvibir/iNi, and optionally add an I page (appears as **I am Your Name**). Join means honesty about origin and custody — not enrollment theater.
+
+**Q: How do I get an I page?**  
+
+**A:**  
+Open a pull request in https://github.com/RASvibir/iNi that adds a Markdown file under `content/i/` (copy the template). After merge, you appear at https://rasvibir.github.io/iNi/#/i as **I am Your Name**. Freeform content — websites, archives, games, company, outreach, whatever you want to share. Not membership enrollment.
 
 Keep existing FAQ items (What is iNi / uXu / 0?0 / opt in without this website / /qtp_[devo]).
 
@@ -74,13 +87,13 @@ Keep existing FAQ items (What is iNi / uXu / 0?0 / opt in without this website /
 
 Keep **uXu** → https://rasvibir.github.io/uXu/  
 **GitHub Repo** can stay https://github.com/RASvibir/uXu (commons software).  
-Optionally add a footer link **iNi paper trail** → https://github.com/RASvibir/iNi
+Optionally add footer links: **iNi paper trail** → https://github.com/RASvibir/iNi · **I pages** → https://rasvibir.github.io/iNi/#/i
 
 ---
 
 ## Optional one-liner under Practice
 
-You do not need this page to opt in. Soloist explains practice; 0?0 runs the protocol; GitHub holds the paper trail.
+You do not need this page to opt in. Soloist explains practice; 0?0 runs the protocol; GitHub holds the paper trail and I pages.
 
 ---
 
@@ -90,6 +103,7 @@ Smoke-check:
 
 1. Services → **Open uXu commons** opens https://rasvibir.github.io/uXu/  
 2. Hero → Visit uXu opens commons  
-3. Paper-trail link opens RASvibir/iNi  
-4. New FAQ answer is readable on mobile  
-5. `/qtp_[devo]` still quiet, late on the page  
+3. **Browse I pages** opens https://rasvibir.github.io/iNi/#/i  
+4. Paper-trail link opens RASvibir/iNi  
+5. New FAQ answers are readable on mobile  
+6. `/qtp_[devo]` still quiet, late on the page  
