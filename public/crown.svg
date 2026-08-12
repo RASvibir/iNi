@@ -1,21 +1,35 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-  <!-- I Crown: 7-leaflet cannabis mark (dispensary logo language) + honor band -->
-  <g fill="currentColor" transform="translate(32 38)">
-    <!-- center -->
-    <path d="M0-34c3.2 8.5 3.6 17.2 0 34c-3.6-16.8-3.2-25.5 0-34z"/>
-    <!-- inner pair -->
-    <path d="M0-30c3 7.5 3.4 15.2 0 30c-3.4-14.8-3-22.5 0-30z" transform="rotate(-28)"/>
-    <path d="M0-30c3 7.5 3.4 15.2 0 30c-3.4-14.8-3-22.5 0-30z" transform="rotate(28)"/>
-    <!-- mid pair -->
-    <path d="M0-24c2.6 6.2 2.9 12.4 0 24c-2.9-11.6-2.6-17.8 0-24z" transform="rotate(-52)"/>
-    <path d="M0-24c2.6 6.2 2.9 12.4 0 24c-2.9-11.6-2.6-17.8 0-24z" transform="rotate(52)"/>
-    <!-- outer pair -->
-    <path d="M0-16c2 4.2 2.2 8.4 0 16c-2.2-7.6-2-11.8 0-16z" transform="rotate(-76)"/>
-    <path d="M0-16c2 4.2 2.2 8.4 0 16c-2.2-7.6-2-11.8 0-16z" transform="rotate(76)"/>
+  <!--
+    I Crown — combo mark
+    Geometric diamond peaks (crown) + leaf fan cue + eye gem (honor / “I”)
+    Line-art logo language; professional at small sizes.
+  -->
+  <g
+    stroke="currentColor"
+    stroke-width="2.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  >
+    <!-- five diamond peaks: crown + leaf suggestion -->
+    <path d="M32 4 L37.2 18.5 L32 22.5 L26.8 18.5 Z"/>
+    <path d="M20.5 10.5 L27.2 21.2 L22.5 25.2 L16.2 17.8 Z"/>
+    <path d="M43.5 10.5 L47.8 17.8 L41.5 25.2 L36.8 21.2 Z"/>
+    <path d="M11 20.5 L19.5 26.5 L16.5 30.5 L9.2 25.8 Z"/>
+    <path d="M53 20.5 L54.8 25.8 L47.5 30.5 L44.5 26.5 Z"/>
+
+    <!-- eye / honor gem -->
+    <path d="M18 38.5 C22.5 33.2 27.5 30.8 32 30.8 C36.5 30.8 41.5 33.2 46 38.5 C41.5 43.8 36.5 46.2 32 46.2 C27.5 46.2 22.5 43.8 18 38.5 Z"/>
+    <!-- interlaced lower lid cue -->
+    <path d="M20 39.5 C24.5 43.5 28.5 45 32 45 C35.5 45 39.5 43.5 44 39.5" opacity="0.85"/>
   </g>
-  <!-- petiole into band -->
-  <path fill="currentColor" d="M30.4 38h3.2v8.2h-3.2z" opacity="0.85"/>
-  <path fill="currentColor" d="M15 52.4h34c1.15 0 2.1.85 2.1 1.95v1.9c0 1.1-.95 1.95-2.1 1.95H15c-1.15 0-2.1-.85-2.1-1.95v-1.9c0-1.1.95-1.95 2.1-1.95z"/>
-  <!-- midrib only on center leaflet -->
-  <path stroke="currentColor" stroke-width="1.35" stroke-linecap="round" opacity="0.35" d="M32 8.5v29"/>
+  <circle cx="32" cy="38.5" r="3.6" fill="currentColor"/>
+  <!-- soft base leaflets (leaf cue, not full fan) -->
+  <g stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M24.5 45.5 L18.5 52.5 L26.5 49.2 Z"/>
+    <path d="M39.5 45.5 L45.5 52.5 L37.5 49.2 Z"/>
+    <!-- short stem into honor bar -->
+    <path d="M32 46.2 V52.5"/>
+  </g>
+  <path fill="currentColor" d="M20 55.2h24c1 0 1.8.7 1.8 1.6v1.4c0 .9-.8 1.6-1.8 1.6H20c-1 0-1.8-.7-1.8-1.6v-1.4c0-.9.8-1.6 1.8-1.6z"/>
 </svg>
