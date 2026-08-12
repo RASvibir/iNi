@@ -1,26 +1,43 @@
-# I pages
+# I Pages
 
 Opt-in public faces for the iNi community. Each page displays as **I am {name}**.
 
-This is a **self-attested showcase** — not membership enrollment, not a badge.
+**I Pages** are **non-judged** profile display. Freeform Markdown — customize as
+you wish (`theme`, `layout`, body sections).
 
-## Add an I page
+Optional **I Crown** (`crown_status: active`) is a separate honor layer for
+identifier truths and proprietary toolkit pointers — not KYC itself, and **no
+asset to iNi provenance**. False advertising / plagiarism / false identification
+can revoke Crown *display* only.
 
-1. Copy `_TEMPLATE.md` → `{slug}.md` (e.g. `ada-lovelace.md`)
-2. Set `name`, `slug`, `attested_at` in front matter
-3. Write whatever you want in the body
-4. Open a pull request
+## Add an I Page
 
-## Acceptance criteria
+1. Copy `_TEMPLATE.md` → `{slug}.md`
+2. Set at least `name`, `slug`, `attested_at`
+3. Optional: `tagline`, `theme` (`ink` · `paper` · `terminal`), `layout` (`free` · `compact` · `wide`)
+4. Optional Crown: `crown_status: active` + `crown_blurb`
+5. Open a pull request
 
-- Front matter has `name`, `slug`, `attested_at`
-- Filename is `{slug}.md` (matches front matter `slug`)
-- Body does **not** claim legal chain-of-custody or enrollment
-- No studio administration framing of iNi
+## Front matter
+
+| Field | Required | Notes |
+|-------|----------|--------|
+| `name` | yes | Shown as **I am {name}** |
+| `slug` | yes | Filename should match |
+| `attested_at` | yes | YYYY-MM-DD |
+| `tagline` | no | Short line under the name |
+| `theme` | no | `ink` (default) · `paper` · `terminal` |
+| `layout` | no | `free` (default) · `compact` · `wide` |
+| `crown_status` | no | `none` · `active` · `suspended` |
+| `crown_blurb` | no | One-line honor summary when Crown is shown |
 
 ## Browse
 
 https://rasvibir.github.io/iNi/#/i
+
+## Forum
+
+https://github.com/RASvibir/iNi/discussions
 
 ## Example
 

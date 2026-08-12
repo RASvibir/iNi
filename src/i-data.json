@@ -1,11 +1,16 @@
 {
-  "generatedAt": "2026-08-12T18:20:19.902Z",
+  "generatedAt": "2026-08-12T19:02:40.453Z",
   "pages": [
     {
       "name": "Victor Birkle",
       "slug": "victor-birkle",
       "attested_at": "2026-08-12",
-      "body": "Curator of **CyberCat Sunflower** (`CyberCat_Sunflower.uXu.0001`), first non-root room on the uXu archive commons. Steward of open archive practice and the iNi provenance paper trail.\n\n## Links\n\n- [uXu commons](https://rasvibir.github.io/uXu/)\n- [iNi public notes (Soloist)](https://soloist.ai/uxu)\n- [uXu repo](https://github.com/RASvibir/uXu)\n- [iNi community repo](https://github.com/RASvibir/iNi)\n- Contact: [rasip@chloreform.org](mailto:rasip@chloreform.org)\n\n## Archives\n\n- [CyberCat Sunflower](https://rasvibir.github.io/uXu/CyberCat-Sunflower/) — Grateful Dead live catalog deck; iNi opted in (2026-08-12)\n- Provenance writeup: [paper trail article](https://github.com/RASvibir/iNi/blob/main/content/articles/2026-08-12-cybercat-sunflower-provenance.md)\n\n## Work\n\n- Shared archive commons (uXu · 0?0)\n- Opt-in provenance practice (iNi)\n- Open-source steward signal: `/qtp_[devo]` (beside practice, not administration of iNi)\n\n## Notes\n\nI page for the provenance community — freeform face, not a membership badge.\n\n*Self-attested **I page** — not membership enrollment.*",
+      "tagline": "Archive steward · CyberCat Sunflower · open provenance",
+      "theme": "ink",
+      "layout": "wide",
+      "crown_status": "active",
+      "crown_blurb": "Public face bound to RASvibir / uXu stewardship — honor-bound identifier claims only.",
+      "body": "Curator of **CyberCat Sunflower** (`CyberCat_Sunflower.uXu.0001`), first non-root room on the uXu archive commons. Steward of open archive practice and the iNi provenance paper trail.\n\n## About\n\nI build shared archive tools so collections stay independent and findable. iNi is practice; this I Page is a face; I Crown is optional honor for claims I’ll stand behind.\n\n## Links\n\n- [uXu commons](https://rasvibir.github.io/uXu/)\n- [iNi public notes (Soloist)](https://soloist.ai/uxu)\n- [iNi forum](https://github.com/RASvibir/iNi/discussions)\n- [uXu repo](https://github.com/RASvibir/uXu)\n- [iNi community repo](https://github.com/RASvibir/iNi)\n- Contact: [rasip@chloreform.org](mailto:rasip@chloreform.org)\n\n## Archives\n\n- [CyberCat Sunflower](https://rasvibir.github.io/uXu/CyberCat-Sunflower/) — Grateful Dead live catalog deck; iNi opted in (2026-08-12)\n- Provenance writeup: [paper trail article](https://github.com/RASvibir/iNi/blob/main/content/articles/2026-08-12-cybercat-sunflower-provenance.md)\n\n## Work\n\n- Shared archive commons (uXu · 0?0)\n- Opt-in provenance practice (iNi)\n- Open-source steward signal: `/qtp_[devo]` (beside practice, not administration of iNi)\n\n## I Crown\n\nHonor-bound datasheet pointers (not KYC issued here):\n\n- Public GitHub: [RASvibir](https://github.com/RASvibir)\n- Steward contact declared above\n- Proprietary / SSO / membership rails: use your own vendors — I Crown only *points*, it does not issue IDs\n\nFalse advertising, plagiarism, or false identification can revoke **Crown display** only.\n\n*Self-attested **I Page** — not membership enrollment.*",
       "file": "victor-birkle.md"
     }
   ]

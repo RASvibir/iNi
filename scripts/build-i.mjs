@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Reads content/i/*.md (except _TEMPLATE) → src/i-data.json
+ * Reads content/i/*.md (except _TEMPLATE / README) → src/i-data.json
  */
 import { readdir, readFile, writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
@@ -17,7 +17,7 @@ function parseFrontMatter(raw) {
   }
   const meta = {};
   for (const line of match[1].split(/\r?\n/)) {
-    const m = line.match(/^(\w+):\s*(.*)$/);
+    const m = line.match(/^([\w_]+):\s*(.*)$/);
     if (!m) continue;
     let val = m[2].trim();
     if (
@@ -29,6 +29,24 @@ function parseFrontMatter(raw) {
     meta[m[1]] = val;
   }
   return { meta, body: match[2].trim() };
+}
+
+function normalizeCrownStatus(raw) {
+  const s = String(raw || "none").toLowerCase();
+  if (s === "active" || s === "suspended" || s === "none") return s;
+  return "none";
+}
+
+function normalizeTheme(raw) {
+  const s = String(raw || "ink").toLowerCase();
+  if (s === "ink" || s === "paper" || s === "terminal") return s;
+  return "ink";
+}
+
+function normalizeLayout(raw) {
+  const s = String(raw || "free").toLowerCase();
+  if (s === "free" || s === "compact" || s === "wide") return s;
+  return "free";
 }
 
 const files = (await readdir(dir))
@@ -49,11 +67,19 @@ for (const file of files) {
     name,
     slug,
     attested_at: meta.attested_at,
+    tagline: meta.tagline || "",
+    theme: normalizeTheme(meta.theme),
+    layout: normalizeLayout(meta.layout),
+    crown_status: normalizeCrownStatus(meta.crown_status),
+    crown_blurb: meta.crown_blurb || "",
     body,
     file,
   });
 }
 
 await mkdir(path.dirname(out), { recursive: true });
-await writeFile(out, JSON.stringify({ generatedAt: new Date().toISOString(), pages }, null, 2) + "\n");
-console.log(`wrote ${pages.length} I page(s) → src/i-data.json`);
+await writeFile(
+  out,
+  JSON.stringify({ generatedAt: new Date().toISOString(), pages }, null, 2) + "\n",
+);
+console.log(`wrote ${pages.length} I Page(s) → src/i-data.json`);

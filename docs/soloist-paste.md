@@ -6,104 +6,119 @@ No ChloReform naming.
 
 ---
 
-## Services section — add Open uXu button
-
-Your nav **Services** jumps to `#services-1` (the **What iNi is** / layer cards block).
-Add a clear button under that section (or under the three uXu / 0?0 / iNi cards):
-
-**Button label:** `Open uXu commons`  
-**Link:** `https://rasvibir.github.io/uXu/`  
-**Behavior:** open in new tab if Designer offers that  
-
-Optional second button on the same row:
-
-**Button label:** `Practice on 0?0`  
-**Link:** `https://rasvibir.github.io/uXu/`  
-(same door — 0?0 is the commons console; visitors land on the archive interface)
-
-If Designer only allows one service CTA, prefer **Open uXu commons**.
-
----
-
 ## Hero CTAs
 
 **Primary button**  
-Label: `Practice iNi`  
-Link: scroll/jump to your Practice section (or FAQ “How do I join…”)
+Label: `See the stack`  
+Link: scroll to your Stack section (or FAQ “What is the iNi → I Page → I Crown stack?”)
 
 **Secondary button**  
 Label: `Visit uXu`  
 Link: `https://rasvibir.github.io/uXu/`
 
-Optional third / text link:  
-`Public notes stay here · paper trail on GitHub →`  
-`https://github.com/RASvibir/iNi`
+Optional third:  
+Label: `Forum`  
+Link: `https://github.com/RASvibir/iNi/discussions`
+
+Optional text link:  
+`Paper trail + I Pages →`  
+`https://rasvibir.github.io/iNi/`
 
 ---
 
-## Links section — add “Community paper trail” + I pages
+## New section — The stack (iNi · I Page · I Crown)
+
+**Eyebrow:** Three layers  
+
+**Heading:** iNi · I Page · I Crown  
+
+**Lede:**  
+Clear jobs. No membership theater. Crown is optional honor — not KYC, and it does not own your iNi provenance.
+
+**Three cards / columns:**
+
+1. **iNi** — Provenance practice  
+   Opt-in honesty about origin, authorship, lineage, and custody on archives. Simple stamp — self-attested.
+
+2. **I Page** — Non-judged face  
+   Public **I am {name}** — freeform, customisable themes and layout. Personality without an audit chill.
+
+3. **I Crown** — Honor-bound truths  
+   Optional identifier datasheet + pointers to proprietary rails (SSO / KYC / memberships *you* run). False advertising, plagiarism, or false ID revokes **Crown display** only.
+
+---
+
+## Services section — Open uXu button
+
+**Button label:** `Open uXu commons`  
+**Link:** `https://rasvibir.github.io/uXu/`  
+
+Optional: **Practice on 0?0** → same URL (Quick Nav → iNi Provenance or type `INI`).
+
+---
+
+## Links section
 
 **Heading:** Community paper trail  
+**Body:** Charter, practice notes, and authorizations live as PRs in the iNi community repo — optional documentation beside opt-in on 0?0.  
+**Link:** https://github.com/RASvibir/iNi  
 
-**Body:**  
-Charter, practice notes, and authorizations live as pull requests in the iNi community repo — optional documentation beside opt-in on 0?0. Not a membership gate.
+**Heading:** I Pages  
+**Body:** Non-judged public faces — **I am {name}**. Themes, layouts, freeform body. Optional I Crown is honor-bound and separate from iNi.  
+**Button:** `Browse I Pages` → https://rasvibir.github.io/iNi/#/i  
 
-**Link label:** RASvibir/iNi  
-**URL:** https://github.com/RASvibir/iNi  
+**Heading:** Forum  
+**Body:** Talk in the open — practice notes, Crown questions, archive help. Not a gated club.  
+**Button:** `Open forum` → https://github.com/RASvibir/iNi/discussions  
 
-**Heading:** I pages  
-
-**Body:**  
-Opt-in public faces for the provenance community. Each reads **I am {name}** — freeform showcase (sites, archives, work, outreach), not a membership badge.
-
-**Button / link label:** `Browse I pages`  
-**URL:** https://rasvibir.github.io/iNi/#/i  
-
-Keep existing links:
-
-- uXu commons — https://rasvibir.github.io/uXu/  
-- 0?0 · iNi Provenance — commons → Quick Nav → iNi Provenance (or type `INI`)  
-- uXu repo — https://github.com/RASvibir/uXu  
+Keep: uXu commons, uXu repo.
 
 ---
 
-## FAQ — add these questions
+## FAQ — add / refresh
+
+**Q: What is the iNi → I Page → I Crown stack?**  
+
+**A:**  
+**iNi** is provenance practice. **I Page** is a non-judged public face (**I am {name}**). **I Crown** is optional honor-bound identifier truths (and pointers to proprietary rails). Crown has no asset to iNi; false claims revoke Crown display only. iNi and I Page stay.
+
+**Q: What is I Crown?**  
+
+**A:**  
+An honor system we demand be honored. Showcase proprietary / SSO / KYC *pointers* — Crown does not issue those IDs. False advertising, plagiarism, or false identification can revoke Crown display. No known issues → Crown stays valid. Regain by correcting the datasheet.
+
+**Q: Where is the forum?**  
+
+**A:**  
+https://github.com/RASvibir/iNi/discussions — GitHub Discussions on the community repo. Soloist and the mirror site are doors, not a membership app.
 
 **Q: How do I join the provenance community?**  
 
 **A:**  
-Practice the protocol — no account required on this site. Read these notes, then open the uXu commons (https://rasvibir.github.io/uXu/) → 0?0 → Quick Nav → iNi Provenance (or type `INI`). Document origin, authorship, lineage, and custody on your archive, set `uxu.ini.optIn: true`, and tag iNi when that documentation is real and maintained. Optionally open a pull request under `content/articles/` at https://github.com/RASvibir/iNi, and optionally add an I page (appears as **I am Your Name**). Join means honesty about origin and custody — not enrollment theater.
+Practice the protocol — no Soloist account required. Open https://rasvibir.github.io/uXu/ → 0?0 → Quick Nav → iNi Provenance (or type `INI`). Document provenance, set `uxu.ini.optIn: true`, tag iNi when it’s real. Optionally PR articles / an I Page at https://github.com/RASvibir/iNi. Optional I Crown is separate honor.
 
-**Q: How do I get an I page?**  
+**Q: How do I get an I Page?**  
 
 **A:**  
-Open a pull request in https://github.com/RASvibir/iNi that adds a Markdown file under `content/i/` (copy the template). After merge, you appear at https://rasvibir.github.io/iNi/#/i as **I am Your Name**. Freeform content — websites, archives, games, company, outreach, whatever you want to share. Not membership enrollment.
+PR a Markdown file under `content/i/` in https://github.com/RASvibir/iNi (see the template). Choose `theme` (`ink` | `paper` | `terminal`) and `layout` (`free` | `compact` | `wide`). Optional `crown_status: active`. After merge: https://rasvibir.github.io/iNi/#/i as **I am Your Name**.
 
-Keep existing FAQ items (What is iNi / uXu / 0?0 / opt in without this website / /qtp_[devo]).
+Keep existing FAQ (What is iNi / uXu / 0?0 / opt in without this website / /qtp_[devo]).
 
 ---
 
 ## Footer
 
-Keep **uXu** → https://rasvibir.github.io/uXu/  
-**GitHub Repo** can stay https://github.com/RASvibir/uXu (commons software).  
-Optionally add footer links: **iNi paper trail** → https://github.com/RASvibir/iNi · **I pages** → https://rasvibir.github.io/iNi/#/i
-
----
-
-## Optional one-liner under Practice
-
-You do not need this page to opt in. Soloist explains practice; 0?0 runs the protocol; GitHub holds the paper trail and I pages.
+- **uXu** → https://rasvibir.github.io/uXu/  
+- **Forum** → https://github.com/RASvibir/iNi/discussions  
+- **I Pages** → https://rasvibir.github.io/iNi/#/i  
+- **GitHub** → https://github.com/RASvibir/iNi (or keep uXu software repo + add iNi)
 
 ---
 
 ## After publish
 
-Smoke-check:
-
-1. Services → **Open uXu commons** opens https://rasvibir.github.io/uXu/  
-2. Hero → Visit uXu opens commons  
-3. **Browse I pages** opens https://rasvibir.github.io/iNi/#/i  
-4. Paper-trail link opens RASvibir/iNi  
-5. New FAQ answers are readable on mobile  
-6. `/qtp_[devo]` still quiet, late on the page  
+1. Stack section readable on mobile  
+2. Forum opens Discussions  
+3. Browse I Pages → https://rasvibir.github.io/iNi/#/i  
+4. New FAQ answers readable  
+5. `/qtp_[devo]` still quiet, late on the page  

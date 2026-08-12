@@ -4,14 +4,19 @@ import { renderMarkdown } from "./markdown";
 
 const SOLOIST = "https://soloist.ai/uxu";
 const UXU_COMMONS = "https://rasvibir.github.io/uXu/";
-const UXU_REPO = "https://github.com/RASvibir/uXu";
 const INI_REPO = "https://github.com/RASvibir/iNi";
+const FORUM = "https://github.com/RASvibir/iNi/discussions";
 const CONTACT = "rasip@chloreform.org";
 
 type IPage = {
   name: string;
   slug: string;
   attested_at: string;
+  tagline?: string;
+  theme?: string;
+  layout?: string;
+  crown_status?: string;
+  crown_blurb?: string;
   body: string;
   file: string;
 };
@@ -20,6 +25,24 @@ const pages = iData.pages as IPage[];
 
 const app = document.querySelector<HTMLDivElement>("#app");
 if (!app) throw new Error("#app missing");
+
+function escapeText(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function crownMark(status: string | undefined): string {
+  if (status === "active") {
+    return `<span class="crown-chip crown-chip--active" title="I Crown active — honor system">I Crown</span>`;
+  }
+  if (status === "suspended") {
+    return `<span class="crown-chip crown-chip--suspended" title="I Crown display suspended">I Crown suspended</span>`;
+  }
+  return "";
+}
 
 function headerHtml(active: "home" | "i" = "home"): string {
   return `
@@ -30,17 +53,18 @@ function headerHtml(active: "home" | "i" = "home"): string {
         ${
           active === "home"
             ? `
-        <a href="#what">What iNi is</a>
+        <a href="#stack">Stack</a>
         <a href="#practice">Practice</a>
-        <a href="#/i">I</a>
-        <a href="#links">Links</a>
+        <a href="#/i">I Pages</a>
+        <a href="#forum">Forum</a>
         <a href="#faq">FAQ</a>
         <a href="#contact">Contact</a>`
             : `
         <a href="#/">Home</a>
-        <a href="#/i" aria-current="page">I</a>
-        <a href="${SOLOIST}">Soloist</a>
-        <a href="${UXU_COMMONS}">uXu</a>`
+        <a href="#/i" aria-current="page">I Pages</a>
+        <a href="#forum">Forum</a>
+        <a href="${FORUM}" target="_blank" rel="noopener">Discussions</a>
+        <a href="${SOLOIST}">Soloist</a>`
         }
       </nav>
     </div>
@@ -51,8 +75,8 @@ function footerHtml(): string {
   return `
   <footer class="site-footer">
     <div class="site-footer__inner">
-      <p><a class="brand" href="#/">iNi</a> · mirror beside <a href="${SOLOIST}">Soloist</a> · practice beside <a href="${UXU_COMMONS}">uXu</a> · <a href="#/i">I pages</a></p>
-      <p><a href="${INI_REPO}">GitHub</a> · <a href="${UXU_REPO}">uXu repo</a></p>
+      <p><a class="brand" href="#/">iNi</a> · <a href="#/i">I Pages</a> · <a href="${FORUM}">Forum</a> · <a href="${SOLOIST}">Soloist</a> · <a href="${UXU_COMMONS}">uXu</a></p>
+      <p><a href="${INI_REPO}">GitHub</a></p>
     </div>
   </footer>`;
 }
@@ -69,50 +93,42 @@ function homeHtml(): string {
         <p class="hero__support reveal">
           A name, a protocol, and a community boundary — defined by how you
           document origin, authorship, lineage, and custody. Not a company
-          label. Not required to use uXu. This page is a mirror; primary public
-          notes live on Soloist.
+          label. Not required to use uXu.
         </p>
         <div class="cta-row reveal">
-          <a class="btn btn--primary" href="${SOLOIST}">Public notes (Soloist)</a>
-          <a class="btn btn--ghost" href="#practice">Practice iNi</a>
-          <a class="btn btn--ghost" href="#/i">I pages</a>
+          <a class="btn btn--primary" href="#stack">See the stack</a>
+          <a class="btn btn--ghost" href="#/i">I Pages</a>
+          <a class="btn btn--ghost" href="${FORUM}" target="_blank" rel="noopener">Forum</a>
           <a class="btn btn--ghost" href="${UXU_COMMONS}">Visit uXu</a>
         </div>
       </div>
     </section>
 
-    <section class="section" id="what" aria-labelledby="what-title">
+    <section class="section" id="stack" aria-labelledby="stack-title">
       <div class="section__inner reveal">
-        <p class="section__eyebrow">Beside the commons</p>
-        <h2 class="section__title" id="what-title">What iNi is</h2>
+        <p class="section__eyebrow">Three layers</p>
+        <h2 class="section__title" id="stack-title">iNi · I Page · I Crown</h2>
         <p class="section__lede">
-          iNi is the inner-circle provenance layer beside uXu. It is a name, a
-          protocol, and a community boundary — not a company label. The spelling
-          comes from an “I and I” framing: a shared identity space where trusted
-          collaborators and archives agree to treat origin, authorship, lineage,
-          and custody as first-class responsibilities.
+          Clear jobs. No membership theater. Crown is optional honor — not KYC,
+          and it does not own your iNi provenance.
         </p>
-        <ul class="layer-list">
+        <ol class="stack-ladder">
           <li>
-            <strong>uXu</strong>
-            <span>Public archive commons — the site, the repo, and the installable app. Independent archives keep their own voice.</span>
+            <p class="stack-ladder__name">iNi</p>
+            <p class="stack-ladder__role">Provenance practice</p>
+            <p>Opt-in honesty about origin, authorship, lineage, and custody on archives. Simple stamp — self-attested.</p>
           </li>
           <li>
-            <strong>0?0</strong>
-            <span>Root archive interface inside uXu — the console for registry, manuals, and navigation. A tool, not the community brand.</span>
+            <p class="stack-ladder__name">I Page</p>
+            <p class="stack-ladder__role">Non-judged face</p>
+            <p>Public <strong>I am {name}</strong> — freeform, customisable themes and layout. Personality without an audit chill.</p>
           </li>
           <li>
-            <strong>iNi</strong>
-            <span>Opt-in provenance practice — “I and I.” Document origin, authorship, lineage, and custody. Community by honesty, not membership theater.</span>
+            <p class="stack-ladder__name">I Crown</p>
+            <p class="stack-ladder__role">Honor-bound truths</p>
+            <p>Optional identifier datasheet + pointers to proprietary rails (SSO / KYC / memberships <em>you</em> run). False advertising, plagiarism, or false ID revokes <strong>Crown display</strong> only.</p>
           </li>
-        </ul>
-        <ul class="not-list" aria-label="What iNi is not">
-          <li>Not membership theater or a signup badge</li>
-          <li>Not required to publish on uXu</li>
-          <li>Not a company or org brand label</li>
-          <li>Not a legal chain-of-custody certificate</li>
-          <li>Not a claim that uXu owns your archive</li>
-        </ul>
+        </ol>
       </div>
     </section>
 
@@ -121,15 +137,13 @@ function homeHtml(): string {
         <p class="section__eyebrow">Self-attestation</p>
         <h2 class="section__title" id="practice-title">How to practice iNi</h2>
         <p class="section__lede">
-          Joining means adopting the protocol — not earning a badge. You do not
-          need this mirror or Soloist to opt in. Prefer the console, or open a
-          pull request in the community repo.
+          You do not need Soloist, an I Page, or I Crown to opt in. Prefer 0?0.
         </p>
         <ol class="practice-steps">
           <li>
             <div>
               <strong>Open 0?0</strong>
-              <p>Start at the uXu commons, then Quick Nav → iNi Provenance (or type <code>INI</code>). Optional notes: <a href="${SOLOIST}">soloist.ai/uxu</a> (<code>INI SITE</code>).</p>
+              <p>Start at the uXu commons, then Quick Nav → iNi Provenance (or type <code>INI</code>).</p>
             </div>
           </li>
           <li>
@@ -141,7 +155,7 @@ function homeHtml(): string {
           <li>
             <div>
               <strong>Opt in when it’s real</strong>
-              <p>Set <code>uxu.ini.optIn: true</code> and tag <strong>iNi</strong> only when that documentation is honest and maintained.</p>
+              <p>Set <code>uxu.ini.optIn: true</code>. Optional stamp on the archive. Optional I Page / I Crown via this repo.</p>
             </div>
           </li>
         </ol>
@@ -149,14 +163,9 @@ function homeHtml(): string {
   "ini": {
     "optIn": true,
     "tag": "iNi",
-    "provenance": {
-      "origin": "…",
-      "authors": ["…"],
-      "custody": "…",
-      "lineage": "…",
-      "conditions": "…",
-      "attestedAt": "2026-08-12"
-    }
+    "showBadge": true,
+    "badgeLinksToIPage": false,
+    "provenance": { "origin": "…", "authors": ["…"], "custody": "…", "lineage": "…", "conditions": "…", "attestedAt": "2026-08-12" }
   }
 }</code></pre>
       </div>
@@ -164,25 +173,44 @@ function homeHtml(): string {
 
     <section class="section section--tight" id="i-preview" aria-labelledby="i-preview-title">
       <div class="section__inner reveal">
-        <p class="section__eyebrow">I pages</p>
+        <p class="section__eyebrow">I Pages</p>
         <h2 class="section__title" id="i-preview-title">I am …</h2>
         <p class="section__lede">
-          Opt-in public faces for the community — freeform showcases, not membership
-          badges. Appears as <strong>I am {name}</strong>.
+          Customisable faces — themes, layout, freeform body. Non-judged.
+          Optional I Crown mark when honor status is active.
         </p>
         <ul class="i-index">
           ${pages
             .map(
               (p) => `
             <li>
-              <a href="#/i/${p.slug}"><span class="i-am">I am</span> ${escapeText(p.name)}</a>
+              <a href="#/i/${p.slug}">
+                <span class="i-am">I am</span> ${escapeText(p.name)}
+                ${crownMark(p.crown_status)}
+                ${p.tagline ? `<span class="i-meta">${escapeText(p.tagline)}</span>` : `<span class="i-meta">attested ${escapeText(p.attested_at)}</span>`}
+              </a>
             </li>`,
             )
             .join("")}
         </ul>
-        <p class="section__lede" style="margin-top:1.25rem;margin-bottom:0">
-          <a class="btn btn--ghost" href="#/i">Browse I pages</a>
+        <p style="margin-top:1.25rem;margin-bottom:0">
+          <a class="btn btn--ghost" href="#/i">Browse I Pages</a>
         </p>
+      </div>
+    </section>
+
+    <section class="section" id="forum" aria-labelledby="forum-title">
+      <div class="section__inner reveal forum-panel">
+        <p class="section__eyebrow">Forum</p>
+        <h2 class="section__title" id="forum-title">Talk in the open</h2>
+        <p class="section__lede">
+          The iNi forum lives in GitHub Discussions — practice notes, Crown
+          questions, archive help. Soloist and this site are doors, not a gated club.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn--primary" href="${FORUM}" target="_blank" rel="noopener">Open forum</a>
+          <a class="btn btn--ghost" href="${INI_REPO}" target="_blank" rel="noopener">Community repo</a>
+        </div>
       </div>
     </section>
 
@@ -191,22 +219,10 @@ function homeHtml(): string {
         <p class="section__eyebrow">Doors</p>
         <h2 class="section__title" id="links-title">Links</h2>
         <div class="links-grid">
-          <a href="${SOLOIST}">
-            <strong>Public notes (Soloist)</strong>
-            <span>Primary community face — practice, FAQ, contact</span>
-          </a>
-          <a href="${UXU_COMMONS}">
-            <strong>uXu commons</strong>
-            <span>Live archive door — opens 0?0</span>
-          </a>
-          <a href="${UXU_REPO}">
-            <strong>uXu repo</strong>
-            <span>Software, templates, RTFM · MIT</span>
-          </a>
-          <a href="#/i">
-            <strong>I pages</strong>
-            <span>Self-attested faces — I am {name}</span>
-          </a>
+          <a href="${SOLOIST}"><strong>Soloist notes</strong><span>Primary public face</span></a>
+          <a href="${UXU_COMMONS}"><strong>uXu commons</strong><span>Archives · 0?0 · INI</span></a>
+          <a href="${FORUM}" target="_blank" rel="noopener"><strong>Forum</strong><span>GitHub Discussions</span></a>
+          <a href="#/i"><strong>I Pages</strong><span>I am {name}</span></a>
         </div>
       </div>
     </section>
@@ -216,9 +232,8 @@ function homeHtml(): string {
         <p class="qtp__mark">/qtp_[devo]</p>
         <h2 class="section__title" id="qtp-title">Open-source steward</h2>
         <p class="section__lede">
-          /qtp_[devo] is the open-source activist layer beside this practice —
-          stewardship and build signal, not administration of iNi. iNi remains
-          community by honesty.
+          /qtp_[devo] is stewardship and build signal beside this practice — not
+          administration of iNi. iNi remains community by honesty.
         </p>
       </div>
     </section>
@@ -229,36 +244,24 @@ function homeHtml(): string {
         <h2 class="section__title" id="faq-title">Frequently asked</h2>
         <div class="faq">
           <details>
-            <summary>What is iNi?</summary>
-            <p>iNi is a name, a protocol, and a community boundary — an “I and I” practice for origin, authorship, lineage, and custody. Not a company label. Not required to use uXu.</p>
+            <summary>What is the iNi → I Page → I Crown stack?</summary>
+            <p><strong>iNi</strong> is provenance practice. <strong>I Page</strong> is a non-judged public face. <strong>I Crown</strong> is optional honor-bound identifier truths (and pointers to proprietary rails). Crown has no asset to iNi; false claims revoke Crown display only.</p>
           </details>
           <details>
-            <summary>What is an I page?</summary>
-            <p>An opt-in public face that reads <strong>I am {name}</strong>. Freeform Markdown in this repo under <code>content/i/</code> — websites, archives, work, outreach, whatever you want to share. Not membership enrollment.</p>
+            <summary>What is I Crown?</summary>
+            <p>An honor system we demand be honored. Showcase proprietary / SSO / KYC <em>pointers</em> — Crown does not issue those IDs. False advertising, plagiarism, or false identification can revoke Crown display. No known issues → Crown stays valid.</p>
           </details>
           <details>
-            <summary>How do I get an I page?</summary>
-            <p>Open a pull request that adds <code>content/i/{slug}.md</code> (see the template). After merge it appears in the <a href="#/i">I directory</a> as <strong>I am Your Name</strong>.</p>
+            <summary>Where is the forum?</summary>
+            <p><a href="${FORUM}" target="_blank" rel="noopener">GitHub Discussions on RASvibir/iNi</a>. Open to the community; not a membership app.</p>
           </details>
           <details>
-            <summary>How do I join the provenance community?</summary>
-            <p>Practice the protocol — no Soloist account required. Read <a href="${SOLOIST}">soloist.ai/uxu</a>, opt in on <a href="${UXU_COMMONS}">0?0</a> (Quick Nav → iNi Provenance or type <code>INI</code>), optionally open a PR under <code>content/articles/</code>, and optionally add an <a href="#/i">I page</a>.</p>
+            <summary>How do I get an I Page?</summary>
+            <p>PR a Markdown file under <code>content/i/</code> (see the template). Choose <code>theme</code> and <code>layout</code>; optional <code>crown_status: active</code>.</p>
           </details>
           <details>
-            <summary>What is uXu?</summary>
-            <p>uXu is the public archive commons — a shared place to find and keep independent archives. It’s the site, the repo, and an installable app. Your collection stays yours; uXu helps it stay findable.</p>
-          </details>
-          <details>
-            <summary>What is 0?0?</summary>
-            <p>0?0 is the root archive interface inside uXu — the console where you browse the registry, open manuals, and run commands. It’s a tool for navigating the commons, not the name of the community.</p>
-          </details>
-          <details>
-            <summary>How do I opt in without a website?</summary>
-            <p>Start at <a href="${UXU_COMMONS}">the uXu commons</a>. That opens 0?0. Use Quick Nav → iNi Provenance (or type <code>INI</code>). Document provenance on your archive, then opt in when that documentation is real and maintained. Self-attestation only.</p>
-          </details>
-          <details>
-            <summary>What is /qtp_[devo]?</summary>
-            <p>An open-source steward signal beside this practice — not administration of iNi. iNi remains community by honesty.</p>
+            <summary>How do I practice iNi without a website?</summary>
+            <p>Open <a href="${UXU_COMMONS}">uXu</a> → 0?0 → Quick Nav → iNi Provenance (or type <code>INI</code>). Fill provenance and opt in when it’s real.</p>
           </details>
         </div>
       </div>
@@ -269,8 +272,7 @@ function homeHtml(): string {
         <p class="section__eyebrow">Reach</p>
         <h2 class="section__title" id="contact-title">Contact</h2>
         <p>Questions about iNi practice: <a href="mailto:${CONTACT}">${CONTACT}</a></p>
-        <p>Primary public notes: <a href="${SOLOIST}">soloist.ai/uxu</a></p>
-        <p>Software &amp; original docs: MIT. Media stays under its own terms.</p>
+        <p>Forum: <a href="${FORUM}" target="_blank" rel="noopener">${FORUM}</a></p>
       </div>
     </section>
   </main>
@@ -283,11 +285,11 @@ function iIndexHtml(): string {
   <main class="i-view">
     <section class="section">
       <div class="section__inner">
-        <p class="section__eyebrow">I pages</p>
+        <p class="section__eyebrow">I Pages</p>
         <h1 class="section__title">I am …</h1>
         <p class="section__lede">
-          Self-attested public faces for the provenance community. Freeform — not membership enrollment.
-          Add yours via PR under <code>content/i/</code>.
+          Non-judged faces. Customisable themes and layouts. Optional I Crown is
+          honor-bound and separate from iNi provenance.
         </p>
         <ul class="i-index">
           ${pages
@@ -296,12 +298,16 @@ function iIndexHtml(): string {
             <li>
               <a href="#/i/${p.slug}">
                 <span class="i-am">I am</span> ${escapeText(p.name)}
-                <span class="i-meta">attested ${escapeText(p.attested_at)}</span>
+                ${crownMark(p.crown_status)}
+                ${p.tagline ? `<span class="i-meta">${escapeText(p.tagline)}</span>` : `<span class="i-meta">attested ${escapeText(p.attested_at)}</span>`}
               </a>
             </li>`,
             )
             .join("")}
         </ul>
+        <p class="section__lede" style="margin-top:1.5rem">
+          Add yours via PR in <code>content/i/</code> · <a href="${FORUM}" target="_blank" rel="noopener">Forum</a>
+        </p>
       </div>
     </section>
   </main>
@@ -309,14 +315,44 @@ function iIndexHtml(): string {
 }
 
 function iDetailHtml(page: IPage): string {
+  const theme = page.theme || "ink";
+  const layout = page.layout || "free";
+  const crown = page.crown_status || "none";
+  let crownPanel = "";
+  if (crown === "active") {
+    crownPanel = `
+      <aside class="crown-panel crown-panel--active" aria-label="I Crown">
+        <p class="crown-panel__mark">I Crown</p>
+        <p class="crown-panel__blurb">${escapeText(page.crown_blurb || "Honor-bound identifier claims — false advertising revokes display.")}</p>
+        <p class="crown-panel__note">Honor system. Not KYC. No asset to iNi provenance.</p>
+      </aside>`;
+  } else if (crown === "suspended") {
+    crownPanel = `
+      <aside class="crown-panel crown-panel--suspended" aria-label="I Crown suspended">
+        <p class="crown-panel__mark">I Crown suspended</p>
+        <p class="crown-panel__blurb">Crown display is suspended pending correction of identifier claims. I Page and iNi are unaffected.</p>
+      </aside>`;
+  }
+
   return `
   ${headerHtml("i")}
   <main class="i-view">
-    <article class="section">
-      <div class="section__inner">
-        <p class="i-back"><a href="#/i">← I pages</a></p>
-        <h1 class="i-title"><span class="i-am">I am</span> ${escapeText(page.name)}</h1>
-        <p class="i-meta">attested ${escapeText(page.attested_at)}</p>
+    <article class="i-page theme-${escapeText(theme)} layout-${escapeText(layout)}">
+      <header class="i-page__hero">
+        <div class="i-page__hero-inner">
+          <p class="i-back"><a href="#/i">← I Pages</a></p>
+          <p class="i-page__kicker">I Page</p>
+          <h1 class="i-title"><span class="i-am">I am</span> ${escapeText(page.name)}</h1>
+          ${page.tagline ? `<p class="i-page__tagline">${escapeText(page.tagline)}</p>` : ""}
+          <p class="i-meta">attested ${escapeText(page.attested_at)} · theme ${escapeText(theme)} · layout ${escapeText(layout)}</p>
+          <div class="i-page__chips">
+            <span class="chip">iNi practice welcome</span>
+            ${crownMark(crown)}
+          </div>
+        </div>
+      </header>
+      <div class="i-page__body section__inner">
+        ${crownPanel}
         <div class="i-body prose">
           ${renderMarkdown(page.body)}
         </div>
@@ -324,14 +360,6 @@ function iDetailHtml(page: IPage): string {
     </article>
   </main>
   ${footerHtml()}`;
-}
-
-function escapeText(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
 }
 
 function parseRoute(): { view: "home" | "i-index" | "i-detail"; slug?: string; anchor?: string } {
@@ -343,7 +371,6 @@ function parseRoute(): { view: "home" | "i-index" | "i-detail"; slug?: string; a
   if (raw === "#/i" || raw.startsWith("#/i?") || raw.startsWith("#/i#")) {
     return { view: "i-index" };
   }
-  // Legacy section anchors on home: #what, #practice, etc.
   if (raw.startsWith("#") && !raw.startsWith("#/")) {
     return { view: "home", anchor: raw.slice(1) };
   }
@@ -382,14 +409,14 @@ function render(): void {
     const page = pages.find((p) => p.slug === route.slug);
     app!.innerHTML = page
       ? iDetailHtml(page)
-      : `${headerHtml("i")}<main class="i-view"><section class="section"><div class="section__inner"><h1 class="section__title">Not found</h1><p><a href="#/i">← I pages</a></p></div></section></main>${footerHtml()}`;
-    document.title = page ? `I am ${page.name} · iNi` : "I page · iNi";
+      : `${headerHtml("i")}<main class="i-view"><section class="section"><div class="section__inner"><h1 class="section__title">Not found</h1><p><a href="#/i">← I Pages</a></p></div></section></main>${footerHtml()}`;
+    document.title = page ? `I am ${page.name} · iNi` : "I Page · iNi";
     window.scrollTo(0, 0);
     return;
   }
   if (route.view === "i-index") {
     app!.innerHTML = iIndexHtml();
-    document.title = "I pages · iNi";
+    document.title = "I Pages · iNi";
     window.scrollTo(0, 0);
     return;
   }
