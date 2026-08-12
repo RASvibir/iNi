@@ -142,11 +142,27 @@ function iIndexRow(p: IPage): string {
             </li>`;
 }
 
+function iniStampHtml(linkHref?: string): string {
+  const inner = `<span class="ini-i">i</span><span class="ini-n">N</span><span class="ini-i">i</span>`;
+  if (linkHref) {
+    return `<a class="ini-stamp ini-stamp--header is-link" href="${linkHref}" title="iNi — provenance practice" aria-label="iNi home">${inner}</a>`;
+  }
+  return `<span class="ini-stamp ini-stamp--header" title="iNi provenance" aria-label="iNi">${inner}</span>`;
+}
+
+function brandLockupHtml(): string {
+  return `
+    <div class="brand-lockup">
+      <a class="uxu-logo" href="${UXU_COMMONS}" title="uXu archive commons" aria-label="uXu commons">uXu</a>
+      ${iniStampHtml("#/")}
+    </div>`;
+}
+
 function headerHtml(active: "home" | "i" = "home"): string {
   return `
   <header class="site-header">
     <div class="site-header__inner">
-      <a class="brand" href="#/" aria-label="iNi home">iNi</a>
+      ${brandLockupHtml()}
       <nav class="nav" aria-label="Main">
         ${
           active === "home"
@@ -173,8 +189,11 @@ function footerHtml(): string {
   return `
   <footer class="site-footer">
     <div class="site-footer__inner">
-      <p><a class="brand" href="#/">iNi</a> · <a href="#/i">I Pages</a> · <a href="${FORUM}">Forum</a> · <a href="${SOLOIST}">Soloist</a> · <a href="${UXU_COMMONS}">uXu</a></p>
-      <p><a href="${INI_REPO}">GitHub</a></p>
+      <div class="brand-lockup brand-lockup--footer">
+        <a class="uxu-logo uxu-logo--sm" href="${UXU_COMMONS}" aria-label="uXu commons">uXu</a>
+        ${iniStampHtml("#/")}
+      </div>
+      <p><a href="#/i">I Pages</a> · <a href="${FORUM}">Forum</a> · <a href="${SOLOIST}">Soloist</a> · <a href="${INI_REPO}">GitHub</a></p>
     </div>
   </footer>`;
 }
