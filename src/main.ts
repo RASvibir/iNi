@@ -7,6 +7,7 @@ const UXU_COMMONS = "https://rasvibir.github.io/uXu/";
 const INI_REPO = "https://github.com/RASvibir/iNi";
 const FORUM = "https://github.com/RASvibir/iNi/discussions";
 const CONTACT = "rasip@chloreform.org";
+const BASE = import.meta.env.BASE_URL || "/";
 
 type IPage = {
   name: string;
@@ -15,8 +16,10 @@ type IPage = {
   tagline?: string;
   theme?: string;
   layout?: string;
+  portrait?: string;
   crown_status?: string;
   crown_blurb?: string;
+  wear_crown?: boolean;
   body: string;
   file: string;
 };
@@ -34,14 +37,109 @@ function escapeText(s: string): string {
     .replace(/"/g, "&quot;");
 }
 
+function escapeAttr(s: string): string {
+  return escapeText(s).replace(/'/g, "&#39;");
+}
+
+/** Resolve site-root portrait paths against Vite base (/iNi/). */
+function resolvePortraitSrc(src: string): string {
+  if (/^https?:\/\//i.test(src)) return src;
+  if (src.startsWith("/")) {
+    return `${BASE.replace(/\/$/, "")}${src}`;
+  }
+  return `${BASE}${src.replace(/^\//, "")}`;
+}
+
+/** True when Crown is active and the page opted to wear the border. */
+function wearsCrown(page: IPage): boolean {
+  return page.crown_status === "active" && Boolean(page.wear_crown);
+}
+
+function portraitHtml(
+  page: IPage,
+  size: "hero" | "index" = "hero",
+): string {
+  if (!page.portrait) return "";
+  const crowned = wearsCrown(page);
+  const classes = [
+    "i-portrait",
+    `i-portrait--${size}`,
+    crowned ? "i-portrait--crowned" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const label = crowned
+    ? `${page.name} — I Crown border`
+    : page.name;
+  const src = resolvePortraitSrc(page.portrait);
+  return `
+    <figure class="${classes}" title="${escapeAttr(label)}">
+      <div class="i-portrait__ring" aria-hidden="true"></div>
+      <div class="i-portrait__frame">
+        <img
+          src="${escapeAttr(src)}"
+          alt=""
+          width="160"
+          height="160"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      ${crowned ? `<span class="i-portrait__crown" aria-hidden="true">${crownIcon(size === "hero" ? "md" : "sm")}</span>` : ""}
+      ${crowned && size === "hero" ? `<figcaption class="i-portrait__caption">Wearing I Crown</figcaption>` : ""}
+    </figure>`;
+}
+
+/** Sleek five-leaflet crown — reads as honor mark with a soft pot-leaf cue. */
+function crownIcon(size: "sm" | "md" | "lg" = "sm"): string {
+  const cls = `crown-icon crown-icon--${size}`;
+  return `<svg class="${cls}" viewBox="0 0 64 56" fill="none" aria-hidden="true" focusable="false">
+    <g fill="currentColor">
+      <path d="M32 2.5c-2.2 8.2-3.6 16.6-4 26.2h8c-.4-9.6-1.8-18-4-26.2z"/>
+      <path d="M28.2 14.5c-4.8-2.8-9.6-2.2-13.4.6 3.1 3.6 7.2 8.2 11.2 13.6.4-4.9.9-9.6 2.2-14.2z"/>
+      <path d="M35.8 14.5c4.8-2.8 9.6-2.2 13.4.6-3.1 3.6-7.2 8.2-11.2 13.6-.4-4.9-.9-9.6-2.2-14.2z"/>
+      <path d="M18.8 24.2c-4.2-1.6-8.4-.6-11.6 2.2 2.2 3.8 5.4 8.2 9.2 12.8.6-5.2 1.2-10 2.4-15z"/>
+      <path d="M45.2 24.2c4.2-1.6 8.4-.6 11.6 2.2-2.2 3.8-5.4 8.2-9.2 12.8-.6-5.2-1.2-10-2.4-15z"/>
+      <path d="M20 39.2h24l1.6 3.2H18.4z"/>
+      <path d="M13 45.6h38c1.2 0 2.2.9 2.2 2.1v2.1c0 1.2-1 2.1-2.2 2.1H13c-1.2 0-2.2-.9-2.2-2.1v-2.1c0-1.2 1-2.1 2.2-2.1z"/>
+    </g>
+    <path stroke="currentColor" stroke-width="1.25" stroke-linecap="round" opacity="0.28" d="M32 8v22"/>
+  </svg>`;
+}
+
 function crownMark(status: string | undefined): string {
   if (status === "active") {
-    return `<span class="crown-chip crown-chip--active" title="I Crown active — honor system">I Crown</span>`;
+    return `<span class="crown-mark crown-mark--active" title="I Crown active — honor system" aria-label="I Crown active">${crownIcon("md")}</span>`;
   }
   if (status === "suspended") {
-    return `<span class="crown-chip crown-chip--suspended" title="I Crown display suspended">I Crown suspended</span>`;
+    return `<span class="crown-mark crown-mark--suspended" title="I Crown display suspended" aria-label="I Crown suspended">${crownIcon("md")}</span>`;
   }
   return "";
+}
+
+/** Text readout with icon — used on stack / I Page panels, not the compact mark. */
+function crownReadout(status: string | undefined, size: "md" | "lg" = "lg"): string {
+  if (status === "active") {
+    return `<span class="crown-readout crown-readout--active">${crownIcon(size)}<span>I Crown</span></span>`;
+  }
+  if (status === "suspended") {
+    return `<span class="crown-readout crown-readout--suspended">${crownIcon(size)}<span>I Crown suspended</span></span>`;
+  }
+  return "";
+}
+
+function iIndexRow(p: IPage): string {
+  return `
+            <li>
+              <a href="#/i/${p.slug}">
+                ${portraitHtml(p, "index")}
+                <span class="i-index__text">
+                  <span class="i-am">I am</span> ${escapeText(p.name)}
+                  ${crownMark(p.crown_status)}
+                  ${p.tagline ? `<span class="i-meta">${escapeText(p.tagline)}</span>` : `<span class="i-meta">attested ${escapeText(p.attested_at)}</span>`}
+                </span>
+              </a>
+            </li>`;
 }
 
 function headerHtml(active: "home" | "i" = "home"): string {
@@ -124,7 +222,7 @@ function homeHtml(): string {
             <p>Public <strong>I am {name}</strong> — freeform, customisable themes and layout. Personality without an audit chill.</p>
           </li>
           <li>
-            <p class="stack-ladder__name">I Crown</p>
+            <p class="stack-ladder__name">${crownReadout("active", "md")}</p>
             <p class="stack-ladder__role">Honor-bound truths</p>
             <p>Optional identifier datasheet + pointers to proprietary rails (SSO / KYC / memberships <em>you</em> run). False advertising, plagiarism, or false ID revokes <strong>Crown display</strong> only.</p>
           </li>
@@ -180,18 +278,7 @@ function homeHtml(): string {
           Optional I Crown mark when honor status is active.
         </p>
         <ul class="i-index">
-          ${pages
-            .map(
-              (p) => `
-            <li>
-              <a href="#/i/${p.slug}">
-                <span class="i-am">I am</span> ${escapeText(p.name)}
-                ${crownMark(p.crown_status)}
-                ${p.tagline ? `<span class="i-meta">${escapeText(p.tagline)}</span>` : `<span class="i-meta">attested ${escapeText(p.attested_at)}</span>`}
-              </a>
-            </li>`,
-            )
-            .join("")}
+          ${pages.map(iIndexRow).join("")}
         </ul>
         <p style="margin-top:1.25rem;margin-bottom:0">
           <a class="btn btn--ghost" href="#/i">Browse I Pages</a>
@@ -292,18 +379,7 @@ function iIndexHtml(): string {
           honor-bound and separate from iNi provenance.
         </p>
         <ul class="i-index">
-          ${pages
-            .map(
-              (p) => `
-            <li>
-              <a href="#/i/${p.slug}">
-                <span class="i-am">I am</span> ${escapeText(p.name)}
-                ${crownMark(p.crown_status)}
-                ${p.tagline ? `<span class="i-meta">${escapeText(p.tagline)}</span>` : `<span class="i-meta">attested ${escapeText(p.attested_at)}</span>`}
-              </a>
-            </li>`,
-            )
-            .join("")}
+          ${pages.map(iIndexRow).join("")}
         </ul>
         <p class="section__lede" style="margin-top:1.5rem">
           Add yours via PR in <code>content/i/</code> · <a href="${FORUM}" target="_blank" rel="noopener">Forum</a>
@@ -322,14 +398,14 @@ function iDetailHtml(page: IPage): string {
   if (crown === "active") {
     crownPanel = `
       <aside class="crown-panel crown-panel--active" aria-label="I Crown">
-        <p class="crown-panel__mark">I Crown</p>
+        <p class="crown-panel__mark">${crownReadout("active", "lg")}</p>
         <p class="crown-panel__blurb">${escapeText(page.crown_blurb || "Honor-bound identifier claims — false advertising revokes display.")}</p>
-        <p class="crown-panel__note">Honor system. Not KYC. No asset to iNi provenance.</p>
+        <p class="crown-panel__note">Honor system. Not KYC. No asset to iNi provenance.${page.wear_crown ? " Portrait wears the Crown border by opt-in." : ""}</p>
       </aside>`;
   } else if (crown === "suspended") {
     crownPanel = `
       <aside class="crown-panel crown-panel--suspended" aria-label="I Crown suspended">
-        <p class="crown-panel__mark">I Crown suspended</p>
+        <p class="crown-panel__mark">${crownReadout("suspended", "lg")}</p>
         <p class="crown-panel__blurb">Crown display is suspended pending correction of identifier claims. I Page and iNi are unaffected.</p>
       </aside>`;
   }
@@ -339,15 +415,18 @@ function iDetailHtml(page: IPage): string {
   <main class="i-view">
     <article class="i-page theme-${escapeText(theme)} layout-${escapeText(layout)}">
       <header class="i-page__hero">
-        <div class="i-page__hero-inner">
-          <p class="i-back"><a href="#/i">← I Pages</a></p>
-          <p class="i-page__kicker">I Page</p>
-          <h1 class="i-title"><span class="i-am">I am</span> ${escapeText(page.name)}</h1>
-          ${page.tagline ? `<p class="i-page__tagline">${escapeText(page.tagline)}</p>` : ""}
-          <p class="i-meta">attested ${escapeText(page.attested_at)} · theme ${escapeText(theme)} · layout ${escapeText(layout)}</p>
-          <div class="i-page__chips">
-            <span class="chip">iNi practice welcome</span>
-            ${crownMark(crown)}
+        <div class="i-page__hero-inner${page.portrait ? " i-page__hero-inner--portrait" : ""}">
+          ${portraitHtml(page, "hero")}
+          <div class="i-page__intro">
+            <p class="i-back"><a href="#/i">← I Pages</a></p>
+            <p class="i-page__kicker">I Page</p>
+            <h1 class="i-title"><span class="i-am">I am</span> ${escapeText(page.name)}</h1>
+            ${page.tagline ? `<p class="i-page__tagline">${escapeText(page.tagline)}</p>` : ""}
+            <p class="i-meta">attested ${escapeText(page.attested_at)} · theme ${escapeText(theme)} · layout ${escapeText(layout)}</p>
+            <div class="i-page__chips">
+              <span class="chip">iNi practice welcome</span>
+              ${crownReadout(crown, "md")}
+            </div>
           </div>
         </div>
       </header>

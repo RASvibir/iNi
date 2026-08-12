@@ -504,9 +504,9 @@ a:hover {
 
 .i-index a {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.35rem 0.75rem;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.85rem 1rem;
   padding: 1rem 0;
   color: inherit;
   text-decoration: none;
@@ -517,6 +517,14 @@ a:hover {
 
 .i-index a:hover {
   color: var(--accent);
+}
+
+.i-index__text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.75rem;
+  min-width: 0;
 }
 
 .i-am {
@@ -659,29 +667,76 @@ a:hover {
   padding-inline-start: 1.25rem;
 }
 
-/* —— Crown chips —— */
-.crown-chip {
+/* —— I Crown mark (leaflet crown) —— */
+.crown-icon {
   display: inline-block;
-  font-family: var(--font-body);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 0.2rem 0.55rem;
-  border: 1px solid var(--line);
+  flex-shrink: 0;
+  vertical-align: -0.12em;
+  color: inherit;
+}
+
+.crown-icon--sm {
+  width: 0.95rem;
+  height: 0.85rem;
+}
+
+.crown-icon--md {
+  width: 1.35rem;
+  height: 1.2rem;
+  vertical-align: -0.15em;
+}
+
+.crown-icon--lg {
+  width: 1.7rem;
+  height: 1.5rem;
+}
+
+/* Compact identifier — icon only, no text box */
+.crown-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   vertical-align: middle;
+  line-height: 0;
+  color: var(--accent);
 }
 
-.crown-chip--active {
-  color: var(--accent-deep);
-  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
-  background: var(--accent-soft);
+.crown-mark--suspended {
+  color: #8b4513;
+  opacity: 0.55;
 }
 
-.crown-chip--suspended {
+/* Named readout — icon + “I Crown” */
+.crown-readout {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+.crown-readout .crown-icon {
+  color: var(--accent);
+}
+
+.crown-readout--suspended {
   color: #6b3a2a;
-  border-color: color-mix(in srgb, #8b4513 40%, transparent);
-  background: #f3e6df;
+}
+
+.crown-readout--suspended .crown-icon {
+  color: #8b4513;
+  opacity: 0.7;
+}
+
+.stack-ladder__name .crown-readout {
+  font-size: inherit;
+}
+
+.i-page__chips .crown-readout {
+  font-size: 1.05rem;
 }
 
 .chip {
@@ -712,11 +767,12 @@ a:hover {
 }
 
 .crown-panel__mark {
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  font-weight: 700;
   margin: 0 0 0.35rem;
-  letter-spacing: -0.02em;
+  font-size: 1.2rem;
+}
+
+.crown-panel__mark .crown-readout {
+  font-size: inherit;
 }
 
 .crown-panel__blurb {
@@ -750,6 +806,148 @@ a:hover {
   margin-inline: auto;
   position: relative;
   z-index: 1;
+}
+
+.i-page__hero-inner--portrait {
+  display: grid;
+  gap: 1.5rem 2rem;
+  align-items: end;
+}
+
+@media (min-width: 640px) {
+  .i-page__hero-inner--portrait {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+  }
+}
+
+.i-page__intro {
+  min-width: 0;
+}
+
+/* —— Profile portrait + I Crown border —— */
+.i-portrait {
+  position: relative;
+  margin: 0;
+  width: fit-content;
+  justify-self: start;
+}
+
+.i-portrait__frame {
+  position: relative;
+  z-index: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--accent-soft) 40%, var(--surface));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ink) 8%, transparent);
+}
+
+.i-portrait__frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.i-portrait--hero .i-portrait__frame {
+  width: clamp(7.5rem, 22vw, 9.5rem);
+  height: clamp(7.5rem, 22vw, 9.5rem);
+}
+
+.i-portrait--index {
+  flex-shrink: 0;
+}
+
+.i-portrait--index .i-portrait__frame {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.i-portrait__ring {
+  display: none;
+}
+
+.i-portrait--crowned .i-portrait__ring {
+  display: block;
+  position: absolute;
+  inset: -0.45rem;
+  border-radius: 50%;
+  z-index: 0;
+  background:
+    conic-gradient(
+      from 200deg,
+      color-mix(in srgb, var(--accent) 75%, #2a6b3a),
+      color-mix(in srgb, var(--accent) 40%, #6b8f4e),
+      color-mix(in srgb, var(--accent) 85%, #1f4d3a),
+      color-mix(in srgb, var(--accent) 45%, #7a9a55),
+      color-mix(in srgb, var(--accent) 75%, #2a6b3a)
+    );
+  -webkit-mask:
+    radial-gradient(farthest-side, transparent calc(100% - 3.5px), #000 calc(100% - 3px));
+  mask:
+    radial-gradient(farthest-side, transparent calc(100% - 3.5px), #000 calc(100% - 3px));
+  animation: crown-ring-spin 28s linear infinite;
+}
+
+.i-portrait--index.i-portrait--crowned .i-portrait__ring {
+  inset: -0.28rem;
+  -webkit-mask:
+    radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 calc(100% - 2px));
+  mask:
+    radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 calc(100% - 2px));
+}
+
+.i-portrait--crowned .i-portrait__frame {
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--surface) 92%, transparent),
+    0 0 0 5px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.i-portrait__crown {
+  position: absolute;
+  top: -0.15rem;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  z-index: 2;
+  color: var(--accent);
+  filter: drop-shadow(0 1px 1px color-mix(in srgb, var(--ink) 20%, transparent));
+  line-height: 0;
+}
+
+.i-portrait--hero .i-portrait__crown .crown-icon {
+  width: 1.55rem;
+  height: 1.35rem;
+}
+
+.i-portrait--index .i-portrait__crown {
+  top: -0.05rem;
+}
+
+.i-portrait--index .i-portrait__crown .crown-icon {
+  width: 0.85rem;
+  height: 0.75rem;
+}
+
+.i-portrait__caption {
+  margin: 0.65rem 0 0;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+@keyframes crown-ring-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .i-portrait--crowned .i-portrait__ring {
+    animation: none;
+  }
 }
 
 .i-page__kicker {
@@ -859,9 +1057,17 @@ a:hover {
   border-left-color: var(--accent);
 }
 
-.i-page.theme-terminal .chip,
-.i-page.theme-terminal .crown-chip {
+.i-page.theme-terminal .chip {
   border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.i-page.theme-terminal .crown-mark,
+.i-page.theme-terminal .crown-readout .crown-icon {
+  color: var(--accent);
+}
+
+.i-page.theme-terminal .crown-readout {
+  color: var(--ink);
 }
 
 .reveal {

@@ -14,9 +14,11 @@ can revoke Crown *display* only.
 
 1. Copy `_TEMPLATE.md` → `{slug}.md`
 2. Set at least `name`, `slug`, `attested_at`
-3. Optional: `tagline`, `theme` (`ink` · `paper` · `terminal`), `layout` (`free` · `compact` · `wide`)
+3. Optional: `tagline`, `theme`, `layout`, `portrait`
 4. Optional Crown: `crown_status: active` + `crown_blurb`
-5. Open a pull request
+5. Optional: `wear_crown: true` to show the Crown border on your portrait
+   (only when Crown status is **active**)
+6. Open a pull request
 
 ## Front matter
 
@@ -28,8 +30,17 @@ can revoke Crown *display* only.
 | `tagline` | no | Short line under the name |
 | `theme` | no | `ink` (default) · `paper` · `terminal` |
 | `layout` | no | `free` (default) · `compact` · `wide` |
+| `portrait` | no | `https://…` or `/i/avatars/your.jpg` |
 | `crown_status` | no | `none` · `active` · `suspended` |
 | `crown_blurb` | no | One-line honor summary when Crown is shown |
+| `wear_crown` | no | `true` to wear Crown border on portrait (needs `crown_status: active`) |
+
+## Portrait + Crown border
+
+- Add a `portrait` URL (or drop a file under `public/i/avatars/` and link `/i/avatars/…`)
+- Set `crown_status: active` when honor status is valid
+- Set `wear_crown: true` to opt into the I Crown border around the image
+- Suspended Crown never shows the border — correct the datasheet first
 
 ## Browse
 

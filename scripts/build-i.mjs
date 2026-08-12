@@ -49,6 +49,20 @@ function normalizeLayout(raw) {
   return "free";
 }
 
+function normalizeBool(raw) {
+  const s = String(raw || "").toLowerCase().trim();
+  return s === "true" || s === "yes" || s === "1";
+}
+
+/** Allow https URLs or site-root paths like /i/avatars/me.jpg */
+function normalizePortrait(raw) {
+  const s = String(raw || "").trim();
+  if (!s) return "";
+  if (/^https?:\/\//i.test(s)) return s;
+  if (s.startsWith("/")) return s;
+  return "";
+}
+
 const files = (await readdir(dir))
   .filter((f) => f.endsWith(".md") && !f.startsWith("_") && f !== "README.md")
   .sort();
@@ -70,8 +84,10 @@ for (const file of files) {
     tagline: meta.tagline || "",
     theme: normalizeTheme(meta.theme),
     layout: normalizeLayout(meta.layout),
+    portrait: normalizePortrait(meta.portrait),
     crown_status: normalizeCrownStatus(meta.crown_status),
     crown_blurb: meta.crown_blurb || "",
+    wear_crown: normalizeBool(meta.wear_crown),
     body,
     file,
   });

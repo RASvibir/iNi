@@ -5,8 +5,10 @@ attested_at: 2026-08-12
 tagline: "Archive steward · CyberCat Sunflower · open provenance"
 theme: ink
 layout: wide
+portrait: "/i/avatars/victor-birkle.jpg"
 crown_status: active
 crown_blurb: "Public face bound to RASvibir / uXu stewardship — honor-bound identifier claims only."
+wear_crown: true
 ---
 
 Curator of **CyberCat Sunflower** (`CyberCat_Sunflower.uXu.0001`), first non-root room on the uXu archive commons. Steward of open archive practice and the iNi provenance paper trail.
