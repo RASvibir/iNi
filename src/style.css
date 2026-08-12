@@ -1065,8 +1065,8 @@ a:hover {
 }
 
 .i-portrait--crowned .i-portrait__halo {
-  /* room above the ring so the crest sits on the border, not in the photo */
-  padding: 1.85rem 0.65rem 0.55rem;
+  /* room above the ring; track hooks hang onto the border */
+  padding: 1.55rem 0.85rem 0.55rem;
 }
 
 .i-portrait--index .i-portrait__halo {
@@ -1074,7 +1074,7 @@ a:hover {
 }
 
 .i-portrait--index.i-portrait--crowned .i-portrait__halo {
-  padding: 1.05rem 0.38rem 0.32rem;
+  padding: 0.95rem 0.48rem 0.32rem;
 }
 
 .i-portrait__frame {
@@ -1115,7 +1115,7 @@ a:hover {
   display: block;
   position: absolute;
   /* hug the photo only — leave top padding for the crest */
-  top: 1.85rem;
+  top: 1.55rem;
   left: 0.12rem;
   right: 0.12rem;
   bottom: 0.12rem;
@@ -1137,7 +1137,7 @@ a:hover {
 }
 
 .i-portrait--index.i-portrait--crowned .i-portrait__ring {
-  top: 1.05rem;
+  top: 0.95rem;
   left: 0.06rem;
   right: 0.06rem;
   bottom: 0.06rem;
@@ -1151,34 +1151,31 @@ a:hover {
     0 0 0 4px color-mix(in srgb, var(--accent) 28%, transparent);
 }
 
-/* Crest rests on the ring apex — outside the photo */
+/* Crest rests on the ring apex — tracks roll into the border */
 .i-portrait__seal {
   position: absolute;
-  top: 0.05rem;
+  top: -0.05rem;
   left: 50%;
   z-index: 3;
   display: grid;
   place-items: center;
-  width: 2.35rem;
-  height: 2.35rem;
+  width: 2.55rem;
+  height: 2.7rem;
   transform: translate(-50%, 0);
-  border-radius: 50%;
+  overflow: visible;
+  border-radius: 0;
   color: var(--accent-deep);
-  background:
-    radial-gradient(circle at 35% 30%, #fff8 0%, transparent 45%),
-    linear-gradient(160deg, #e8f2ea, color-mix(in srgb, var(--accent-soft) 80%, #fff));
-  border: 1.5px solid color-mix(in srgb, var(--accent) 55%, #c9a227);
-  box-shadow:
-    0 1px 3px color-mix(in srgb, var(--ink) 18%, transparent),
-    inset 0 1px 0 #fff8;
+  background: transparent;
+  border: none;
+  box-shadow: none;
   line-height: 0;
+  filter: drop-shadow(0 1px 1px color-mix(in srgb, var(--ink) 22%, transparent));
 }
 
 .i-portrait--index .i-portrait__seal {
-  width: 1.2rem;
-  height: 1.2rem;
-  top: 0;
-  border-width: 1px;
+  width: 1.35rem;
+  height: 1.4rem;
+  top: -0.02rem;
 }
 
 .i-portrait__seal .crown-icon {
@@ -1186,13 +1183,13 @@ a:hover {
 }
 
 .i-portrait--hero .i-portrait__seal .crown-icon {
-  width: 1.35rem;
-  height: 1.35rem;
+  width: 1.7rem;
+  height: 1.7rem;
 }
 
 .i-portrait--index .i-portrait__seal .crown-icon {
-  width: 0.72rem;
-  height: 0.72rem;
+  width: 0.88rem;
+  height: 0.88rem;
 }
 
 .i-portrait__caption {

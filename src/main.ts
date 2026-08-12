@@ -101,28 +101,30 @@ function portraitHtml(
 }
 
 /**
- * I Crown mark — geometric crown peaks + leaf cue + eye gem (combo logo).
- * Suggests cannabis without a literal leaf; reads as honor crown at small size.
+ * I Crown mark — diamond peaks + central i + two data/USB tracks per side.
+ * Tracks flare outward and terminate as hooks into the portrait border.
  */
 function crownIcon(size: "sm" | "md" | "lg" = "sm"): string {
   const cls = `crown-icon crown-icon--${size}`;
   return `<svg class="${cls}" viewBox="0 0 64 64" fill="none" aria-hidden="true" focusable="false">
-    <g stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <g stroke="currentColor" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round" fill="none">
       <path d="M32 4 L37.2 18.5 L32 22.5 L26.8 18.5 Z"/>
       <path d="M20.5 10.5 L27.2 21.2 L22.5 25.2 L16.2 17.8 Z"/>
       <path d="M43.5 10.5 L47.8 17.8 L41.5 25.2 L36.8 21.2 Z"/>
       <path d="M11 20.5 L19.5 26.5 L16.5 30.5 L9.2 25.8 Z"/>
       <path d="M53 20.5 L54.8 25.8 L47.5 30.5 L44.5 26.5 Z"/>
-      <path d="M18 38.5 C22.5 33.2 27.5 30.8 32 30.8 C36.5 30.8 41.5 33.2 46 38.5 C41.5 43.8 36.5 46.2 32 46.2 C27.5 46.2 22.5 43.8 18 38.5 Z"/>
-      <path d="M20 39.5 C24.5 43.5 28.5 45 32 45 C35.5 45 39.5 43.5 44 39.5" opacity="0.85"/>
+      <path d="M32 30.6 V46.5"/>
+      <path d="M28.2 34 V39 L22.5 46.5 L20.5 52"/>
+      <path d="M25.2 35.5 V38.5 L16.5 47 L12.5 53.5"/>
+      <path d="M35.8 34 V39 L41.5 46.5 L43.5 52"/>
+      <path d="M38.8 35.5 V38.5 L47.5 47 L51.5 53.5"/>
     </g>
-    <circle cx="32" cy="38.5" r="3.6" fill="currentColor"/>
-    <g stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" fill="none">
-      <path d="M24.5 45.5 L18.5 52.5 L26.5 49.2 Z"/>
-      <path d="M39.5 45.5 L45.5 52.5 L37.5 49.2 Z"/>
-      <path d="M32 46.2 V52.5"/>
-    </g>
-    <path fill="currentColor" d="M20 55.2h24c1 0 1.8.7 1.8 1.6v1.4c0 .9-.8 1.6-1.8 1.6H20c-1 0-1.8-.7-1.8-1.6v-1.4c0-.9.8-1.6 1.8-1.6z"/>
+    <circle cx="32" cy="25.8" r="2.4" fill="currentColor"/>
+    <rect x="30" y="46" width="4" height="4" rx="0.4" fill="currentColor"/>
+    <path d="M20.5 52 L18.4 57 L20.5 55.4 L22.6 57 Z" fill="currentColor"/>
+    <path d="M12.5 53.5 L10 58.5 L12.5 56.8 L15 58.5 Z" fill="currentColor"/>
+    <path d="M43.5 52 L41.4 57 L43.5 55.4 L45.6 57 Z" fill="currentColor"/>
+    <path d="M51.5 53.5 L49 58.5 L51.5 56.8 L54 58.5 Z" fill="currentColor"/>
   </svg>`;
 }
 
