@@ -386,22 +386,101 @@ function homeHtml(): string {
 }
 
 function iIndexHtml(): string {
+  const count = pages.length;
+  const facesLabel =
+    count === 0
+      ? "No faces yet — be the first."
+      : count === 1
+        ? "1 community face"
+        : `${count} community faces`;
+
   return `
   ${headerHtml("i")}
-  <main class="i-view">
-    <section class="section">
+  <main class="i-view i-land">
+    <header class="i-land__hero">
+      <div class="i-land__hero-inner">
+        <p class="i-page__kicker">Community</p>
+        <h1 class="i-title"><span class="i-am">I</span> Pages</h1>
+        <p class="i-land__tagline">
+          Public faces for the provenance community — non-judged, freeform,
+          and open. The forum is where we talk; I Pages are where we show up as
+          <strong>I am {name}</strong>.
+        </p>
+        <div class="i-page__chips">
+          <span class="chip">${escapeText(facesLabel)}</span>
+          <span class="chip">Forum open</span>
+          <span class="chip">iNi practice welcome</span>
+        </div>
+        <div class="cta-row i-land__cta">
+          <a class="btn btn--primary" href="${FORUM}" target="_blank" rel="noopener">Open forum</a>
+          <a class="btn btn--ghost" href="#faces">Browse faces</a>
+          <a class="btn btn--ghost" href="${INI_REPO}/blob/main/content/i/_TEMPLATE.md" target="_blank" rel="noopener">Add an I Page</a>
+        </div>
+      </div>
+    </header>
+
+    <section class="section section--tight" aria-labelledby="i-land-forum-title">
       <div class="section__inner">
-        <p class="section__eyebrow">I Pages</p>
-        <h1 class="section__title">I am …</h1>
+        <aside class="i-land__forum" aria-labelledby="i-land-forum-title">
+          <p class="i-land__forum-eyebrow">Forum</p>
+          <h2 class="i-land__forum-title" id="i-land-forum-title">Talk in the open</h2>
+          <p>
+            Practice notes, Crown questions, archive help, and new I Page
+            introductions live in GitHub Discussions — not a gated club.
+            Bring honesty; leave membership theater at the door.
+          </p>
+          <p class="i-land__forum-actions">
+            <a class="btn btn--primary" href="${FORUM}" target="_blank" rel="noopener">Join the forum</a>
+            <a class="btn btn--ghost" href="${INI_REPO}" target="_blank" rel="noopener">Community repo</a>
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="i-land-about-title">
+      <div class="section__inner">
+        <p class="section__eyebrow">How it fits</p>
+        <h2 class="section__title" id="i-land-about-title">Faces beside practice</h2>
         <p class="section__lede">
-          Non-judged faces. Customisable themes and layouts. Optional I Crown is
-          honor-bound and separate from iNi provenance.
+          An I Page is optional. iNi provenance stands on its own. Crown is a
+          separate honor layer — never required to appear here.
+        </p>
+        <ul class="i-land__points">
+          <li>
+            <strong>Community</strong>
+            <span>Shared paper trail and forum — honesty about origin and custody.</span>
+          </li>
+          <li>
+            <strong>I Page</strong>
+            <span>Your public face. Themes, layout, portrait — non-judged display.</span>
+          </li>
+          <li>
+            <strong>Forum</strong>
+            <span>Where introductions, questions, and Crown talk actually happen.</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="faces" aria-labelledby="faces-title">
+      <div class="section__inner">
+        <p class="section__eyebrow">Directory</p>
+        <h2 class="section__title" id="faces-title">I am …</h2>
+        <p class="section__lede">
+          Self-attested faces. Open one to read their page — or start a forum
+          thread if you’re new here.
         </p>
         <ul class="i-index">
-          ${pages.map(iIndexRow).join("")}
+          ${
+            pages.length
+              ? pages.map(iIndexRow).join("")
+              : `<li class="i-index__empty">No I Pages yet. <a href="${FORUM}" target="_blank" rel="noopener">Say hello in the forum</a> or PR <code>content/i/</code>.</li>`
+          }
         </ul>
-        <p class="section__lede" style="margin-top:1.5rem">
-          Add yours via PR in <code>content/i/</code> · <a href="${FORUM}" target="_blank" rel="noopener">Forum</a>
+        <p class="i-land__foot">
+          Add yours via pull request under <code>content/i/</code>
+          · <a href="${FORUM}" target="_blank" rel="noopener">Ask in the forum</a>
+          · <a href="#/">Back to iNi home</a>
         </p>
       </div>
     </section>
