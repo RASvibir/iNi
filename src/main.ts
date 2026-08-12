@@ -4,6 +4,7 @@ import { renderMarkdown } from "./markdown";
 
 const SOLOIST = "https://soloist.ai/uxu";
 const UXU_COMMONS = "https://rasvibir.github.io/uXu/";
+const UXU_CREATE = "https://rasvibir.github.io/uXu/#CREATE";
 const INI_REPO = "https://github.com/RASvibir/iNi";
 const FORUM = "https://github.com/RASvibir/iNi/discussions";
 const CONTACT = "rasip@chloreform.org";
@@ -219,10 +220,11 @@ function footerHtml(): string {
 function homeHtml(): string {
   return `
   ${headerHtml("home")}
-  <main id="top">
+  <main id="top" class="home-view">
     <section class="hero" aria-labelledby="hero-brand">
       <div class="hero__atmosphere" aria-hidden="true"></div>
       <div class="hero__inner">
+        <p class="hero__status reveal" aria-hidden="true">uXu :: 0?0 &gt; INI · provenance practice</p>
         <p id="hero-brand" class="hero__brand reveal">iNi</p>
         <h1 class="hero__headline reveal">Practice provenance together</h1>
         <p class="hero__support reveal">
@@ -232,6 +234,7 @@ function homeHtml(): string {
         </p>
         <div class="cta-row reveal">
           <a class="btn btn--primary" href="#stack">See the stack</a>
+          <a class="btn btn--ghost" href="${UXU_CREATE}">Create archive</a>
           <a class="btn btn--ghost" href="#/i">I Pages</a>
           <a class="btn btn--ghost" href="${FORUM}" target="_blank" rel="noopener">Forum</a>
           <a class="btn btn--ghost" href="${UXU_COMMONS}">Visit uXu</a>
@@ -278,7 +281,7 @@ function homeHtml(): string {
           <li>
             <div>
               <strong>Open 0?0</strong>
-              <p>Start at the uXu commons, then Quick Nav → iNi Provenance (or type <code>INI</code>).</p>
+              <p>Start at the uXu commons, then Quick Nav → iNi Provenance (or type <code>INI</code>). To start a shelf: <a href="${UXU_CREATE}">Create archive</a> (or type <code>CREATE ARCHIVE</code>).</p>
             </div>
           </li>
           <li>
@@ -294,6 +297,10 @@ function homeHtml(): string {
             </div>
           </li>
         </ol>
+        <p class="cta-row" style="margin-top:1.25rem">
+          <a class="btn btn--primary" href="${UXU_CREATE}">Create archive on uXu</a>
+          <a class="btn btn--ghost" href="${UXU_COMMONS}">Open 0?0</a>
+        </p>
         <pre class="snippet" tabindex="0"><code>"uxu": {
   "ini": {
     "optIn": true,
@@ -345,6 +352,7 @@ function homeHtml(): string {
         <div class="links-grid">
           <a href="${SOLOIST}"><strong>Soloist notes</strong><span>Primary public face</span></a>
           <a href="${UXU_COMMONS}"><strong>uXu commons</strong><span>Archives · 0?0 · INI</span></a>
+          <a href="${UXU_CREATE}"><strong>Create archive</strong><span>Open CREATE ARCHIVE on 0?0</span></a>
           <a href="${FORUM}" target="_blank" rel="noopener"><strong>Forum</strong><span>GitHub Discussions</span></a>
           <a href="#/i"><strong>I Pages</strong><span>I am {name}</span></a>
         </div>
@@ -602,6 +610,7 @@ function render(): void {
   const route = parseRoute();
   if (route.view === "i-detail" && route.slug) {
     const page = pages.find((p) => p.slug === route.slug);
+    app!.dataset.surface = "i";
     app!.innerHTML = page
       ? iDetailHtml(page)
       : `${headerHtml("i")}<main class="i-view"><section class="section"><div class="section__inner"><h1 class="section__title">Not found</h1><p><a href="#/i">← I Pages</a></p></div></section></main>${footerHtml()}`;
@@ -610,11 +619,13 @@ function render(): void {
     return;
   }
   if (route.view === "i-index") {
+    app!.dataset.surface = "i";
     app!.innerHTML = iIndexHtml();
     document.title = "I Pages · iNi";
     window.scrollTo(0, 0);
     return;
   }
+  app!.dataset.surface = "home";
   app!.innerHTML = homeHtml();
   document.title = "iNi — provenance practice · uXu";
   bindReveals();

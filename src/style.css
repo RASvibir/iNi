@@ -1364,6 +1364,170 @@ a:hover {
   transition-delay: 300ms;
 }
 
+.hero .reveal:nth-child(5) {
+  transition-delay: 380ms;
+}
+
+/* —— Home only: uXu / 0?0 console atmosphere (I Pages untouched) —— */
+#app[data-surface="home"] {
+  --uxu-screen: #030805;
+  --uxu-green: #3de872;
+  --uxu-green-bright: #6dff9a;
+  --uxu-panel: #d6cdb8;
+  --uxu-bezel: #c4b89a;
+  --uxu-cyan: #5ef0ff;
+}
+
+#app[data-surface="home"] .site-header {
+  background: color-mix(in srgb, var(--uxu-screen) 88%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--uxu-green) 28%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+#app[data-surface="home"] .nav a {
+  color: color-mix(in srgb, var(--uxu-green-bright) 72%, #fff);
+  font-family: "VT323", ui-monospace, monospace;
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+}
+
+#app[data-surface="home"] .nav a:hover {
+  color: var(--uxu-green-bright);
+}
+
+#app[data-surface="home"] .hero {
+  color: #eaffef;
+}
+
+#app[data-surface="home"] .hero__atmosphere {
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 30%, #0f3a22 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 80% 70%, #1a1520 0%, transparent 50%),
+    linear-gradient(180deg, #06140a 0%, var(--uxu-screen) 55%, #0a100c 100%);
+}
+
+#app[data-surface="home"] .hero__atmosphere::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 2px,
+    rgba(0, 0, 0, 0.22) 2px,
+    rgba(0, 0, 0, 0.22) 3px
+  );
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+#app[data-surface="home"] .hero__atmosphere::after {
+  opacity: 0.2;
+  mix-blend-mode: screen;
+  background-image: none;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 40%, rgba(61, 232, 114, 0.12), transparent 60%);
+}
+
+#app[data-surface="home"] .hero__status {
+  margin: 0 0 1rem;
+  font-family: "VT323", ui-monospace, monospace;
+  font-size: 1.15rem;
+  letter-spacing: 0.06em;
+  color: var(--uxu-green);
+  text-shadow: 0 0 8px rgba(61, 232, 114, 0.35);
+}
+
+#app[data-surface="home"] .hero__brand {
+  color: var(--uxu-green-bright);
+  text-shadow:
+    0 0 12px rgba(109, 255, 154, 0.35),
+    0 0 40px rgba(61, 232, 114, 0.2);
+}
+
+#app[data-surface="home"] .hero__headline {
+  color: #eaffef;
+  max-width: 22ch;
+}
+
+#app[data-surface="home"] .hero__support {
+  color: color-mix(in srgb, #eaffef 72%, var(--uxu-green));
+}
+
+#app[data-surface="home"] .btn--primary {
+  background: var(--uxu-green);
+  color: var(--uxu-screen);
+  border-color: var(--uxu-green-bright);
+}
+
+#app[data-surface="home"] .btn--primary:hover {
+  background: var(--uxu-green-bright);
+  color: var(--uxu-screen);
+}
+
+#app[data-surface="home"] .btn--ghost {
+  color: var(--uxu-green-bright);
+  border-color: color-mix(in srgb, var(--uxu-green) 45%, transparent);
+  background: rgba(3, 8, 5, 0.35);
+}
+
+#app[data-surface="home"] .btn--ghost:hover {
+  border-color: var(--uxu-green-bright);
+  background: rgba(15, 58, 34, 0.55);
+  color: #fff;
+}
+
+#app[data-surface="home"] .home-view {
+  background:
+    linear-gradient(180deg, var(--uxu-screen) 0%, transparent 18rem),
+    linear-gradient(165deg, #f3efe4, #e4ddd0 40%, #dfe8e4);
+}
+
+#app[data-surface="home"] .section__eyebrow {
+  font-family: "VT323", ui-monospace, monospace;
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+  color: #1f8f4a;
+}
+
+#app[data-surface="home"] .stack-ladder li {
+  border-top-color: #1f8f4a;
+  background: color-mix(in srgb, var(--uxu-panel) 55%, #fff);
+}
+
+#app[data-surface="home"] .stack-ladder__role {
+  color: #1f8f4a;
+}
+
+#app[data-surface="home"] .snippet {
+  background: var(--uxu-screen);
+  color: var(--uxu-green-bright);
+  border: 2px solid #0d3a1e;
+  box-shadow: inset 0 0 24px rgba(61, 232, 114, 0.08);
+  font-family: "VT323", ui-monospace, monospace;
+  font-size: 1.05rem;
+  line-height: 1.45;
+}
+
+#app[data-surface="home"] .forum-panel {
+  border-inline-start-color: #1f8f4a;
+  background: color-mix(in srgb, var(--uxu-panel) 40%, #eaf6ee);
+}
+
+#app[data-surface="home"] .site-footer {
+  background: color-mix(in srgb, var(--uxu-screen) 92%, #0a140c);
+  border-top-color: color-mix(in srgb, var(--uxu-green) 25%, transparent);
+  color: color-mix(in srgb, var(--uxu-green-bright) 70%, #fff);
+}
+
+#app[data-surface="home"] .site-footer a {
+  color: inherit;
+}
+
+#app[data-surface="home"] .site-footer a:hover {
+  color: var(--uxu-green-bright);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
