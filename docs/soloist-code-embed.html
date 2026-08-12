@@ -1,0 +1,209 @@
+<!--
+  Soloist Designer → Add section → Code Embed
+  1. Section Heading: leave blank if allowed, or set to a single space / "iNi"
+     (the embed carries the brand — avoid a second loud Designer title)
+  2. Paste from <section> through </section> into Code
+  3. Light color preset · Save Draft · Publish
+-->
+<section class="ini-brand" aria-labelledby="ini-brand-title">
+  <style>
+    .ini-brand {
+      --ink: #1a2428;
+      --ink-soft: #3d4a50;
+      --accent: #0d5c63;
+      --accent-deep: #084248;
+      --wash: #dfecef;
+      --sand: #efe6d8;
+      --surface: rgba(250, 249, 246, 0.92);
+      --line: rgba(26, 36, 40, 0.12);
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      max-width: 44rem;
+      margin: 0 auto;
+      padding: 1.75rem 1.35rem 1.6rem;
+      color: var(--ink);
+      font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+      line-height: 1.55;
+      background:
+        radial-gradient(900px 420px at 8% -20%, var(--wash) 0%, transparent 55%),
+        radial-gradient(700px 380px at 100% 10%, var(--sand) 0%, transparent 50%),
+        linear-gradient(165deg, #f7f4ef, #e8eef0);
+      border-radius: 2px;
+    }
+    .ini-brand *,
+    .ini-brand *::before,
+    .ini-brand *::after {
+      box-sizing: border-box;
+    }
+    .ini-brand__mark {
+      margin: 0 0 0.35rem;
+      font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+      font-size: clamp(2.4rem, 7vw, 3.25rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--ink);
+    }
+    .ini-brand__mark span {
+      color: var(--accent);
+    }
+    .ini-brand__whisper {
+      margin: 0 0 1.1rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .ini-brand__title {
+      margin: 0 0 0.75rem;
+      font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+      font-size: clamp(1.35rem, 3vw, 1.7rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      color: var(--ink);
+    }
+    .ini-brand__lede {
+      margin: 0 0 1.15rem;
+      color: var(--ink-soft);
+      font-size: 1.02rem;
+      max-width: 38rem;
+    }
+    .ini-brand__ladder {
+      margin: 0 0 1.35rem;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.55rem;
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+    }
+    .ini-brand__ladder li {
+      display: grid;
+      grid-template-columns: 5.5rem 1fr;
+      gap: 0.65rem;
+      align-items: baseline;
+      padding: 0.35rem 0;
+      border-top: 1px solid var(--line);
+    }
+    .ini-brand__ladder li:last-child {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 0.55rem;
+    }
+    .ini-brand__ladder b {
+      font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+    .ini-brand__doors {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.55rem;
+    }
+    @media (min-width: 560px) {
+      .ini-brand__doors {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.65rem;
+      }
+    }
+    .ini-brand__doors a {
+      display: block;
+      padding: 0.85rem 0.9rem;
+      text-decoration: none;
+      color: inherit;
+      background: var(--surface);
+      border-top: 2px solid var(--accent);
+      transition: background 180ms ease, color 180ms ease;
+    }
+    .ini-brand__doors a:hover,
+    .ini-brand__doors a:focus-visible {
+      background: color-mix(in srgb, var(--wash) 65%, #fff);
+      outline: none;
+    }
+    .ini-brand__doors strong {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+      color: var(--accent-deep);
+    }
+    .ini-brand__doors span {
+      display: block;
+      font-size: 0.84rem;
+      color: var(--ink-soft);
+      line-height: 1.4;
+    }
+    .ini-brand__foot {
+      margin: 1.15rem 0 0;
+      font-size: 0.86rem;
+      color: var(--ink-soft);
+    }
+    .ini-brand__foot a {
+      color: var(--accent);
+      text-underline-offset: 0.15em;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ini-brand__doors a {
+        transition: none;
+      }
+    }
+  </style>
+
+  <p class="ini-brand__mark" id="ini-brand-title" aria-label="iNi">i<span>N</span>i</p>
+  <p class="ini-brand__whisper">Provenance community</p>
+  <h2 class="ini-brand__title">A face, a forum, and an honor mark</h2>
+  <p class="ini-brand__lede">
+    iNi is practiced beside the uXu commons — honesty about origin and custody,
+    not a product lane. When you want a public face or a place to talk, these
+    doors stay open. Nothing here is enrollment theater.
+  </p>
+
+  <ul class="ini-brand__ladder" aria-label="The iNi stack">
+    <li>
+      <b>iNi</b>
+      <span>Provenance practice — self-attested honesty on archives.</span>
+    </li>
+    <li>
+      <b>I Page</b>
+      <span>Non-judged public face — reads as <em>I am {name}</em>.</span>
+    </li>
+    <li>
+      <b>I Crown</b>
+      <span>Optional honor for identifier truths you stand behind — not KYC.</span>
+    </li>
+  </ul>
+
+  <ul class="ini-brand__doors">
+    <li>
+      <a href="https://rasvibir.github.io/iNi/#/i" target="_blank" rel="noopener">
+        <strong>I Pages</strong>
+        <span>Browse community faces</span>
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/RASvibir/iNi/discussions" target="_blank" rel="noopener">
+        <strong>Forum</strong>
+        <span>Talk in the open</span>
+      </a>
+    </li>
+    <li>
+      <a href="https://rasvibir.github.io/iNi/#stack" target="_blank" rel="noopener">
+        <strong>The stack</strong>
+        <span>How the layers fit</span>
+      </a>
+    </li>
+  </ul>
+
+  <p class="ini-brand__foot">
+    Paper trail lives in
+    <a href="https://github.com/RASvibir/iNi" target="_blank" rel="noopener">RASvibir/iNi</a>
+    — pull requests, not a storefront.
+  </p>
+</section>
