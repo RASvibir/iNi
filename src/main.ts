@@ -72,38 +72,51 @@ function portraitHtml(
     ? `${page.name} — I Crown border`
     : page.name;
   const src = resolvePortraitSrc(page.portrait);
+  const crownSeal = crowned
+    ? `<span class="i-portrait__seal" aria-hidden="true">${crownIcon(size === "hero" ? "md" : "sm")}</span>`
+    : "";
+  const caption =
+    crowned && size === "hero"
+      ? `<figcaption class="i-portrait__caption">Wearing I Crown</figcaption>`
+      : "";
   return `
     <figure class="${classes}" title="${escapeAttr(label)}">
-      <div class="i-portrait__ring" aria-hidden="true"></div>
-      <div class="i-portrait__frame">
-        <img
-          src="${escapeAttr(src)}"
-          alt=""
-          width="160"
-          height="160"
-          loading="lazy"
-          decoding="async"
-        />
+      <div class="i-portrait__halo">
+        <div class="i-portrait__ring" aria-hidden="true"></div>
+        <div class="i-portrait__frame">
+          <img
+            src="${escapeAttr(src)}"
+            alt=""
+            width="160"
+            height="160"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        ${crownSeal}
       </div>
-      ${crowned ? `<span class="i-portrait__crown" aria-hidden="true">${crownIcon(size === "hero" ? "md" : "sm")}</span>` : ""}
-      ${crowned && size === "hero" ? `<figcaption class="i-portrait__caption">Wearing I Crown</figcaption>` : ""}
+      ${caption}
     </figure>`;
 }
 
-/** Sleek five-leaflet crown — reads as honor mark with a soft pot-leaf cue. */
+/**
+ * I Crown mark — 7-leaflet cannabis silhouette (dispensary-clean) + honor band.
+ */
 function crownIcon(size: "sm" | "md" | "lg" = "sm"): string {
   const cls = `crown-icon crown-icon--${size}`;
-  return `<svg class="${cls}" viewBox="0 0 64 56" fill="none" aria-hidden="true" focusable="false">
-    <g fill="currentColor">
-      <path d="M32 2.5c-2.2 8.2-3.6 16.6-4 26.2h8c-.4-9.6-1.8-18-4-26.2z"/>
-      <path d="M28.2 14.5c-4.8-2.8-9.6-2.2-13.4.6 3.1 3.6 7.2 8.2 11.2 13.6.4-4.9.9-9.6 2.2-14.2z"/>
-      <path d="M35.8 14.5c4.8-2.8 9.6-2.2 13.4.6-3.1 3.6-7.2 8.2-11.2 13.6-.4-4.9-.9-9.6-2.2-14.2z"/>
-      <path d="M18.8 24.2c-4.2-1.6-8.4-.6-11.6 2.2 2.2 3.8 5.4 8.2 9.2 12.8.6-5.2 1.2-10 2.4-15z"/>
-      <path d="M45.2 24.2c4.2-1.6 8.4-.6 11.6 2.2-2.2 3.8-5.4 8.2-9.2 12.8-.6-5.2-1.2-10-2.4-15z"/>
-      <path d="M20 39.2h24l1.6 3.2H18.4z"/>
-      <path d="M13 45.6h38c1.2 0 2.2.9 2.2 2.1v2.1c0 1.2-1 2.1-2.2 2.1H13c-1.2 0-2.2-.9-2.2-2.1v-2.1c0-1.2 1-2.1 2.2-2.1z"/>
+  return `<svg class="${cls}" viewBox="0 0 64 64" fill="none" aria-hidden="true" focusable="false">
+    <g fill="currentColor" transform="translate(32 38)">
+      <path d="M0-34c3.2 8.5 3.6 17.2 0 34c-3.6-16.8-3.2-25.5 0-34z"/>
+      <path d="M0-30c3 7.5 3.4 15.2 0 30c-3.4-14.8-3-22.5 0-30z" transform="rotate(-28)"/>
+      <path d="M0-30c3 7.5 3.4 15.2 0 30c-3.4-14.8-3-22.5 0-30z" transform="rotate(28)"/>
+      <path d="M0-24c2.6 6.2 2.9 12.4 0 24c-2.9-11.6-2.6-17.8 0-24z" transform="rotate(-52)"/>
+      <path d="M0-24c2.6 6.2 2.9 12.4 0 24c-2.9-11.6-2.6-17.8 0-24z" transform="rotate(52)"/>
+      <path d="M0-16c2 4.2 2.2 8.4 0 16c-2.2-7.6-2-11.8 0-16z" transform="rotate(-76)"/>
+      <path d="M0-16c2 4.2 2.2 8.4 0 16c-2.2-7.6-2-11.8 0-16z" transform="rotate(76)"/>
     </g>
-    <path stroke="currentColor" stroke-width="1.25" stroke-linecap="round" opacity="0.28" d="M32 8v22"/>
+    <path fill="currentColor" d="M30.4 38h3.2v8.2h-3.2z" opacity="0.85"/>
+    <path fill="currentColor" d="M15 52.4h34c1.15 0 2.1.85 2.1 1.95v1.9c0 1.1-.95 1.95-2.1 1.95H15c-1.15 0-2.1-.85-2.1-1.95v-1.9c0-1.1.95-1.95 2.1-1.95z"/>
+    <path stroke="currentColor" stroke-width="1.35" stroke-linecap="round" opacity="0.35" d="M32 8.5v29"/>
   </svg>`;
 }
 
