@@ -1065,8 +1065,11 @@ a:hover {
 }
 
 .i-portrait--crowned .i-portrait__halo {
-  /* room above the ring; track hooks hang onto the border */
-  padding: 1.55rem 0.85rem 0.55rem;
+  /* equal side/bottom so the honor ring stays a true circle; extra top for crest */
+  --crown-pad: 0.78rem;
+  --crown-crest: 1.6rem;
+  --crown-ring: 7.5px;
+  padding: var(--crown-crest) var(--crown-pad) var(--crown-pad);
 }
 
 .i-portrait--index .i-portrait__halo {
@@ -1074,7 +1077,10 @@ a:hover {
 }
 
 .i-portrait--index.i-portrait--crowned .i-portrait__halo {
-  padding: 0.95rem 0.48rem 0.32rem;
+  --crown-pad: 0.46rem;
+  --crown-crest: 0.98rem;
+  --crown-ring: 4.5px;
+  padding: var(--crown-crest) var(--crown-pad) var(--crown-pad);
 }
 
 .i-portrait__frame {
@@ -1114,47 +1120,57 @@ a:hover {
 .i-portrait--crowned .i-portrait__ring {
   display: block;
   position: absolute;
-  /* hug the photo only — leave top padding for the crest */
-  top: 1.55rem;
-  left: 0.12rem;
-  right: 0.12rem;
-  bottom: 0.12rem;
+  /* concentric with the photo — same inset on all sides, then expand by ring width */
+  top: calc(var(--crown-crest) - var(--crown-ring));
+  left: calc(var(--crown-pad) - var(--crown-ring));
+  right: calc(var(--crown-pad) - var(--crown-ring));
+  bottom: calc(var(--crown-pad) - var(--crown-ring));
   border-radius: 50%;
   z-index: 0;
   pointer-events: none;
   background:
     conic-gradient(
-      from 160deg,
-      #1f5c3a,
-      color-mix(in srgb, var(--accent) 70%, #3d8f4a),
-      #c9a227,
-      color-mix(in srgb, var(--accent) 55%, #2a6b3a),
-      #1f5c3a
+      from -90deg,
+      #143728 0deg,
+      #1f5c3a 38deg,
+      #c9a227 78deg,
+      #e0c35a 98deg,
+      #2f7a4a 140deg,
+      #1a4d32 185deg,
+      #b8860b 230deg,
+      #d4af37 250deg,
+      #3d8f5a 300deg,
+      #163f2a 340deg,
+      #143728 360deg
     );
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4.5px));
-  mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4.5px));
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent);
-}
-
-.i-portrait--index.i-portrait--crowned .i-portrait__ring {
-  top: 0.95rem;
-  left: 0.06rem;
-  right: 0.06rem;
-  bottom: 0.06rem;
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3.5px), #000 calc(100% - 3px));
-  mask: radial-gradient(farthest-side, transparent calc(100% - 3.5px), #000 calc(100% - 3px));
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - var(--crown-ring)),
+    #000 calc(100% - var(--crown-ring) + 0.5px)
+  );
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - var(--crown-ring)),
+    #000 calc(100% - var(--crown-ring) + 0.5px)
+  );
+  box-shadow:
+    0 0 0 1.5px color-mix(in srgb, #c9a227 55%, transparent),
+    0 0 0 3px color-mix(in srgb, var(--bg-0) 80%, transparent),
+    0 0 16px color-mix(in srgb, #1f5c3a 32%, transparent),
+    0 0 28px color-mix(in srgb, #c9a227 22%, transparent);
+  animation: crown-ring-spin 56s linear infinite;
 }
 
 .i-portrait--crowned .i-portrait__frame {
   box-shadow:
-    0 0 0 3px color-mix(in srgb, var(--bg-0) 88%, #fff),
-    0 0 0 4px color-mix(in srgb, var(--accent) 28%, transparent);
+    0 0 0 3px color-mix(in srgb, var(--bg-0) 94%, #fff),
+    0 0 0 4px color-mix(in srgb, #c9a227 70%, #1f5c3a);
 }
 
 /* Crest rests on the ring apex — tracks roll into the border */
 .i-portrait__seal {
   position: absolute;
-  top: -0.05rem;
+  top: calc(var(--crown-crest) - var(--crown-ring) - 1.45rem);
   left: 50%;
   z-index: 3;
   display: grid;
@@ -1175,7 +1191,7 @@ a:hover {
 .i-portrait--index .i-portrait__seal {
   width: 1.35rem;
   height: 1.4rem;
-  top: -0.02rem;
+  top: calc(var(--crown-crest) - var(--crown-ring) - 0.78rem);
 }
 
 .i-portrait__seal .crown-icon {
