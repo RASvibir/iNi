@@ -6,6 +6,25 @@ No ChloReform naming.
 
 ---
 
+## Services section — add Open uXu button
+
+Your nav **Services** jumps to `#services-1` (the **What iNi is** / layer cards block).
+Add a clear button under that section (or under the three uXu / 0?0 / iNi cards):
+
+**Button label:** `Open uXu commons`  
+**Link:** `https://rasvibir.github.io/uXu/`  
+**Behavior:** open in new tab if Designer offers that  
+
+Optional second button on the same row:
+
+**Button label:** `Practice on 0?0`  
+**Link:** `https://rasvibir.github.io/uXu/`  
+(same door — 0?0 is the commons console; visitors land on the archive interface)
+
+If Designer only allows one service CTA, prefer **Open uXu commons**.
+
+---
+
 ## Hero CTAs
 
 **Primary button**  
@@ -51,6 +70,14 @@ Keep existing FAQ items (What is iNi / uXu / 0?0 / opt in without this website /
 
 ---
 
+## Footer
+
+Keep **uXu** → https://rasvibir.github.io/uXu/  
+**GitHub Repo** can stay https://github.com/RASvibir/uXu (commons software).  
+Optionally add a footer link **iNi paper trail** → https://github.com/RASvibir/iNi
+
+---
+
 ## Optional one-liner under Practice
 
 You do not need this page to opt in. Soloist explains practice; 0?0 runs the protocol; GitHub holds the paper trail.
@@ -61,7 +88,8 @@ You do not need this page to opt in. Soloist explains practice; 0?0 runs the pro
 
 Smoke-check:
 
-1. Hero → Visit uXu opens commons  
-2. New paper-trail link opens RASvibir/iNi  
-3. New FAQ answer is readable on mobile  
-4. `/qtp_[devo]` still quiet, late on the page  
+1. Services → **Open uXu commons** opens https://rasvibir.github.io/uXu/  
+2. Hero → Visit uXu opens commons  
+3. Paper-trail link opens RASvibir/iNi  
+4. New FAQ answer is readable on mobile  
+5. `/qtp_[devo]` still quiet, late on the page  
