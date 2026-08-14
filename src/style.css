@@ -690,6 +690,24 @@ a:hover {
 
 .i-land__cta {
   margin-top: 1.35rem;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.i-land__cta .btn {
+  width: 100%;
+}
+
+@media (min-width: 32rem) {
+  .i-land__cta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .i-land__cta .btn {
+    width: auto;
+  }
 }
 
 .i-land__forum {

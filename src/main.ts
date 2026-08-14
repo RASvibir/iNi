@@ -440,9 +440,8 @@ function iIndexHtml(): string {
           <span class="chip">iNi practice welcome</span>
         </div>
         <div class="cta-row i-land__cta">
-          <a class="btn btn--primary" href="${FORUM}" target="_blank" rel="noopener">Open forum</a>
-          <a class="btn btn--ghost" href="#faces">Browse faces</a>
-          <a class="btn btn--ghost" href="${INI_REPO}/blob/main/content/i/_TEMPLATE.md" target="_blank" rel="noopener">Add an I Page</a>
+          <a class="btn btn--primary" href="#faces">Browse faces</a>
+          <a class="btn btn--ghost" href="${INI_REPO}/blob/main/content/i/README.md" target="_blank" rel="noopener">Add an I Page</a>
         </div>
       </div>
     </header>

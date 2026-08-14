@@ -22,9 +22,10 @@ Do **not** claim legal chain-of-custody. Do **not** treat a merge as enrollment.
 ## I page PRs
 
 1. Fork this repo
-2. Copy `content/i/_TEMPLATE.md` → `content/i/{slug}.md`
-3. Set `name`, `slug`, `attested_at` — write whatever you want in the body
-4. Open a pull request
+2. Read [`content/i/README.md`](content/i/README.md) — short human steps
+3. Copy `content/i/_TEMPLATE.md` → `content/i/{slug}.md`
+4. Set `name`, `slug`, `attested_at` — write whatever you want in the body
+5. Open a pull request
 
 Merged I pages appear at https://rasvibir.github.io/iNi/#/i as **I am {name}**.
 

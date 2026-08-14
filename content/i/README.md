@@ -1,54 +1,42 @@
 # I Pages
 
-Opt-in public faces for the iNi community. Each page displays as **I am {name}**.
+Public faces for the iNi community. Each page shows as **I am {name}**.
 
-**I Pages** are **non-judged** profile display. Freeform Markdown — customize as
-you wish (`theme`, `layout`, body sections).
+Freeform. Non-judged. Not membership.
 
-Optional **I Crown** (`crown_status: active`) is a separate honor layer for
-identifier truths and proprietary toolkit pointers — not KYC itself, and **no
-asset to iNi provenance**. False advertising / plagiarism / false identification
-can revoke Crown *display* only.
+## Add yours (about 5 minutes)
 
-## Add an I Page
+1. Fork [RASvibir/iNi](https://github.com/RASvibir/iNi)
+2. Copy [`_TEMPLATE.md`](_TEMPLATE.md) → `content/i/{slug}.md`  
+   Example: `maya-chen.md`
+3. At the top of the file, set:
+   - `name: "Maya Chen"`
+   - `slug: "maya-chen"`
+   - `attested_at: 2026-08-13` (use today’s date)
+4. Write whatever you want under the headings (About, Links, …)
+5. Open a pull request
 
-1. Copy `_TEMPLATE.md` → `{slug}.md`
-2. Set at least `name`, `slug`, `attested_at`
-3. Optional: `tagline`, `theme`, `layout`, `portrait`
-4. Optional Crown: `crown_status: active` + `crown_blurb`
-5. Optional: `wear_crown: true` to show the Crown border on your portrait
-   (only when Crown status is **active**)
-6. Open a pull request
-
-## Front matter
-
-| Field | Required | Notes |
-|-------|----------|--------|
-| `name` | yes | Shown as **I am {name}** |
-| `slug` | yes | Filename should match |
-| `attested_at` | yes | YYYY-MM-DD |
-| `tagline` | no | Short line under the name |
-| `theme` | no | `ink` (default) · `paper` · `terminal` |
-| `layout` | no | `free` (default) · `compact` · `wide` |
-| `portrait` | no | `https://…` or `/i/avatars/your.jpg` |
-| `crown_status` | no | `none` · `active` · `suspended` |
-| `crown_blurb` | no | One-line honor summary when Crown is shown |
-| `wear_crown` | no | `true` to wear Crown border on portrait (needs `crown_status: active`) |
-
-## Portrait + Crown border
-
-- Add a `portrait` URL (or drop a file under `public/i/avatars/` and link `/i/avatars/…`)
-- Set `crown_status: active` when honor status is valid
-- Set `wear_crown: true` to opt into the I Crown border around the image
-- Suspended Crown never shows the border — correct the datasheet first
-
-## Browse
-
+That’s it. After merge you appear at  
 https://rasvibir.github.io/iNi/#/i
 
-## Forum
+## Optional extras
 
-https://github.com/RASvibir/iNi/discussions
+| Want… | Set… |
+|-------|------|
+| A short line under your name | `tagline: "…"` |
+| A photo | `portrait: "https://…"` or drop a file in `public/i/avatars/` and use `/i/avatars/your.jpg` |
+| Look & feel | `theme: ink` · `paper` · `terminal` |
+| Page width | `layout: free` · `compact` · `wide` |
+| I Crown honor line | `crown_status: active` + `crown_blurb: "…"` |
+| Crown border on your photo | also `wear_crown: true` (only when Crown is **active**) |
+
+Crown is optional honor — never required. Suspending Crown removes the border and
+badge display only; your I Page and iNi provenance stay.
+
+## Browse & talk
+
+- Faces: https://rasvibir.github.io/iNi/#/i
+- Forum: https://github.com/RASvibir/iNi/discussions
 
 ## Example
 
