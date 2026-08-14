@@ -6,6 +6,7 @@ tagline: "One short line under your name"
 theme: ink
 layout: free
 portrait: ""
+contact_email: ""
 crown_status: none
 crown_blurb: ""
 wear_crown: false
@@ -13,7 +14,7 @@ wear_crown: false
 
 # How to use this file
 
-Prefer the form: **[Miss Pamic's Template](https://rasvibir.github.io/iNi/#/i/new)** — fill fields, open on GitHub, done.
+Prefer **[Miss Pamic's Template](https://rasvibir.github.io/iNi/#/i/new)** — edit your profile, keep an email for updates, send changes without Git.
 
 Or by hand:
 

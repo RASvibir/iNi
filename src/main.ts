@@ -18,6 +18,7 @@ type IPage = {
   theme?: string;
   layout?: string;
   portrait?: string;
+  contact_email?: string;
   crown_status?: string;
   crown_blurb?: string;
   wear_crown?: boolean;
@@ -593,6 +594,10 @@ function buildIPageMarkdown(data: {
   theme: string;
   layout: string;
   portrait: string;
+  contact_email: string;
+  crown_status: string;
+  crown_blurb: string;
+  wear_crown: boolean;
   about: string;
   links: string;
 }): string {
@@ -608,6 +613,11 @@ function buildIPageMarkdown(data: {
     });
   const linksBlock =
     linkLines.length > 0 ? linkLines.join("\n") : "- Add a link here";
+  const crown = ["none", "active", "suspended"].includes(data.crown_status)
+    ? data.crown_status
+    : "none";
+  const wear =
+    crown === "active" && data.wear_crown ? "true" : "false";
 
   return `---
 name: ${yamlQuote(data.name)}
@@ -617,9 +627,10 @@ tagline: ${yamlQuote(data.tagline)}
 theme: ${data.theme}
 layout: ${data.layout}
 portrait: ${yamlQuote(data.portrait)}
-crown_status: none
-crown_blurb: ""
-wear_crown: false
+contact_email: ${yamlQuote(data.contact_email)}
+crown_status: ${crown}
+crown_blurb: ${yamlQuote(data.crown_blurb)}
+wear_crown: ${wear}
 ---
 
 ## About
@@ -636,22 +647,113 @@ ${linksBlock}
 
 ## I Crown
 
-Optional. Skip unless you want the honor layer.
+${
+  crown === "active"
+    ? data.crown_blurb.trim() ||
+      "Honor-bound identifier claims — false advertising revokes display."
+    : "Optional. Skip unless you want the honor layer."
+}
 
 *Self-attested I Page — not enrollment.*
 `;
 }
 
+function extractSection(body: string, heading: string): string {
+  const re = new RegExp(
+    `##\\s+${heading}\\s*\\n([\\s\\S]*?)(?=\\n##\\s+|$)`,
+    "i",
+  );
+  const m = body.match(re);
+  return m ? m[1].trim() : "";
+}
+
+function linksToPlain(section: string): string {
+  return section
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => {
+      const md = l.match(/^[-*]\s+\[([^\]]+)\]\((https?:\/\/[^)]+)\)/i);
+      if (md) return md[2];
+      return l.replace(/^[-*]\s+/, "");
+    })
+    .join("\n");
+}
+
+const PAMIC_STORE = "ini-miss-pamic-profile";
+
+type PamicDraft = {
+  email: string;
+  slug: string;
+  name: string;
+};
+
+function loadPamicDraft(): PamicDraft | null {
+  try {
+    const raw = localStorage.getItem(PAMIC_STORE);
+    if (!raw) return null;
+    return JSON.parse(raw) as PamicDraft;
+  } catch {
+    return null;
+  }
+}
+
+function savePamicDraft(data: { email: string; slug: string; name: string }): void {
+  localStorage.setItem(
+    PAMIC_STORE,
+    JSON.stringify({
+      email: data.email,
+      slug: data.slug,
+      name: data.name,
+    }),
+  );
+}
+
+function buildUpdateMailto(data: {
+  mode: "create" | "update";
+  name: string;
+  slug: string;
+  email: string;
+  markdown: string;
+  crown_status: string;
+  wear_crown: boolean;
+}): string {
+  const kind = data.mode === "create" ? "new I Page" : "I Page / Crown update";
+  const subject = `[iNi] ${kind}: ${data.name} (${data.slug})`;
+  const body = [
+    `Miss Pamic's Template — ${kind}`,
+    ``,
+    `From: ${data.name}`,
+    `Email (for replies): ${data.email}`,
+    `Slug: ${data.slug}`,
+    `Mode: ${data.mode}`,
+    `Crown: ${data.crown_status}${data.wear_crown ? " · wear border" : ""}`,
+    ``,
+    `Please apply this profile and reply to my email when it's live.`,
+    ``,
+    `----- markdown file: content/i/${data.slug}.md -----`,
+    data.markdown,
+  ].join("\n");
+  return `mailto:${CONTACT}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
 function githubNewFileUrl(slug: string, markdown: string): string | null {
   const filename = `content/i/${slug}.md`;
   const url = `${INI_REPO}/new/main?filename=${encodeURIComponent(filename)}&value=${encodeURIComponent(markdown)}`;
-  // Keep under common browser/URL limits
   if (url.length > 7200) return null;
   return url;
 }
 
 function iNewHtml(): string {
   const today = todayISO();
+  const draft = typeof localStorage !== "undefined" ? loadPamicDraft() : null;
+  const pageOptions = pages
+    .map(
+      (p) =>
+        `<option value="${escapeAttr(p.slug)}">${escapeText(p.name)} (${escapeText(p.slug)})</option>`,
+    )
+    .join("");
+
   return `
   ${headerHtml("i")}
   <main class="i-view i-new">
@@ -659,10 +761,11 @@ function iNewHtml(): string {
       <div class="i-new__hero-inner">
         <p class="i-back"><a href="#/i">← I Pages</a></p>
         <p class="i-page__kicker">Miss Pamic's Template</p>
-        <h1 class="i-title">Add an <span class="i-am">I</span> Page</h1>
+        <h1 class="i-title">Your <span class="i-am">I</span> profile</h1>
         <p class="i-land__tagline">
-          Fill this in. We’ll build the file. Then open it on GitHub — fork if
-          asked, submit the pull request. No YAML spelunking.
+          This is your friendly account for I Pages and I Crowns — edit your
+          profile, keep an email for updates, and send changes without wrestling
+          Git. Steward applies them; you get a reply when it’s live.
         </p>
         <p class="i-new__preview" id="i-new-preview" aria-live="polite">
           <span class="i-am">I am</span> <strong id="i-new-preview-name">…</strong>
@@ -673,21 +776,41 @@ function iNewHtml(): string {
     <section class="section section--tight">
       <div class="section__inner">
         <form class="i-new__form" id="i-new-form" novalidate>
+          <div class="i-new__modes" role="tablist" aria-label="Profile mode">
+            <button type="button" class="i-new__mode is-active" data-mode="create" role="tab" aria-selected="true">New profile</button>
+            <button type="button" class="i-new__mode" data-mode="update" role="tab" aria-selected="false">Update mine</button>
+          </div>
+
+          <div class="i-new__load" id="i-new-load" hidden>
+            <label class="i-new__field">
+              <span class="i-new__label">Load existing face</span>
+              <select class="i-new__input" name="load_slug" id="i-new-load-slug">
+                <option value="">Choose a page…</option>
+                ${pageOptions}
+              </select>
+            </label>
+          </div>
+
           <div class="i-new__grid">
             <label class="i-new__field">
               <span class="i-new__label">Your name <em>*</em></span>
-              <input class="i-new__input" name="name" type="text" required autocomplete="name" placeholder="Maya Chen" />
+              <input class="i-new__input" name="name" type="text" required autocomplete="name" placeholder="Maya Chen" value="${escapeAttr(draft?.name || "")}" />
+            </label>
+            <label class="i-new__field">
+              <span class="i-new__label">Email for updates <em>*</em></span>
+              <input class="i-new__input" name="contact_email" type="email" required autocomplete="email" placeholder="you@example.com" value="${escapeAttr(draft?.email || "")}" />
+              <span class="i-new__hint">Private — used to reply when your page or Crown changes. Not shown on the public page.</span>
             </label>
             <label class="i-new__field">
               <span class="i-new__label">Slug <em>*</em></span>
-              <input class="i-new__input" name="slug" type="text" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="maya-chen" />
+              <input class="i-new__input" name="slug" type="text" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="maya-chen" value="${escapeAttr(draft?.slug || "")}" />
               <span class="i-new__hint">URL piece — auto-fills from your name</span>
             </label>
             <label class="i-new__field">
               <span class="i-new__label">Date <em>*</em></span>
               <input class="i-new__input" name="attested_at" type="date" required value="${escapeAttr(today)}" />
             </label>
-            <label class="i-new__field">
+            <label class="i-new__field i-new__field--wide">
               <span class="i-new__label">Tagline</span>
               <input class="i-new__input" name="tagline" type="text" placeholder="One short line under your name" maxlength="120" />
             </label>
@@ -721,19 +844,46 @@ function iNewHtml(): string {
             </label>
           </div>
 
+          <fieldset class="i-new__crown">
+            <legend class="i-new__crown-legend">I Crown</legend>
+            <p class="i-new__hint">Optional honor layer — not membership, not KYC. You can change this later by emailing an update.</p>
+            <div class="i-new__grid">
+              <label class="i-new__field">
+                <span class="i-new__label">Crown status</span>
+                <select class="i-new__input" name="crown_status">
+                  <option value="none" selected>none</option>
+                  <option value="active">active</option>
+                  <option value="suspended">suspended</option>
+                </select>
+              </label>
+              <label class="i-new__field i-new__check">
+                <span class="i-new__label">Wear Crown border</span>
+                <label class="i-new__check-row">
+                  <input type="checkbox" name="wear_crown" value="1" />
+                  <span>Show the Crown ring on my portrait (needs active)</span>
+                </label>
+              </label>
+              <label class="i-new__field i-new__field--wide">
+                <span class="i-new__label">Crown blurb</span>
+                <input class="i-new__input" name="crown_blurb" type="text" placeholder="Short honor line if Crown is active" maxlength="200" />
+              </label>
+            </div>
+          </fieldset>
+
           <p class="i-new__status" id="i-new-status" role="status" hidden></p>
 
           <div class="cta-row i-new__actions">
-            <button class="btn btn--primary" type="submit" name="github">Open on GitHub</button>
+            <button class="btn btn--primary" type="submit" name="email">Email my profile</button>
+            <button class="btn btn--ghost" type="button" name="github">Open on GitHub</button>
             <button class="btn btn--ghost" type="button" name="download">Download .md</button>
             <button class="btn btn--ghost" type="button" name="copy">Copy markdown</button>
           </div>
 
           <p class="i-new__note">
-            <strong>Miss Pamic's Template</strong> writes a normal I Page file.
-            GitHub may ask you to fork first — that’s expected. After merge you
-            show up at <a href="#/i">I Pages</a>.
-            Prefer the long way? <a href="${INI_REPO}/blob/main/content/i/README.md" target="_blank" rel="noopener">README steps</a>.
+            <strong>Miss Pamic's Template</strong> remembers your name, email, and
+            slug on this device. Primary path: email the steward your profile —
+            they’ll apply I Page / Crown changes and reply to you. GitHub is
+            optional if you prefer to open the PR yourself.
           </p>
         </form>
       </div>
@@ -748,9 +898,14 @@ function bindINewForm(): void {
 
   const nameInput = form.elements.namedItem("name") as HTMLInputElement;
   const slugInput = form.elements.namedItem("slug") as HTMLInputElement;
+  const emailInput = form.elements.namedItem("contact_email") as HTMLInputElement;
   const previewName = document.getElementById("i-new-preview-name");
   const statusEl = document.getElementById("i-new-status");
-  let slugTouched = false;
+  const loadWrap = document.getElementById("i-new-load");
+  const loadSelect = document.getElementById("i-new-load-slug") as HTMLSelectElement | null;
+  const modeBtns = form.querySelectorAll<HTMLButtonElement>(".i-new__mode");
+  let mode: "create" | "update" = "create";
+  let slugTouched = Boolean(slugInput.value.trim());
 
   const setStatus = (msg: string, kind: "ok" | "err" | "info" = "info") => {
     if (!statusEl) return;
@@ -758,6 +913,59 @@ function bindINewForm(): void {
     statusEl.textContent = msg;
     statusEl.dataset.kind = kind;
   };
+
+  const setMode = (next: "create" | "update") => {
+    mode = next;
+    modeBtns.forEach((btn) => {
+      const on = btn.dataset.mode === next;
+      btn.classList.toggle("is-active", on);
+      btn.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    if (loadWrap) loadWrap.hidden = next !== "update";
+    const submitBtn = form.elements.namedItem("email") as HTMLButtonElement;
+    submitBtn.textContent =
+      next === "update" ? "Email my update" : "Email my profile";
+  };
+
+  modeBtns.forEach((btn) => {
+    btn.addEventListener("click", () => setMode((btn.dataset.mode as "create" | "update") || "create"));
+  });
+
+  const fillFromPage = (page: IPage) => {
+    nameInput.value = page.name;
+    slugInput.value = page.slug;
+    slugTouched = true;
+    (form.elements.namedItem("attested_at") as HTMLInputElement).value =
+      page.attested_at || todayISO();
+    (form.elements.namedItem("tagline") as HTMLInputElement).value =
+      page.tagline || "";
+    (form.elements.namedItem("portrait") as HTMLInputElement).value =
+      page.portrait || "";
+    (form.elements.namedItem("theme") as HTMLSelectElement).value =
+      page.theme || "ink";
+    (form.elements.namedItem("layout") as HTMLSelectElement).value =
+      page.layout || "free";
+    (form.elements.namedItem("crown_status") as HTMLSelectElement).value =
+      page.crown_status || "none";
+    (form.elements.namedItem("crown_blurb") as HTMLInputElement).value =
+      page.crown_blurb || "";
+    (form.elements.namedItem("wear_crown") as HTMLInputElement).checked =
+      Boolean(page.wear_crown);
+    if (page.contact_email) emailInput.value = page.contact_email;
+    const about = extractSection(page.body, "About") || page.body.split(/\n##\s+/)[0]?.trim() || "";
+    const links = linksToPlain(extractSection(page.body, "Links"));
+    (form.elements.namedItem("about") as HTMLTextAreaElement).value = about;
+    (form.elements.namedItem("links") as HTMLTextAreaElement).value = links;
+    syncPreview();
+  };
+
+  loadSelect?.addEventListener("change", () => {
+    const page = pages.find((p) => p.slug === loadSelect.value);
+    if (page) {
+      fillFromPage(page);
+      setStatus(`Loaded ${page.name}. Edit, then email your update.`, "info");
+    }
+  });
 
   const readData = () => {
     const fd = new FormData(form);
@@ -769,6 +977,10 @@ function bindINewForm(): void {
       theme: String(fd.get("theme") || "ink"),
       layout: String(fd.get("layout") || "free"),
       portrait: String(fd.get("portrait") || "").trim(),
+      contact_email: String(fd.get("contact_email") || "").trim(),
+      crown_status: String(fd.get("crown_status") || "none"),
+      crown_blurb: String(fd.get("crown_blurb") || "").trim(),
+      wear_crown: fd.get("wear_crown") === "1",
       about: String(fd.get("about") || ""),
       links: String(fd.get("links") || ""),
     };
@@ -788,15 +1000,41 @@ function bindINewForm(): void {
   });
   syncPreview();
 
-  const downloadBtn = form.elements.namedItem("download") as HTMLButtonElement;
-  const copyBtn = form.elements.namedItem("copy") as HTMLButtonElement;
-
-  downloadBtn.addEventListener("click", () => {
+  const validate = () => {
     const data = readData();
     if (!data.name || !data.slug) {
       setStatus("Name and slug are required.", "err");
-      return;
+      nameInput.focus();
+      return null;
     }
+    if (!data.contact_email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.contact_email)) {
+      setStatus("A real email is required so we can reply about updates.", "err");
+      emailInput.focus();
+      return null;
+    }
+    if (mode === "create" && pages.some((p) => p.slug === data.slug)) {
+      setStatus(`Slug “${data.slug}” is taken — switch to Update mine, or pick another slug.`, "err");
+      return null;
+    }
+    if (mode === "update" && !pages.some((p) => p.slug === data.slug)) {
+      setStatus(`No I Page with slug “${data.slug}” yet — use New profile, or load an existing face.`, "err");
+      return null;
+    }
+    return data;
+  };
+
+  const persist = (data: ReturnType<typeof readData>) => {
+    savePamicDraft({
+      email: data.contact_email,
+      slug: data.slug,
+      name: data.name,
+    });
+  };
+
+  (form.elements.namedItem("download") as HTMLButtonElement).addEventListener("click", () => {
+    const data = validate();
+    if (!data) return;
+    persist(data);
     const md = buildIPageMarkdown(data);
     const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
     const a = document.createElement("a");
@@ -804,45 +1042,76 @@ function bindINewForm(): void {
     a.download = `${data.slug}.md`;
     a.click();
     URL.revokeObjectURL(a.href);
-    setStatus(`Downloaded ${data.slug}.md — add it under content/i/ in a PR.`, "ok");
+    setStatus(`Downloaded ${data.slug}.md`, "ok");
   });
 
-  copyBtn.addEventListener("click", async () => {
-    const data = readData();
-    if (!data.name || !data.slug) {
-      setStatus("Name and slug are required.", "err");
-      return;
-    }
-    const md = buildIPageMarkdown(data);
+  (form.elements.namedItem("copy") as HTMLButtonElement).addEventListener("click", async () => {
+    const data = validate();
+    if (!data) return;
+    persist(data);
     try {
-      await navigator.clipboard.writeText(md);
-      setStatus("Markdown copied. Paste into a new file on GitHub if needed.", "ok");
+      await navigator.clipboard.writeText(buildIPageMarkdown(data));
+      setStatus("Markdown copied.", "ok");
     } catch {
       setStatus("Couldn’t copy — use Download instead.", "err");
     }
   });
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const data = readData();
-    if (!data.name || !data.slug) {
-      setStatus("Name and slug are required.", "err");
-      nameInput.focus();
-      return;
-    }
-    if (pages.some((p) => p.slug === data.slug)) {
-      setStatus(`Slug “${data.slug}” is already taken — pick another.`, "err");
-      return;
-    }
+  (form.elements.namedItem("github") as HTMLButtonElement).addEventListener("click", () => {
+    const data = validate();
+    if (!data) return;
+    persist(data);
     const md = buildIPageMarkdown(data);
     const gh = githubNewFileUrl(data.slug, md);
     if (!gh) {
-      setStatus("Page is a bit long for a GitHub link — Download or Copy, then open a PR.", "info");
+      setStatus("Too long for a GitHub link — Email my profile, or Download.", "info");
       return;
     }
-    setStatus("Opening GitHub… fork if asked, then create the pull request.", "ok");
+    setStatus("Opening GitHub… optional path if you want to PR yourself.", "ok");
     window.open(gh, "_blank", "noopener");
   });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = validate();
+    if (!data) return;
+    persist(data);
+    const md = buildIPageMarkdown(data);
+    const href = buildUpdateMailto({
+      mode,
+      name: data.name,
+      slug: data.slug,
+      email: data.contact_email,
+      markdown: md,
+      crown_status: data.crown_status,
+      wear_crown: data.wear_crown && data.crown_status === "active",
+    });
+    // mailto body can hit length limits — fall back to copy + short mail
+    if (href.length > 1800) {
+      void navigator.clipboard.writeText(md).then(
+        () => {
+          const short = `mailto:${CONTACT}?subject=${encodeURIComponent(`[iNi] ${mode} I Page: ${data.name} (${data.slug})`)}&body=${encodeURIComponent(
+            `From: ${data.name} <${data.contact_email}>\nSlug: ${data.slug}\nMode: ${mode}\nCrown: ${data.crown_status}${data.wear_crown ? " · wear border" : ""}\n\nMarkdown is on my clipboard — paste it under content/i/${data.slug}.md and reply when live.\n`,
+          )}`;
+          setStatus("Profile copied. Opening a short email — paste the markdown if asked.", "ok");
+          window.location.href = short;
+        },
+        () => setStatus("Email body too long — use Download, then email the file to " + CONTACT, "info"),
+      );
+      return;
+    }
+    setStatus("Opening your mail app — send it, then watch for a reply when it’s live.", "ok");
+    window.location.href = href;
+  });
+
+  // Returning visitors who already have a face land on Update
+  const draft = loadPamicDraft();
+  if (draft?.slug && pages.some((p) => p.slug === draft.slug)) {
+    setMode("update");
+    if (loadSelect) loadSelect.value = draft.slug;
+    const page = pages.find((p) => p.slug === draft.slug);
+    if (page) fillFromPage(page);
+  }
 }
 
 function parseRoute(): {

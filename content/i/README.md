@@ -4,43 +4,38 @@ Public faces for the iNi community. Each page shows as **I am {name}**.
 
 Freeform. Non-judged. Not membership.
 
-## Add yours — Miss Pamic's Template
-
-Use the form (no YAML required):
+## Miss Pamic's Template (your profile)
 
 **https://rasvibir.github.io/iNi/#/i/new**
 
-1. Enter your name (slug auto-fills)
-2. Write a bit about yourself
-3. **Open on GitHub** — fork if asked, then submit the pull request
+This is the friendly account for I Pages and I Crowns:
 
-That’s it. After merge you appear at  
-https://rasvibir.github.io/iNi/#/i
+1. Enter your **name** and **email** (email is private — for update replies only)
+2. Edit your profile + optional Crown settings
+3. Tap **Email my profile** / **Email my update**
+4. Steward applies the change and replies to your email when it’s live
 
-### Manual path (optional)
+**New profile** or **Update mine** — no Git required for everyday edits. GitHub remains an optional advanced path.
+
+Your name, email, and slug are remembered on this device.
+
+## Optional extras (in the form)
+
+- Tagline, portrait URL, theme, layout
+- I Crown: status, wear border, short blurb
+
+`contact_email` in the file is steward-only — not shown on the public page.
+
+## Manual path (optional)
 
 1. Fork [RASvibir/iNi](https://github.com/RASvibir/iNi)
 2. Copy [`_TEMPLATE.md`](_TEMPLATE.md) → `content/i/{slug}.md`
-3. Fill `name`, `slug`, `attested_at` at the top
-4. Write under the headings and open a pull request
-
-## Optional extras
-
-| Want… | Set… |
-|-------|------|
-| A short line under your name | `tagline: "…"` |
-| A photo | `portrait: "https://…"` or `/i/avatars/your.jpg` |
-| Look & feel | `theme: ink` · `paper` · `terminal` |
-| Page width | `layout: free` · `compact` · `wide` |
-| I Crown honor line | `crown_status: active` + `crown_blurb: "…"` |
-| Crown border on your photo | also `wear_crown: true` (only when Crown is **active**) |
-
-Crown is optional honor — never required.
+3. Fill fields and open a pull request
 
 ## Browse & talk
 
 - Faces: https://rasvibir.github.io/iNi/#/i
-- Form: https://rasvibir.github.io/iNi/#/i/new
+- Profile form: https://rasvibir.github.io/iNi/#/i/new
 - Forum: https://github.com/RASvibir/iNi/discussions
 
 ## Example

@@ -88,6 +88,7 @@ for (const file of files) {
     crown_status: normalizeCrownStatus(meta.crown_status),
     crown_blurb: meta.crown_blurb || "",
     wear_crown: normalizeBool(meta.wear_crown),
+    contact_email: String(meta.contact_email || "").trim(),
     body,
     file,
   });
