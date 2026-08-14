@@ -13,6 +13,10 @@ wear_crown: false
 
 # How to use this file
 
+Prefer the form: **[Miss Pamic's Template](https://rasvibir.github.io/iNi/#/i/new)** — fill fields, open on GitHub, done.
+
+Or by hand:
+
 1. **Copy** this file to a new name that matches your slug  
    Example: `your-slug.md`
 2. **Fill the top fields** (the block above this heading):

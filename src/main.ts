@@ -441,7 +441,7 @@ function iIndexHtml(): string {
         </div>
         <div class="cta-row i-land__cta">
           <a class="btn btn--primary" href="#faces">Browse faces</a>
-          <a class="btn btn--ghost" href="${INI_REPO}/blob/main/content/i/README.md" target="_blank" rel="noopener">Add an I Page</a>
+          <a class="btn btn--ghost" href="#/i/new">Miss Pamic's Template</a>
         </div>
       </div>
     </header>
@@ -501,11 +501,11 @@ function iIndexHtml(): string {
           ${
             pages.length
               ? pages.map(iIndexRow).join("")
-              : `<li class="i-index__empty">No I Pages yet. <a href="${FORUM}" target="_blank" rel="noopener">Say hello in the forum</a> or PR <code>content/i/</code>.</li>`
+              : `<li class="i-index__empty">No I Pages yet. <a href="#/i/new">Miss Pamic's Template</a> or <a href="${FORUM}" target="_blank" rel="noopener">say hello in the forum</a>.</li>`
           }
         </ul>
         <p class="i-land__foot">
-          Add yours via pull request under <code>content/i/</code>
+          Use <a href="#/i/new">Miss Pamic's Template</a> to add yours
           · <a href="${FORUM}" target="_blank" rel="noopener">Ask in the forum</a>
           · <a href="#/">Back to iNi home</a>
         </p>
@@ -566,8 +566,294 @@ function iDetailHtml(page: IPage): string {
   ${footerHtml()}`;
 }
 
-function parseRoute(): { view: "home" | "i-index" | "i-detail"; slug?: string; anchor?: string } {
+function todayISO(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function slugifyName(name: string): string {
+  return name
+    .trim()
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 48);
+}
+
+function yamlQuote(value: string): string {
+  return `"${value.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
+}
+
+function buildIPageMarkdown(data: {
+  name: string;
+  slug: string;
+  attested_at: string;
+  tagline: string;
+  theme: string;
+  layout: string;
+  portrait: string;
+  about: string;
+  links: string;
+}): string {
+  const about = data.about.trim() || "Say who you are in a sentence or two.";
+  const linkLines = data.links
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => {
+      if (/^https?:\/\//i.test(l)) return `- [${l}](${l})`;
+      if (l.startsWith("- ")) return l;
+      return `- ${l}`;
+    });
+  const linksBlock =
+    linkLines.length > 0 ? linkLines.join("\n") : "- Add a link here";
+
+  return `---
+name: ${yamlQuote(data.name)}
+slug: ${yamlQuote(data.slug)}
+attested_at: ${data.attested_at}
+tagline: ${yamlQuote(data.tagline)}
+theme: ${data.theme}
+layout: ${data.layout}
+portrait: ${yamlQuote(data.portrait)}
+crown_status: none
+crown_blurb: ""
+wear_crown: false
+---
+
+## About
+
+${about}
+
+## Links
+
+${linksBlock}
+
+## Archives
+
+## Work
+
+## I Crown
+
+Optional. Skip unless you want the honor layer.
+
+*Self-attested I Page — not enrollment.*
+`;
+}
+
+function githubNewFileUrl(slug: string, markdown: string): string | null {
+  const filename = `content/i/${slug}.md`;
+  const url = `${INI_REPO}/new/main?filename=${encodeURIComponent(filename)}&value=${encodeURIComponent(markdown)}`;
+  // Keep under common browser/URL limits
+  if (url.length > 7200) return null;
+  return url;
+}
+
+function iNewHtml(): string {
+  const today = todayISO();
+  return `
+  ${headerHtml("i")}
+  <main class="i-view i-new">
+    <header class="i-new__hero">
+      <div class="i-new__hero-inner">
+        <p class="i-back"><a href="#/i">← I Pages</a></p>
+        <p class="i-page__kicker">Miss Pamic's Template</p>
+        <h1 class="i-title">Add an <span class="i-am">I</span> Page</h1>
+        <p class="i-land__tagline">
+          Fill this in. We’ll build the file. Then open it on GitHub — fork if
+          asked, submit the pull request. No YAML spelunking.
+        </p>
+        <p class="i-new__preview" id="i-new-preview" aria-live="polite">
+          <span class="i-am">I am</span> <strong id="i-new-preview-name">…</strong>
+        </p>
+      </div>
+    </header>
+
+    <section class="section section--tight">
+      <div class="section__inner">
+        <form class="i-new__form" id="i-new-form" novalidate>
+          <div class="i-new__grid">
+            <label class="i-new__field">
+              <span class="i-new__label">Your name <em>*</em></span>
+              <input class="i-new__input" name="name" type="text" required autocomplete="name" placeholder="Maya Chen" />
+            </label>
+            <label class="i-new__field">
+              <span class="i-new__label">Slug <em>*</em></span>
+              <input class="i-new__input" name="slug" type="text" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="maya-chen" />
+              <span class="i-new__hint">URL piece — auto-fills from your name</span>
+            </label>
+            <label class="i-new__field">
+              <span class="i-new__label">Date <em>*</em></span>
+              <input class="i-new__input" name="attested_at" type="date" required value="${escapeAttr(today)}" />
+            </label>
+            <label class="i-new__field">
+              <span class="i-new__label">Tagline</span>
+              <input class="i-new__input" name="tagline" type="text" placeholder="One short line under your name" maxlength="120" />
+            </label>
+            <label class="i-new__field i-new__field--wide">
+              <span class="i-new__label">About</span>
+              <textarea class="i-new__input i-new__textarea" name="about" rows="4" placeholder="Who you are, what you steward…"></textarea>
+            </label>
+            <label class="i-new__field i-new__field--wide">
+              <span class="i-new__label">Links</span>
+              <textarea class="i-new__input i-new__textarea" name="links" rows="3" placeholder="One per line — paste a URL or write Markdown"></textarea>
+            </label>
+            <label class="i-new__field i-new__field--wide">
+              <span class="i-new__label">Portrait URL</span>
+              <input class="i-new__input" name="portrait" type="url" placeholder="https://… or leave blank" />
+            </label>
+            <label class="i-new__field">
+              <span class="i-new__label">Theme</span>
+              <select class="i-new__input" name="theme">
+                <option value="ink" selected>ink</option>
+                <option value="paper">paper</option>
+                <option value="terminal">terminal</option>
+              </select>
+            </label>
+            <label class="i-new__field">
+              <span class="i-new__label">Layout</span>
+              <select class="i-new__input" name="layout">
+                <option value="free" selected>free</option>
+                <option value="compact">compact</option>
+                <option value="wide">wide</option>
+              </select>
+            </label>
+          </div>
+
+          <p class="i-new__status" id="i-new-status" role="status" hidden></p>
+
+          <div class="cta-row i-new__actions">
+            <button class="btn btn--primary" type="submit" name="github">Open on GitHub</button>
+            <button class="btn btn--ghost" type="button" name="download">Download .md</button>
+            <button class="btn btn--ghost" type="button" name="copy">Copy markdown</button>
+          </div>
+
+          <p class="i-new__note">
+            <strong>Miss Pamic's Template</strong> writes a normal I Page file.
+            GitHub may ask you to fork first — that’s expected. After merge you
+            show up at <a href="#/i">I Pages</a>.
+            Prefer the long way? <a href="${INI_REPO}/blob/main/content/i/README.md" target="_blank" rel="noopener">README steps</a>.
+          </p>
+        </form>
+      </div>
+    </section>
+  </main>
+  ${footerHtml()}`;
+}
+
+function bindINewForm(): void {
+  const form = document.getElementById("i-new-form") as HTMLFormElement | null;
+  if (!form) return;
+
+  const nameInput = form.elements.namedItem("name") as HTMLInputElement;
+  const slugInput = form.elements.namedItem("slug") as HTMLInputElement;
+  const previewName = document.getElementById("i-new-preview-name");
+  const statusEl = document.getElementById("i-new-status");
+  let slugTouched = false;
+
+  const setStatus = (msg: string, kind: "ok" | "err" | "info" = "info") => {
+    if (!statusEl) return;
+    statusEl.hidden = !msg;
+    statusEl.textContent = msg;
+    statusEl.dataset.kind = kind;
+  };
+
+  const readData = () => {
+    const fd = new FormData(form);
+    return {
+      name: String(fd.get("name") || "").trim(),
+      slug: String(fd.get("slug") || "").trim(),
+      attested_at: String(fd.get("attested_at") || todayISO()).trim(),
+      tagline: String(fd.get("tagline") || "").trim(),
+      theme: String(fd.get("theme") || "ink"),
+      layout: String(fd.get("layout") || "free"),
+      portrait: String(fd.get("portrait") || "").trim(),
+      about: String(fd.get("about") || ""),
+      links: String(fd.get("links") || ""),
+    };
+  };
+
+  const syncPreview = () => {
+    const name = nameInput.value.trim() || "…";
+    if (previewName) previewName.textContent = name;
+    if (!slugTouched) {
+      slugInput.value = slugifyName(nameInput.value);
+    }
+  };
+
+  nameInput.addEventListener("input", syncPreview);
+  slugInput.addEventListener("input", () => {
+    slugTouched = slugInput.value.trim().length > 0;
+  });
+  syncPreview();
+
+  const downloadBtn = form.elements.namedItem("download") as HTMLButtonElement;
+  const copyBtn = form.elements.namedItem("copy") as HTMLButtonElement;
+
+  downloadBtn.addEventListener("click", () => {
+    const data = readData();
+    if (!data.name || !data.slug) {
+      setStatus("Name and slug are required.", "err");
+      return;
+    }
+    const md = buildIPageMarkdown(data);
+    const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `${data.slug}.md`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    setStatus(`Downloaded ${data.slug}.md — add it under content/i/ in a PR.`, "ok");
+  });
+
+  copyBtn.addEventListener("click", async () => {
+    const data = readData();
+    if (!data.name || !data.slug) {
+      setStatus("Name and slug are required.", "err");
+      return;
+    }
+    const md = buildIPageMarkdown(data);
+    try {
+      await navigator.clipboard.writeText(md);
+      setStatus("Markdown copied. Paste into a new file on GitHub if needed.", "ok");
+    } catch {
+      setStatus("Couldn’t copy — use Download instead.", "err");
+    }
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = readData();
+    if (!data.name || !data.slug) {
+      setStatus("Name and slug are required.", "err");
+      nameInput.focus();
+      return;
+    }
+    if (pages.some((p) => p.slug === data.slug)) {
+      setStatus(`Slug “${data.slug}” is already taken — pick another.`, "err");
+      return;
+    }
+    const md = buildIPageMarkdown(data);
+    const gh = githubNewFileUrl(data.slug, md);
+    if (!gh) {
+      setStatus("Page is a bit long for a GitHub link — Download or Copy, then open a PR.", "info");
+      return;
+    }
+    setStatus("Opening GitHub… fork if asked, then create the pull request.", "ok");
+    window.open(gh, "_blank", "noopener");
+  });
+}
+
+function parseRoute(): {
+  view: "home" | "i-index" | "i-new" | "i-detail";
+  slug?: string;
+  anchor?: string;
+} {
   const raw = window.location.hash || "#/";
+  if (raw === "#/i/new" || raw.startsWith("#/i/new?") || raw.startsWith("#/i/new#")) {
+    return { view: "i-new" };
+  }
   if (raw.startsWith("#/i/")) {
     const slug = decodeURIComponent(raw.slice(4).split(/[?#]/)[0] || "");
     return slug ? { view: "i-detail", slug } : { view: "i-index" };
@@ -609,6 +895,14 @@ function bindReveals(): void {
 
 function render(): void {
   const route = parseRoute();
+  if (route.view === "i-new") {
+    app!.dataset.surface = "i";
+    app!.innerHTML = iNewHtml();
+    document.title = "Miss Pamic's Template · iNi";
+    window.scrollTo(0, 0);
+    bindINewForm();
+    return;
+  }
   if (route.view === "i-detail" && route.slug) {
     const page = pages.find((p) => p.slug === route.slug);
     app!.dataset.surface = "i";

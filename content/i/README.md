@@ -4,38 +4,43 @@ Public faces for the iNi community. Each page shows as **I am {name}**.
 
 Freeform. Non-judged. Not membership.
 
-## Add yours (about 5 minutes)
+## Add yours — Miss Pamic's Template
 
-1. Fork [RASvibir/iNi](https://github.com/RASvibir/iNi)
-2. Copy [`_TEMPLATE.md`](_TEMPLATE.md) → `content/i/{slug}.md`  
-   Example: `maya-chen.md`
-3. At the top of the file, set:
-   - `name: "Maya Chen"`
-   - `slug: "maya-chen"`
-   - `attested_at: 2026-08-13` (use today’s date)
-4. Write whatever you want under the headings (About, Links, …)
-5. Open a pull request
+Use the form (no YAML required):
+
+**https://rasvibir.github.io/iNi/#/i/new**
+
+1. Enter your name (slug auto-fills)
+2. Write a bit about yourself
+3. **Open on GitHub** — fork if asked, then submit the pull request
 
 That’s it. After merge you appear at  
 https://rasvibir.github.io/iNi/#/i
+
+### Manual path (optional)
+
+1. Fork [RASvibir/iNi](https://github.com/RASvibir/iNi)
+2. Copy [`_TEMPLATE.md`](_TEMPLATE.md) → `content/i/{slug}.md`
+3. Fill `name`, `slug`, `attested_at` at the top
+4. Write under the headings and open a pull request
 
 ## Optional extras
 
 | Want… | Set… |
 |-------|------|
 | A short line under your name | `tagline: "…"` |
-| A photo | `portrait: "https://…"` or drop a file in `public/i/avatars/` and use `/i/avatars/your.jpg` |
+| A photo | `portrait: "https://…"` or `/i/avatars/your.jpg` |
 | Look & feel | `theme: ink` · `paper` · `terminal` |
 | Page width | `layout: free` · `compact` · `wide` |
 | I Crown honor line | `crown_status: active` + `crown_blurb: "…"` |
 | Crown border on your photo | also `wear_crown: true` (only when Crown is **active**) |
 
-Crown is optional honor — never required. Suspending Crown removes the border and
-badge display only; your I Page and iNi provenance stay.
+Crown is optional honor — never required.
 
 ## Browse & talk
 
 - Faces: https://rasvibir.github.io/iNi/#/i
+- Form: https://rasvibir.github.io/iNi/#/i/new
 - Forum: https://github.com/RASvibir/iNi/discussions
 
 ## Example

@@ -21,8 +21,12 @@ Do **not** claim legal chain-of-custody. Do **not** treat a merge as enrollment.
 
 ## I page PRs
 
+**Easiest:** use [Miss Pamic's Template](https://rasvibir.github.io/iNi/#/i/new) on the site — fill the form, open on GitHub, submit the PR.
+
+Or by hand:
+
 1. Fork this repo
-2. Read [`content/i/README.md`](content/i/README.md) — short human steps
+2. Read [`content/i/README.md`](content/i/README.md)
 3. Copy `content/i/_TEMPLATE.md` → `content/i/{slug}.md`
 4. Set `name`, `slug`, `attested_at` — write whatever you want in the body
 5. Open a pull request

@@ -795,6 +795,127 @@ a:hover {
   line-height: 1.55;
 }
 
+/* —— Miss Pamic's Template (#/i/new) —— */
+.i-new__hero {
+  padding: clamp(1.75rem, 4vw, 2.75rem) 0 0.5rem;
+  background:
+    radial-gradient(ellipse 70% 55% at 12% 0%, color-mix(in srgb, var(--accent-soft) 80%, transparent), transparent 60%),
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 70%, #dfecef), transparent);
+}
+
+.i-new__hero-inner {
+  width: min(100% - 2rem, var(--max));
+  margin-inline: auto;
+}
+
+.i-new__preview {
+  margin: 1.15rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 3vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.i-new__preview .i-am {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.i-new__form {
+  max-width: 40rem;
+}
+
+.i-new__grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 36rem) {
+  .i-new__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .i-new__field--wide {
+    grid-column: 1 / -1;
+  }
+}
+
+.i-new__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.i-new__label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.i-new__label em {
+  color: var(--accent);
+  font-style: normal;
+}
+
+.i-new__hint {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.i-new__input {
+  font: inherit;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 0.35rem;
+  padding: 0.65rem 0.75rem;
+  min-height: 2.75rem;
+}
+
+.i-new__input:focus {
+  outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+.i-new__textarea {
+  min-height: 6rem;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.i-new__actions {
+  margin-top: 1.35rem;
+}
+
+.i-new__status {
+  margin: 1rem 0 0;
+  padding: 0.65rem 0.85rem;
+  border-left: 3px solid var(--accent);
+  background: color-mix(in srgb, var(--accent-soft) 55%, var(--surface));
+  font-size: 0.92rem;
+}
+
+.i-new__status[data-kind="err"] {
+  border-left-color: #8b4513;
+  background: #f3e6df;
+}
+
+.i-new__status[data-kind="ok"] {
+  border-left-color: #1f5c3a;
+}
+
+.i-new__note {
+  margin: 1.25rem 0 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  max-width: 38rem;
+}
+
 .i-index__empty {
   padding: 1.25rem 0;
   color: var(--ink-soft);
