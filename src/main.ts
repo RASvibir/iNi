@@ -189,18 +189,16 @@ function headerHtml(active: "home" | "i" = "home"): string {
         ${
           active === "home"
             ? `
-        <a href="#stack">Stack</a>
-        <a href="#practice">Practice</a>
         <a href="#/i">I Pages</a>
+        <a href="#/i/new">My profile</a>
         <a href="#forum">Forum</a>
-        <a href="#faq">FAQ</a>
         <a href="#contact">Contact</a>`
             : `
         <a href="#/">Home</a>
-        <a href="#/i" aria-current="page">I Pages</a>
-        <a href="#forum">Forum</a>
-        <a href="${FORUM}" target="_blank" rel="noopener">Discussions</a>
-        <a href="${SOLOIST}">Soloist</a>`
+        <a href="#/i" ${active === "i" ? 'aria-current="page"' : ""}>I Pages</a>
+        <a href="#/i/new">My profile</a>
+        <a href="${FORUM}" target="_blank" rel="noopener">Forum</a>
+        <a href="mailto:${CONTACT}">Contact</a>`
         }
       </nav>
     </div>
@@ -215,7 +213,12 @@ function footerHtml(): string {
         <a class="uxu-logo uxu-logo--sm" href="${UXU_COMMONS}" aria-label="uXu commons">uXu</a>
         ${iniStampHtml("#/")}
       </div>
-      <p><a href="#/i">I Pages</a> · <a href="${FORUM}">Forum</a> · <a href="${SOLOIST}">Soloist</a> · <a href="${INI_REPO}">GitHub</a></p>
+      <p>
+        <a href="#/i">I Pages</a>
+        · <a href="#/i/new">My profile</a>
+        · <a href="${FORUM}" target="_blank" rel="noopener">Forum</a>
+        · <a href="mailto:${CONTACT}">Email</a>
+      </p>
     </div>
   </footer>`;
 }
@@ -236,11 +239,9 @@ function homeHtml(): string {
           label. Not required to use uXu.
         </p>
         <div class="cta-row reveal">
-          <a class="btn btn--primary" href="#stack">See the stack</a>
+          <a class="btn btn--primary" href="#/i/new">Create my page</a>
+          <a class="btn btn--ghost" href="#/i">Browse I Pages</a>
           <a class="btn btn--ghost" href="${UXU_CREATE}">Create archive</a>
-          <a class="btn btn--ghost" href="#/i">I Pages</a>
-          <a class="btn btn--ghost" href="${FORUM}" target="_blank" rel="noopener">Forum</a>
-          <a class="btn btn--ghost" href="${UXU_COMMONS}">Visit uXu</a>
         </div>
       </div>
     </section>
@@ -296,15 +297,17 @@ function homeHtml(): string {
           <li>
             <div>
               <strong>Opt in when it’s real</strong>
-              <p>Set <code>uxu.ini.optIn: true</code>. Optional stamp on the archive. Optional I Page / I Crown via this repo.</p>
+              <p>Mark your archive as opted in on uXu. Want a public face too? Use <a href="#/i/new">My profile</a> — email us, no Git required.</p>
             </div>
           </li>
         </ol>
         <p class="cta-row" style="margin-top:1.25rem">
           <a class="btn btn--primary" href="${UXU_CREATE}">Create archive on uXu</a>
-          <a class="btn btn--ghost" href="${UXU_COMMONS}">Open 0?0</a>
+          <a class="btn btn--ghost" href="${UXU_COMMONS}">Open uXu</a>
         </p>
-        <pre class="snippet" tabindex="0"><code>"uxu": {
+        <details class="i-new__more" style="border-top:none;padding-top:0">
+          <summary>Technical fields (optional)</summary>
+          <pre class="snippet" tabindex="0"><code>"uxu": {
   "ini": {
     "optIn": true,
     "tag": "iNi",
@@ -313,6 +316,7 @@ function homeHtml(): string {
     "provenance": { "origin": "…", "authors": ["…"], "custody": "…", "lineage": "…", "conditions": "…", "attestedAt": "2026-08-12" }
   }
 }</code></pre>
+        </details>
       </div>
     </section>
 
@@ -327,7 +331,8 @@ function homeHtml(): string {
         <ul class="i-index">
           ${pages.map(iIndexRow).join("")}
         </ul>
-        <p style="margin-top:1.25rem;margin-bottom:0">
+        <p style="margin-top:1.25rem;margin-bottom:0" class="cta-row">
+          <a class="btn btn--primary" href="#/i/new">Create my page</a>
           <a class="btn btn--ghost" href="#/i">Browse I Pages</a>
         </p>
       </div>
@@ -338,12 +343,12 @@ function homeHtml(): string {
         <p class="section__eyebrow">Forum</p>
         <h2 class="section__title" id="forum-title">Talk in the open</h2>
         <p class="section__lede">
-          The iNi forum lives in GitHub Discussions — practice notes, Crown
-          questions, archive help. Soloist and this site are doors, not a gated club.
+          Ask questions, introduce yourself, talk Crown — open community chat.
+          No membership app.
         </p>
         <div class="cta-row">
           <a class="btn btn--primary" href="${FORUM}" target="_blank" rel="noopener">Open forum</a>
-          <a class="btn btn--ghost" href="${INI_REPO}" target="_blank" rel="noopener">Community repo</a>
+          <a class="btn btn--ghost" href="mailto:${CONTACT}">Email steward</a>
         </div>
       </div>
     </section>
@@ -353,11 +358,12 @@ function homeHtml(): string {
         <p class="section__eyebrow">Doors</p>
         <h2 class="section__title" id="links-title">Links</h2>
         <div class="links-grid">
-          <a href="${SOLOIST}"><strong>Soloist notes</strong><span>Primary public face</span></a>
-          <a href="${UXU_COMMONS}"><strong>uXu commons</strong><span>Archives · 0?0 · INI</span></a>
-          <a href="${UXU_CREATE}"><strong>Create archive</strong><span>Open CREATE ARCHIVE on 0?0</span></a>
-          <a href="${FORUM}" target="_blank" rel="noopener"><strong>Forum</strong><span>GitHub Discussions</span></a>
-          <a href="#/i"><strong>I Pages</strong><span>I am {name}</span></a>
+          <a href="${SOLOIST}"><strong>Soloist notes</strong><span>Public notes</span></a>
+          <a href="${UXU_COMMONS}"><strong>uXu commons</strong><span>Archives</span></a>
+          <a href="${UXU_CREATE}"><strong>Create archive</strong><span>Start a shelf on uXu</span></a>
+          <a href="${FORUM}" target="_blank" rel="noopener"><strong>Forum</strong><span>Community chat</span></a>
+          <a href="#/i/new"><strong>My profile</strong><span>I Page + Crown</span></a>
+          <a href="#/i"><strong>I Pages</strong><span>Browse faces</span></a>
         </div>
       </div>
     </section>
@@ -388,11 +394,11 @@ function homeHtml(): string {
           </details>
           <details>
             <summary>Where is the forum?</summary>
-            <p><a href="${FORUM}" target="_blank" rel="noopener">GitHub Discussions on RASvibir/iNi</a>. Open to the community; not a membership app.</p>
+            <p><a href="${FORUM}" target="_blank" rel="noopener">Open the community forum</a> — free to join, not a membership app. Or <a href="mailto:${CONTACT}">email the steward</a>.</p>
           </details>
           <details>
             <summary>How do I get an I Page?</summary>
-            <p>PR a Markdown file under <code>content/i/</code> (see the template). Choose <code>theme</code> and <code>layout</code>; optional <code>crown_status: active</code>.</p>
+            <p>Use <a href="#/i/new">My profile</a> (Miss Pamic's Template). Fill your name and email, tap <strong>Send my page</strong>. We apply it and reply when it’s live — no GitHub required.</p>
           </details>
           <details>
             <summary>How do I practice iNi without a website?</summary>
@@ -406,8 +412,9 @@ function homeHtml(): string {
       <div class="section__inner reveal contact-block">
         <p class="section__eyebrow">Reach</p>
         <h2 class="section__title" id="contact-title">Contact</h2>
-        <p>Questions about iNi practice: <a href="mailto:${CONTACT}">${CONTACT}</a></p>
-        <p>Forum: <a href="${FORUM}" target="_blank" rel="noopener">${FORUM}</a></p>
+        <p>Questions: <a href="mailto:${CONTACT}">${CONTACT}</a></p>
+        <p>Forum: <a href="${FORUM}" target="_blank" rel="noopener">Community chat</a></p>
+        <p>Profile: <a href="#/i/new">Create or update my page</a></p>
       </div>
     </section>
   </main>
@@ -431,18 +438,15 @@ function iIndexHtml(): string {
         <p class="i-page__kicker">Community</p>
         <h1 class="i-title"><span class="i-am">I</span> Pages</h1>
         <p class="i-land__tagline">
-          Public faces for the provenance community — non-judged, freeform,
-          and open. The forum is where we talk; I Pages are where we show up as
-          <strong>I am {name}</strong>.
+          Show up as <strong>I am {name}</strong> — freeform, non-judged.
+          Create or update your page with an email. No Git required.
         </p>
         <div class="i-page__chips">
           <span class="chip">${escapeText(facesLabel)}</span>
-          <span class="chip">Forum open</span>
-          <span class="chip">iNi practice welcome</span>
         </div>
         <div class="cta-row i-land__cta">
-          <a class="btn btn--primary" href="#faces">Browse faces</a>
-          <a class="btn btn--ghost" href="#/i/new">Miss Pamic's Template</a>
+          <a class="btn btn--primary" href="#/i/new">Create / update my page</a>
+          <a class="btn btn--ghost" href="#faces">Browse faces</a>
         </div>
       </div>
     </header>
@@ -450,43 +454,17 @@ function iIndexHtml(): string {
     <section class="section section--tight" aria-labelledby="i-land-forum-title">
       <div class="section__inner">
         <aside class="i-land__forum" aria-labelledby="i-land-forum-title">
-          <p class="i-land__forum-eyebrow">Forum</p>
-          <h2 class="i-land__forum-title" id="i-land-forum-title">Talk in the open</h2>
+          <p class="i-land__forum-eyebrow">Need help?</p>
+          <h2 class="i-land__forum-title" id="i-land-forum-title">Talk or email</h2>
           <p>
-            Practice notes, Crown questions, archive help, and new I Page
-            introductions live in GitHub Discussions — not a gated club.
-            Bring honesty; leave membership theater at the door.
+            Questions about your page or Crown? Ask in the forum or email the
+            steward — we’ll help without the Git maze.
           </p>
           <p class="i-land__forum-actions">
-            <a class="btn btn--primary" href="${FORUM}" target="_blank" rel="noopener">Join the forum</a>
-            <a class="btn btn--ghost" href="${INI_REPO}" target="_blank" rel="noopener">Community repo</a>
+            <a class="btn btn--primary" href="${FORUM}" target="_blank" rel="noopener">Open forum</a>
+            <a class="btn btn--ghost" href="mailto:${CONTACT}">Email steward</a>
           </p>
         </aside>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="i-land-about-title">
-      <div class="section__inner">
-        <p class="section__eyebrow">How it fits</p>
-        <h2 class="section__title" id="i-land-about-title">Faces beside practice</h2>
-        <p class="section__lede">
-          An I Page is optional. iNi provenance stands on its own. Crown is a
-          separate honor layer — never required to appear here.
-        </p>
-        <ul class="i-land__points">
-          <li>
-            <strong>Community</strong>
-            <span>Shared paper trail and forum — honesty about origin and custody.</span>
-          </li>
-          <li>
-            <strong>I Page</strong>
-            <span>Your public face. Themes, layout, portrait — non-judged display.</span>
-          </li>
-          <li>
-            <strong>Forum</strong>
-            <span>Where introductions, questions, and Crown talk actually happen.</span>
-          </li>
-        </ul>
       </div>
     </section>
 
@@ -495,20 +473,19 @@ function iIndexHtml(): string {
         <p class="section__eyebrow">Directory</p>
         <h2 class="section__title" id="faces-title">I am …</h2>
         <p class="section__lede">
-          Self-attested faces. Open one to read their page — or start a forum
-          thread if you’re new here.
+          Community faces. Tap one to read — or make yours.
         </p>
         <ul class="i-index">
           ${
             pages.length
               ? pages.map(iIndexRow).join("")
-              : `<li class="i-index__empty">No I Pages yet. <a href="#/i/new">Miss Pamic's Template</a> or <a href="${FORUM}" target="_blank" rel="noopener">say hello in the forum</a>.</li>`
+              : `<li class="i-index__empty">No I Pages yet. <a href="#/i/new">Create the first one</a>.</li>`
           }
         </ul>
         <p class="i-land__foot">
-          Use <a href="#/i/new">Miss Pamic's Template</a> to add yours
-          · <a href="${FORUM}" target="_blank" rel="noopener">Ask in the forum</a>
-          · <a href="#/">Back to iNi home</a>
+          <a href="#/i/new">Create / update my page</a>
+          · <a href="mailto:${CONTACT}">Email</a>
+          · <a href="#/">Home</a>
         </p>
       </div>
     </section>
@@ -750,7 +727,7 @@ function iNewHtml(): string {
   const pageOptions = pages
     .map(
       (p) =>
-        `<option value="${escapeAttr(p.slug)}">${escapeText(p.name)} (${escapeText(p.slug)})</option>`,
+        `<option value="${escapeAttr(p.slug)}">${escapeText(p.name)}</option>`,
     )
     .join("");
 
@@ -761,15 +738,19 @@ function iNewHtml(): string {
       <div class="i-new__hero-inner">
         <p class="i-back"><a href="#/i">← I Pages</a></p>
         <p class="i-page__kicker">Miss Pamic's Template</p>
-        <h1 class="i-title">Your <span class="i-am">I</span> profile</h1>
+        <h1 class="i-title">My <span class="i-am">I</span> page</h1>
         <p class="i-land__tagline">
-          This is your friendly account for I Pages and I Crowns — edit your
-          profile, keep an email for updates, and send changes without wrestling
-          Git. Steward applies them; you get a reply when it’s live.
+          Tell us who you are. Hit send. We publish it and email you when it’s
+          live — that’s the whole path.
         </p>
         <p class="i-new__preview" id="i-new-preview" aria-live="polite">
           <span class="i-am">I am</span> <strong id="i-new-preview-name">…</strong>
         </p>
+        <ol class="i-new__steps" aria-label="How it works">
+          <li>Fill your profile</li>
+          <li>Send to steward</li>
+          <li>Get an email when it’s live</li>
+        </ol>
       </div>
     </header>
 
@@ -777,15 +758,15 @@ function iNewHtml(): string {
       <div class="section__inner">
         <form class="i-new__form" id="i-new-form" novalidate>
           <div class="i-new__modes" role="tablist" aria-label="Profile mode">
-            <button type="button" class="i-new__mode is-active" data-mode="create" role="tab" aria-selected="true">New profile</button>
+            <button type="button" class="i-new__mode is-active" data-mode="create" role="tab" aria-selected="true">I’m new</button>
             <button type="button" class="i-new__mode" data-mode="update" role="tab" aria-selected="false">Update mine</button>
           </div>
 
           <div class="i-new__load" id="i-new-load" hidden>
             <label class="i-new__field">
-              <span class="i-new__label">Load existing face</span>
+              <span class="i-new__label">Which page is yours?</span>
               <select class="i-new__input" name="load_slug" id="i-new-load-slug">
-                <option value="">Choose a page…</option>
+                <option value="">Choose…</option>
                 ${pageOptions}
               </select>
             </label>
@@ -797,93 +778,93 @@ function iNewHtml(): string {
               <input class="i-new__input" name="name" type="text" required autocomplete="name" placeholder="Maya Chen" value="${escapeAttr(draft?.name || "")}" />
             </label>
             <label class="i-new__field">
-              <span class="i-new__label">Email for updates <em>*</em></span>
+              <span class="i-new__label">Your email <em>*</em></span>
               <input class="i-new__input" name="contact_email" type="email" required autocomplete="email" placeholder="you@example.com" value="${escapeAttr(draft?.email || "")}" />
-              <span class="i-new__hint">Private — used to reply when your page or Crown changes. Not shown on the public page.</span>
-            </label>
-            <label class="i-new__field">
-              <span class="i-new__label">Slug <em>*</em></span>
-              <input class="i-new__input" name="slug" type="text" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="maya-chen" value="${escapeAttr(draft?.slug || "")}" />
-              <span class="i-new__hint">URL piece — auto-fills from your name</span>
-            </label>
-            <label class="i-new__field">
-              <span class="i-new__label">Date <em>*</em></span>
-              <input class="i-new__input" name="attested_at" type="date" required value="${escapeAttr(today)}" />
+              <span class="i-new__hint">Private — we reply here when your page is live. Never shown publicly.</span>
             </label>
             <label class="i-new__field i-new__field--wide">
               <span class="i-new__label">Tagline</span>
               <input class="i-new__input" name="tagline" type="text" placeholder="One short line under your name" maxlength="120" />
             </label>
             <label class="i-new__field i-new__field--wide">
-              <span class="i-new__label">About</span>
-              <textarea class="i-new__input i-new__textarea" name="about" rows="4" placeholder="Who you are, what you steward…"></textarea>
+              <span class="i-new__label">About you</span>
+              <textarea class="i-new__input i-new__textarea" name="about" rows="4" placeholder="Who you are…"></textarea>
             </label>
             <label class="i-new__field i-new__field--wide">
               <span class="i-new__label">Links</span>
-              <textarea class="i-new__input i-new__textarea" name="links" rows="3" placeholder="One per line — paste a URL or write Markdown"></textarea>
+              <textarea class="i-new__input i-new__textarea" name="links" rows="3" placeholder="One URL per line"></textarea>
             </label>
             <label class="i-new__field i-new__field--wide">
-              <span class="i-new__label">Portrait URL</span>
-              <input class="i-new__input" name="portrait" type="url" placeholder="https://… or leave blank" />
-            </label>
-            <label class="i-new__field">
-              <span class="i-new__label">Theme</span>
-              <select class="i-new__input" name="theme">
-                <option value="ink" selected>ink</option>
-                <option value="paper">paper</option>
-                <option value="terminal">terminal</option>
-              </select>
-            </label>
-            <label class="i-new__field">
-              <span class="i-new__label">Layout</span>
-              <select class="i-new__input" name="layout">
-                <option value="free" selected>free</option>
-                <option value="compact">compact</option>
-                <option value="wide">wide</option>
-              </select>
+              <span class="i-new__label">Photo link</span>
+              <input class="i-new__input" name="portrait" type="url" placeholder="https://… (optional)" />
             </label>
           </div>
 
           <fieldset class="i-new__crown">
-            <legend class="i-new__crown-legend">I Crown</legend>
-            <p class="i-new__hint">Optional honor layer — not membership, not KYC. You can change this later by emailing an update.</p>
-            <div class="i-new__grid">
+            <legend class="i-new__crown-legend">I Crown (optional)</legend>
+            <label class="i-new__check-row">
+              <input type="checkbox" name="want_crown" value="1" />
+              <span>I want an I Crown on my page</span>
+            </label>
+            <label class="i-new__check-row" id="i-new-wear-wrap" hidden>
+              <input type="checkbox" name="wear_crown" value="1" />
+              <span>Show the Crown border on my photo</span>
+            </label>
+            <label class="i-new__field i-new__field--wide" id="i-new-blurb-wrap" hidden>
+              <span class="i-new__label">Crown line</span>
+              <input class="i-new__input" name="crown_blurb" type="text" placeholder="Short honor line" maxlength="200" />
+            </label>
+          </fieldset>
+
+          <details class="i-new__more">
+            <summary>More options</summary>
+            <div class="i-new__grid" style="margin-top:0.85rem">
               <label class="i-new__field">
-                <span class="i-new__label">Crown status</span>
-                <select class="i-new__input" name="crown_status">
-                  <option value="none" selected>none</option>
-                  <option value="active">active</option>
-                  <option value="suspended">suspended</option>
+                <span class="i-new__label">Page address</span>
+                <input class="i-new__input" name="slug" type="text" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="maya-chen" value="${escapeAttr(draft?.slug || "")}" />
+                <span class="i-new__hint">Auto-fills from your name</span>
+              </label>
+              <label class="i-new__field">
+                <span class="i-new__label">Date</span>
+                <input class="i-new__input" name="attested_at" type="date" required value="${escapeAttr(today)}" />
+              </label>
+              <label class="i-new__field">
+                <span class="i-new__label">Look</span>
+                <select class="i-new__input" name="theme">
+                  <option value="ink" selected>ink</option>
+                  <option value="paper">paper</option>
+                  <option value="terminal">terminal</option>
                 </select>
               </label>
-              <label class="i-new__field i-new__check">
-                <span class="i-new__label">Wear Crown border</span>
-                <label class="i-new__check-row">
-                  <input type="checkbox" name="wear_crown" value="1" />
-                  <span>Show the Crown ring on my portrait (needs active)</span>
-                </label>
-              </label>
-              <label class="i-new__field i-new__field--wide">
-                <span class="i-new__label">Crown blurb</span>
-                <input class="i-new__input" name="crown_blurb" type="text" placeholder="Short honor line if Crown is active" maxlength="200" />
+              <label class="i-new__field">
+                <span class="i-new__label">Width</span>
+                <select class="i-new__input" name="layout">
+                  <option value="free" selected>free</option>
+                  <option value="compact">compact</option>
+                  <option value="wide">wide</option>
+                </select>
               </label>
             </div>
-          </fieldset>
+          </details>
 
           <p class="i-new__status" id="i-new-status" role="status" hidden></p>
 
           <div class="cta-row i-new__actions">
-            <button class="btn btn--primary" type="submit" name="email">Email my profile</button>
-            <button class="btn btn--ghost" type="button" name="github">Open on GitHub</button>
-            <button class="btn btn--ghost" type="button" name="download">Download .md</button>
-            <button class="btn btn--ghost" type="button" name="copy">Copy markdown</button>
+            <button class="btn btn--primary" type="submit" name="email">Send my page</button>
           </div>
 
+          <details class="i-new__more">
+            <summary>Advanced (builders)</summary>
+            <div class="cta-row" style="margin-top:0.85rem">
+              <button class="btn btn--ghost" type="button" name="github">Open on GitHub</button>
+              <button class="btn btn--ghost" type="button" name="download">Download .md</button>
+              <button class="btn btn--ghost" type="button" name="copy">Copy markdown</button>
+            </div>
+          </details>
+
           <p class="i-new__note">
-            <strong>Miss Pamic's Template</strong> remembers your name, email, and
-            slug on this device. Primary path: email the steward your profile —
-            they’ll apply I Page / Crown changes and reply to you. GitHub is
-            optional if you prefer to open the PR yourself.
+            We save your name and email on this device for next time.
+            Questions? <a href="mailto:${CONTACT}">${CONTACT}</a>
           </p>
         </form>
       </div>
@@ -924,12 +905,23 @@ function bindINewForm(): void {
     if (loadWrap) loadWrap.hidden = next !== "update";
     const submitBtn = form.elements.namedItem("email") as HTMLButtonElement;
     submitBtn.textContent =
-      next === "update" ? "Email my update" : "Email my profile";
+      next === "update" ? "Send my update" : "Send my page";
   };
 
   modeBtns.forEach((btn) => {
     btn.addEventListener("click", () => setMode((btn.dataset.mode as "create" | "update") || "create"));
   });
+
+  const wantCrown = form.elements.namedItem("want_crown") as HTMLInputElement;
+  const wearWrap = document.getElementById("i-new-wear-wrap");
+  const blurbWrap = document.getElementById("i-new-blurb-wrap");
+  const syncCrownUi = () => {
+    const on = wantCrown.checked;
+    if (wearWrap) wearWrap.hidden = !on;
+    if (blurbWrap) blurbWrap.hidden = !on;
+  };
+  wantCrown.addEventListener("change", syncCrownUi);
+  syncCrownUi();
 
   const fillFromPage = (page: IPage) => {
     nameInput.value = page.name;
@@ -945,12 +937,12 @@ function bindINewForm(): void {
       page.theme || "ink";
     (form.elements.namedItem("layout") as HTMLSelectElement).value =
       page.layout || "free";
-    (form.elements.namedItem("crown_status") as HTMLSelectElement).value =
-      page.crown_status || "none";
+    wantCrown.checked = page.crown_status === "active";
     (form.elements.namedItem("crown_blurb") as HTMLInputElement).value =
       page.crown_blurb || "";
     (form.elements.namedItem("wear_crown") as HTMLInputElement).checked =
       Boolean(page.wear_crown);
+    syncCrownUi();
     if (page.contact_email) emailInput.value = page.contact_email;
     const about = extractSection(page.body, "About") || page.body.split(/\n##\s+/)[0]?.trim() || "";
     const links = linksToPlain(extractSection(page.body, "Links"));
@@ -969,18 +961,19 @@ function bindINewForm(): void {
 
   const readData = () => {
     const fd = new FormData(form);
+    const want = fd.get("want_crown") === "1";
     return {
       name: String(fd.get("name") || "").trim(),
-      slug: String(fd.get("slug") || "").trim(),
+      slug: String(fd.get("slug") || "").trim() || slugifyName(String(fd.get("name") || "")),
       attested_at: String(fd.get("attested_at") || todayISO()).trim(),
       tagline: String(fd.get("tagline") || "").trim(),
       theme: String(fd.get("theme") || "ink"),
       layout: String(fd.get("layout") || "free"),
       portrait: String(fd.get("portrait") || "").trim(),
       contact_email: String(fd.get("contact_email") || "").trim(),
-      crown_status: String(fd.get("crown_status") || "none"),
+      crown_status: want ? "active" : "none",
       crown_blurb: String(fd.get("crown_blurb") || "").trim(),
-      wear_crown: fd.get("wear_crown") === "1",
+      wear_crown: want && fd.get("wear_crown") === "1",
       about: String(fd.get("about") || ""),
       links: String(fd.get("links") || ""),
     };
@@ -1100,7 +1093,7 @@ function bindINewForm(): void {
       );
       return;
     }
-    setStatus("Opening your mail app — send it, then watch for a reply when it’s live.", "ok");
+    setStatus("Opening your email… send it, then watch for our reply when it’s live.", "ok");
     window.location.href = href;
   });
 

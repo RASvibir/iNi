@@ -2,42 +2,26 @@
 
 Public faces for the iNi community. Each page shows as **I am {name}**.
 
-Freeform. Non-judged. Not membership.
+## Create or update (easiest)
 
-## Miss Pamic's Template (your profile)
+**https://rasvibir.github.io/iNi/#/i/new** — Miss Pamic's Template
 
-**https://rasvibir.github.io/iNi/#/i/new**
+1. Enter your name and email  
+2. Write a bit about yourself (optional Crown)  
+3. Tap **Send my page**  
+4. We publish it and reply to your email when it’s live  
 
-This is the friendly account for I Pages and I Crowns:
+No GitHub account required for everyday use.
 
-1. Enter your **name** and **email** (email is private — for update replies only)
-2. Edit your profile + optional Crown settings
-3. Tap **Email my profile** / **Email my update**
-4. Steward applies the change and replies to your email when it’s live
+## Browse
 
-**New profile** or **Update mine** — no Git required for everyday edits. GitHub remains an optional advanced path.
+https://rasvibir.github.io/iNi/#/i
 
-Your name, email, and slug are remembered on this device.
+## Forum & email
 
-## Optional extras (in the form)
+- Forum: https://github.com/RASvibir/iNi/discussions  
+- Steward: rasip@chloreform.org  
 
-- Tagline, portrait URL, theme, layout
-- I Crown: status, wear border, short blurb
+## Builders (optional)
 
-`contact_email` in the file is steward-only — not shown on the public page.
-
-## Manual path (optional)
-
-1. Fork [RASvibir/iNi](https://github.com/RASvibir/iNi)
-2. Copy [`_TEMPLATE.md`](_TEMPLATE.md) → `content/i/{slug}.md`
-3. Fill fields and open a pull request
-
-## Browse & talk
-
-- Faces: https://rasvibir.github.io/iNi/#/i
-- Profile form: https://rasvibir.github.io/iNi/#/i/new
-- Forum: https://github.com/RASvibir/iNi/discussions
-
-## Example
-
-[victor-birkle.md](victor-birkle.md) → **I am Victor Birkle**
+Copy [`_TEMPLATE.md`](_TEMPLATE.md) → `content/i/{slug}.md` and open a PR if you prefer that path.

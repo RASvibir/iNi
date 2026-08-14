@@ -822,6 +822,55 @@ a:hover {
   font-weight: 600;
 }
 
+.i-new__steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 1.15rem 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: pamic;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.i-new__steps li {
+  counter-increment: pamic;
+}
+
+.i-new__steps li::before {
+  content: counter(pamic) ". ";
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.i-new__more {
+  margin: 1.15rem 0 0;
+  border-top: 1px solid var(--line);
+  padding-top: 0.85rem;
+}
+
+.i-new__more summary {
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  list-style: none;
+}
+
+.i-new__more summary::-webkit-details-marker {
+  display: none;
+}
+
+.i-new__more summary::before {
+  content: "+ ";
+  color: var(--accent);
+}
+
+.i-new__more[open] summary::before {
+  content: "– ";
+}
+
 .i-new__form {
   max-width: 40rem;
 }

@@ -21,9 +21,9 @@ Do **not** claim legal chain-of-custody. Do **not** treat a merge as enrollment.
 
 ## I page PRs
 
-**Easiest:** [Miss Pamic's Template](https://rasvibir.github.io/iNi/#/i/new) — profile + email for create/update (I Page and I Crown). Steward applies changes and replies by email.
+**Easiest:** [My profile](https://rasvibir.github.io/iNi/#/i/new) — fill the form, send by email. Steward publishes and replies.
 
-Or by hand:
+Or by hand (builders):
 
 1. Fork this repo
 2. Read [`content/i/README.md`](content/i/README.md)
