@@ -398,7 +398,7 @@ function homeHtml(): string {
           </details>
           <details>
             <summary>How do I get an I Page?</summary>
-            <p>Use <a href="#/i/new">My profile</a> (Miss Pamic's Template). Fill your name and email, tap <strong>Send my page</strong>. We apply it and reply when it’s live — no GitHub required.</p>
+            <p>Use <a href="#/i/new">My profile</a> (Miss Pamic's Template). Fill your name and email, tap <strong>Send my page</strong>, then send the message (mail app, Gmail, or copy-paste). We apply it and reply when it’s live — no GitHub required.</p>
           </details>
           <details>
             <summary>How do I practice iNi without a website?</summary>
@@ -686,7 +686,16 @@ function savePamicDraft(data: { email: string; slug: string; name: string }): vo
   );
 }
 
-function buildUpdateMailto(data: {
+type MailParts = {
+  subject: string;
+  body: string;
+  mailtoHref: string;
+  gmailHref: string;
+  outlookHref: string;
+  usedShortMail: boolean;
+};
+
+function buildMailParts(data: {
   mode: "create" | "update";
   name: string;
   slug: string;
@@ -694,7 +703,7 @@ function buildUpdateMailto(data: {
   markdown: string;
   crown_status: string;
   wear_crown: boolean;
-}): string {
+}): MailParts {
   const kind = data.mode === "create" ? "new I Page" : "I Page / Crown update";
   const subject = `[iNi] ${kind}: ${data.name} (${data.slug})`;
   const body = [
@@ -711,7 +720,59 @@ function buildUpdateMailto(data: {
     `----- markdown file: content/i/${data.slug}.md -----`,
     data.markdown,
   ].join("\n");
-  return `mailto:${CONTACT}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const shortBody = [
+    `From: ${data.name} <${data.email}>`,
+    `Slug: ${data.slug}`,
+    `Mode: ${data.mode}`,
+    `Crown: ${data.crown_status}${data.wear_crown ? " · wear border" : ""}`,
+    ``,
+    `The full profile is on my clipboard (and in the page I just filled).`,
+    `Paste it here, or attach content/i/${data.slug}.md, then reply when live.`,
+  ].join("\n");
+
+  const hrefsFor = (mailBody: string) => ({
+    mailto: `mailto:${CONTACT}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(mailBody)}`,
+    gmail: `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${encodeURIComponent(CONTACT)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(mailBody)}`,
+    outlook: `https://outlook.live.com/mail/0/deeplink/compose?to=${encodeURIComponent(CONTACT)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(mailBody)}`,
+  });
+
+  let hrefs = hrefsFor(body);
+  let usedShortMail = false;
+  if (hrefs.mailto.length > 1800 || hrefs.gmail.length > 2000) {
+    usedShortMail = true;
+    hrefs = hrefsFor(shortBody);
+  }
+
+  return {
+    subject,
+    body,
+    mailtoHref: hrefs.mailto,
+    gmailHref: hrefs.gmail,
+    outlookHref: hrefs.outlook,
+    usedShortMail,
+  };
+}
+
+async function copyText(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand("copy");
+      ta.remove();
+      return ok;
+    } catch {
+      return false;
+    }
+  }
 }
 
 function githubNewFileUrl(slug: string, markdown: string): string | null {
@@ -740,16 +801,17 @@ function iNewHtml(): string {
         <p class="i-page__kicker">Miss Pamic's Template</p>
         <h1 class="i-title">My <span class="i-am">I</span> page</h1>
         <p class="i-land__tagline">
-          Tell us who you are. Hit send. We publish it and email you when it’s
-          live — that’s the whole path.
+          Tell us who you are. We’ll give you a message to send — mail app,
+          Gmail in the browser, or copy-paste. We publish it and reply when
+          it’s live.
         </p>
         <p class="i-new__preview" id="i-new-preview" aria-live="polite">
           <span class="i-am">I am</span> <strong id="i-new-preview-name">…</strong>
         </p>
         <ol class="i-new__steps" aria-label="How it works">
           <li>Fill your profile</li>
-          <li>Send to steward</li>
-          <li>Get an email when it’s live</li>
+          <li>Copy or open the message</li>
+          <li>Send it — we reply when it’s live</li>
         </ol>
       </div>
     </header>
@@ -816,7 +878,7 @@ function iNewHtml(): string {
             </label>
           </fieldset>
 
-          <details class="i-new__more">
+          <details class="i-new__more" id="i-new-more">
             <summary>More options</summary>
             <div class="i-new__grid" style="margin-top:0.85rem">
               <label class="i-new__field">
@@ -853,6 +915,30 @@ function iNewHtml(): string {
             <button class="btn btn--primary" type="submit" name="email">Send my page</button>
           </div>
 
+          <aside class="i-new__send" id="i-new-send" hidden>
+            <h2 class="i-new__send-title">Send this to finish</h2>
+            <p class="i-new__send-lede" id="i-new-send-lede">
+              Your page isn’t live until this message reaches us. If a mail app
+              didn’t open, copy the message or use Gmail in the browser.
+            </p>
+            <p class="i-new__send-meta">
+              To <a href="mailto:${CONTACT}">${CONTACT}</a>
+              · <span id="i-new-send-subject"></span>
+            </p>
+            <label class="i-new__field i-new__field--wide">
+              <span class="i-new__label">Message</span>
+              <textarea class="i-new__input i-new__textarea" id="i-new-send-body" rows="12" readonly></textarea>
+            </label>
+            <div class="cta-row i-new__send-actions">
+              <button type="button" class="btn btn--primary" id="i-new-copy-msg">Copy message</button>
+              <a class="btn btn--ghost" id="i-new-mailto" target="_blank" rel="noopener">Mail app</a>
+              <a class="btn btn--ghost" id="i-new-gmail" target="_blank" rel="noopener">Gmail</a>
+              <a class="btn btn--ghost" id="i-new-outlook" target="_blank" rel="noopener">Outlook</a>
+              <button type="button" class="btn btn--ghost" id="i-new-share" hidden>Share</button>
+              <button type="button" class="btn btn--ghost" id="i-new-dl">Download .md</button>
+            </div>
+          </aside>
+
           <details class="i-new__more">
             <summary>Advanced (builders)</summary>
             <div class="cta-row" style="margin-top:0.85rem">
@@ -864,6 +950,7 @@ function iNewHtml(): string {
 
           <p class="i-new__note">
             We save your name and email on this device for next time.
+            No mail app? Copy the message or open Gmail after you tap send.
             Questions? <a href="mailto:${CONTACT}">${CONTACT}</a>
           </p>
         </form>
@@ -888,11 +975,27 @@ function bindINewForm(): void {
   let mode: "create" | "update" = "create";
   let slugTouched = Boolean(slugInput.value.trim());
 
+  const sendPanel = document.getElementById("i-new-send");
+  const sendBody = document.getElementById("i-new-send-body") as HTMLTextAreaElement | null;
+  const sendSubject = document.getElementById("i-new-send-subject");
+  const sendLede = document.getElementById("i-new-send-lede");
+  const moreOpts = document.getElementById("i-new-more") as HTMLDetailsElement | null;
+  const mailtoLink = document.getElementById("i-new-mailto") as HTMLAnchorElement | null;
+  const gmailLink = document.getElementById("i-new-gmail") as HTMLAnchorElement | null;
+  const outlookLink = document.getElementById("i-new-outlook") as HTMLAnchorElement | null;
+  const shareBtn = document.getElementById("i-new-share") as HTMLButtonElement | null;
+
   const setStatus = (msg: string, kind: "ok" | "err" | "info" = "info") => {
     if (!statusEl) return;
     statusEl.hidden = !msg;
     statusEl.textContent = msg;
     statusEl.dataset.kind = kind;
+    if (msg) statusEl.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  };
+
+  const revealSlugField = () => {
+    if (moreOpts) moreOpts.open = true;
+    slugInput.focus();
   };
 
   const setMode = (next: "create" | "update") => {
@@ -955,7 +1058,7 @@ function bindINewForm(): void {
     const page = pages.find((p) => p.slug === loadSelect.value);
     if (page) {
       fillFromPage(page);
-      setStatus(`Loaded ${page.name}. Edit, then email your update.`, "info");
+      setStatus(`Loaded ${page.name}. Edit, then send your update.`, "info");
     }
   });
 
@@ -995,9 +1098,23 @@ function bindINewForm(): void {
 
   const validate = () => {
     const data = readData();
-    if (!data.name || !data.slug) {
-      setStatus("Name and slug are required.", "err");
+    if (!data.name) {
+      setStatus("Name is required.", "err");
       nameInput.focus();
+      return null;
+    }
+    if (!data.slug) {
+      data.slug = `i-${todayISO()}`;
+      slugInput.value = data.slug;
+      slugTouched = true;
+      revealSlugField();
+    }
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(data.slug)) {
+      setStatus(
+        "Page address can only use lowercase letters, numbers, and hyphens.",
+        "err",
+      );
+      revealSlugField();
       return null;
     }
     if (!data.contact_email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.contact_email)) {
@@ -1006,11 +1123,19 @@ function bindINewForm(): void {
       return null;
     }
     if (mode === "create" && pages.some((p) => p.slug === data.slug)) {
-      setStatus(`Slug “${data.slug}” is taken — switch to Update mine, or pick another slug.`, "err");
+      setStatus(
+        `Slug “${data.slug}” is taken — switch to Update mine, or pick another slug.`,
+        "err",
+      );
+      revealSlugField();
       return null;
     }
     if (mode === "update" && !pages.some((p) => p.slug === data.slug)) {
-      setStatus(`No I Page with slug “${data.slug}” yet — use New profile, or load an existing face.`, "err");
+      setStatus(
+        `No I Page with slug “${data.slug}” yet — use I’m new, or load an existing face.`,
+        "err",
+      );
+      revealSlugField();
       return null;
     }
     return data;
@@ -1024,10 +1149,7 @@ function bindINewForm(): void {
     });
   };
 
-  (form.elements.namedItem("download") as HTMLButtonElement).addEventListener("click", () => {
-    const data = validate();
-    if (!data) return;
-    persist(data);
+  const downloadMarkdown = (data: ReturnType<typeof readData>) => {
     const md = buildIPageMarkdown(data);
     const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
     const a = document.createElement("a");
@@ -1035,6 +1157,13 @@ function bindINewForm(): void {
     a.download = `${data.slug}.md`;
     a.click();
     URL.revokeObjectURL(a.href);
+  };
+
+  (form.elements.namedItem("download") as HTMLButtonElement).addEventListener("click", () => {
+    const data = validate();
+    if (!data) return;
+    persist(data);
+    downloadMarkdown(data);
     setStatus(`Downloaded ${data.slug}.md`, "ok");
   });
 
@@ -1042,12 +1171,8 @@ function bindINewForm(): void {
     const data = validate();
     if (!data) return;
     persist(data);
-    try {
-      await navigator.clipboard.writeText(buildIPageMarkdown(data));
-      setStatus("Markdown copied.", "ok");
-    } catch {
-      setStatus("Couldn’t copy — use Download instead.", "err");
-    }
+    const ok = await copyText(buildIPageMarkdown(data));
+    setStatus(ok ? "Markdown copied." : "Couldn’t copy — use Download instead.", ok ? "ok" : "err");
   });
 
   (form.elements.namedItem("github") as HTMLButtonElement).addEventListener("click", () => {
@@ -1057,20 +1182,70 @@ function bindINewForm(): void {
     const md = buildIPageMarkdown(data);
     const gh = githubNewFileUrl(data.slug, md);
     if (!gh) {
-      setStatus("Too long for a GitHub link — Email my profile, or Download.", "info");
+      setStatus("Too long for a GitHub link — send the message below, or Download.", "info");
       return;
     }
     setStatus("Opening GitHub… optional path if you want to PR yourself.", "ok");
     window.open(gh, "_blank", "noopener");
   });
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
+  const showSendPanel = (parts: MailParts, copied: boolean) => {
+    if (sendBody) sendBody.value = parts.body;
+    if (sendSubject) sendSubject.textContent = parts.subject;
+    if (mailtoLink) mailtoLink.href = parts.mailtoHref;
+    if (gmailLink) gmailLink.href = parts.gmailHref;
+    if (outlookLink) outlookLink.href = parts.outlookHref;
+    if (sendLede) {
+      sendLede.textContent = copied
+        ? parts.usedShortMail
+          ? "Message copied. Mail apps often truncate long notes — paste this message if the draft looks short."
+          : "Message copied. Send it with a mail app, Gmail, or paste it yourself — then watch for our reply."
+        : "Copy the message below, then send it with a mail app, Gmail, or paste. Your page isn’t live until we get it.";
+    }
+    if (sendPanel) {
+      sendPanel.hidden = false;
+      sendPanel.scrollIntoView({ block: "center", behavior: "smooth" });
+    }
+  };
+
+  document.getElementById("i-new-copy-msg")?.addEventListener("click", async () => {
+    const text = sendBody?.value || "";
+    const ok = text ? await copyText(text) : false;
+    setStatus(ok ? "Message copied — paste it into any mail app." : "Couldn’t copy — select the message and copy it yourself.", ok ? "ok" : "err");
+  });
+
+  document.getElementById("i-new-dl")?.addEventListener("click", () => {
     const data = validate();
     if (!data) return;
     persist(data);
+    downloadMarkdown(data);
+    setStatus(`Downloaded ${data.slug}.md — attach it if your mail draft is empty.`, "ok");
+  });
+
+  if (shareBtn && typeof navigator.share === "function") {
+    shareBtn.hidden = false;
+    shareBtn.addEventListener("click", async () => {
+      const text = sendBody?.value || "";
+      const title = sendSubject?.textContent || "iNi I Page";
+      try {
+        await navigator.share({ title, text });
+        setStatus("Share sheet opened — pick Mail or Messages to send.", "ok");
+      } catch {
+        /* user cancelled */
+      }
+    });
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = validate();
+    if (!data) {
+      if (sendPanel) sendPanel.hidden = true;
+      return;
+    }
+    persist(data);
     const md = buildIPageMarkdown(data);
-    const href = buildUpdateMailto({
+    const parts = buildMailParts({
       mode,
       name: data.name,
       slug: data.slug,
@@ -1079,22 +1254,14 @@ function bindINewForm(): void {
       crown_status: data.crown_status,
       wear_crown: data.wear_crown && data.crown_status === "active",
     });
-    // mailto body can hit length limits — fall back to copy + short mail
-    if (href.length > 1800) {
-      void navigator.clipboard.writeText(md).then(
-        () => {
-          const short = `mailto:${CONTACT}?subject=${encodeURIComponent(`[iNi] ${mode} I Page: ${data.name} (${data.slug})`)}&body=${encodeURIComponent(
-            `From: ${data.name} <${data.contact_email}>\nSlug: ${data.slug}\nMode: ${mode}\nCrown: ${data.crown_status}${data.wear_crown ? " · wear border" : ""}\n\nMarkdown is on my clipboard — paste it under content/i/${data.slug}.md and reply when live.\n`,
-          )}`;
-          setStatus("Profile copied. Opening a short email — paste the markdown if asked.", "ok");
-          window.location.href = short;
-        },
-        () => setStatus("Email body too long — use Download, then email the file to " + CONTACT, "info"),
-      );
-      return;
-    }
-    setStatus("Opening your email… send it, then watch for our reply when it’s live.", "ok");
-    window.location.href = href;
+    const copied = await copyText(parts.body);
+    showSendPanel(parts, copied);
+    setStatus(
+      copied
+        ? "Ready to send. Use Mail app, Gmail, or paste the copied message."
+        : "Ready to send. Copy the message below — a mail app is optional.",
+      "ok",
+    );
   });
 
   // Returning visitors who already have a face land on Update
