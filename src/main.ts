@@ -7,8 +7,6 @@ const UXU_COMMONS = "https://rasvibir.github.io/uXu/";
 const UXU_CREATE = "https://rasvibir.github.io/uXu/#CREATE";
 const INI_REPO = "https://github.com/RASvibir/iNi";
 const FORUM = "https://github.com/RASvibir/iNi/discussions";
-/* I-page intake only. Public chrome uses the forum — not a studio address. */
-const CONTACT = "rasip@chloreform.org";
 const BASE = import.meta.env.BASE_URL || "/";
 
 type IPage = {
@@ -395,7 +393,7 @@ function homeHtml(): string {
           </details>
           <details>
             <summary>How do I get an I Page?</summary>
-            <p>Use <a href="#/i/new">My profile</a> (Miss Pamic's Template). Fill your name and email, tap <strong>Send my page</strong>, then send the message (mail app, Gmail, or copy-paste). We apply it and reply when it’s live — no GitHub required.</p>
+            <p>Use <a href="#/i/new">My profile</a> (Miss Pamic's Template). Fill your name and a reply email, tap <strong>Send my page</strong>, then copy that note onto the <a href="${FORUM}" target="_blank" rel="noopener">forum</a> (or open a PR). A steward publishes it from there.</p>
           </details>
           <details>
             <summary>How do I practice iNi without a website?</summary>
@@ -681,16 +679,22 @@ function savePamicDraft(data: { email: string; slug: string; name: string }): vo
   );
 }
 
-type MailParts = {
+type SendParts = {
   subject: string;
   body: string;
-  mailtoHref: string;
-  gmailHref: string;
-  outlookHref: string;
-  usedShortMail: boolean;
+  forumHref: string;
+  usedShortBody: boolean;
 };
 
-function buildMailParts(data: {
+function forumComposeHref(title: string, body: string): string {
+  const full = `${FORUM}/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+  if (full.length > 1800) {
+    return `${FORUM}/new?title=${encodeURIComponent(title)}`;
+  }
+  return full;
+}
+
+function buildSendParts(data: {
   mode: "create" | "update";
   name: string;
   slug: string;
@@ -698,7 +702,7 @@ function buildMailParts(data: {
   markdown: string;
   crown_status: string;
   wear_crown: boolean;
-}): MailParts {
+}): SendParts {
   const kind = data.mode === "create" ? "new I Page" : "I Page / Crown update";
   const subject = `[iNi] ${kind}: ${data.name} (${data.slug})`;
   const body = [
@@ -710,7 +714,7 @@ function buildMailParts(data: {
     `Mode: ${data.mode}`,
     `Crown: ${data.crown_status}${data.wear_crown ? " · wear border" : ""}`,
     ``,
-    `Please apply this profile and reply to my email when it's live.`,
+    `Please apply this profile and reply when it's live.`,
     ``,
     `----- markdown file: content/i/${data.slug}.md -----`,
     data.markdown,
@@ -722,29 +726,20 @@ function buildMailParts(data: {
     `Crown: ${data.crown_status}${data.wear_crown ? " · wear border" : ""}`,
     ``,
     `The full profile is on my clipboard (and in the page I just filled).`,
-    `Paste it here, or attach content/i/${data.slug}.md, then reply when live.`,
+    `Paste it here, or attach content/i/${data.slug}.md.`,
   ].join("\n");
 
-  const hrefsFor = (mailBody: string) => ({
-    mailto: `mailto:${CONTACT}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(mailBody)}`,
-    gmail: `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${encodeURIComponent(CONTACT)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(mailBody)}`,
-    outlook: `https://outlook.live.com/mail/0/deeplink/compose?to=${encodeURIComponent(CONTACT)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(mailBody)}`,
-  });
-
-  let hrefs = hrefsFor(body);
-  let usedShortMail = false;
-  if (hrefs.mailto.length > 1800 || hrefs.gmail.length > 2000) {
-    usedShortMail = true;
-    hrefs = hrefsFor(shortBody);
-  }
+  const fullHref = forumComposeHref(subject, body);
+  const usedShortBody = !fullHref.includes("&body=");
+  const forumHref = usedShortBody
+    ? forumComposeHref(subject, shortBody)
+    : fullHref;
 
   return {
     subject,
     body,
-    mailtoHref: hrefs.mailto,
-    gmailHref: hrefs.gmail,
-    outlookHref: hrefs.outlook,
-    usedShortMail,
+    forumHref,
+    usedShortBody,
   };
 }
 
@@ -796,17 +791,16 @@ function iNewHtml(): string {
         <p class="i-page__kicker">Miss Pamic's Template</p>
         <h1 class="i-title">My <span class="i-am">I</span> page</h1>
         <p class="i-land__tagline">
-          Tell us who you are. We’ll give you a message to send — mail app,
-          Gmail in the browser, or copy-paste. We publish it and reply when
-          it’s live.
+          Tell us who you are. We’ll give you a message to copy onto the
+          iNi forum, or open as a PR. A steward publishes it from there.
         </p>
         <p class="i-new__preview" id="i-new-preview" aria-live="polite">
           <span class="i-am">I am</span> <strong id="i-new-preview-name">…</strong>
         </p>
         <ol class="i-new__steps" aria-label="How it works">
           <li>Fill your profile</li>
-          <li>Copy or open the message</li>
-          <li>Send it — we reply when it’s live</li>
+          <li>Copy the message</li>
+          <li>Open the forum — a steward publishes it</li>
         </ol>
       </div>
     </header>
@@ -913,11 +907,11 @@ function iNewHtml(): string {
           <aside class="i-new__send" id="i-new-send" hidden>
             <h2 class="i-new__send-title">Send this to finish</h2>
             <p class="i-new__send-lede" id="i-new-send-lede">
-              Your page isn’t live until this message reaches us. If a mail app
-              didn’t open, copy the message or use Gmail in the browser.
+              Your page isn’t live until a steward sees this on the forum or as a PR.
+              Copy the message, then open the forum.
             </p>
             <p class="i-new__send-meta">
-              To steward inbox
+              To iNi forum
               · <span id="i-new-send-subject"></span>
             </p>
             <label class="i-new__field i-new__field--wide">
@@ -926,9 +920,7 @@ function iNewHtml(): string {
             </label>
             <div class="cta-row i-new__send-actions">
               <button type="button" class="btn btn--primary" id="i-new-copy-msg">Copy message</button>
-              <a class="btn btn--ghost" id="i-new-mailto" target="_blank" rel="noopener">Mail app</a>
-              <a class="btn btn--ghost" id="i-new-gmail" target="_blank" rel="noopener">Gmail</a>
-              <a class="btn btn--ghost" id="i-new-outlook" target="_blank" rel="noopener">Outlook</a>
+              <a class="btn btn--ghost" id="i-new-forum" target="_blank" rel="noopener">Open forum</a>
               <button type="button" class="btn btn--ghost" id="i-new-share" hidden>Share</button>
               <button type="button" class="btn btn--ghost" id="i-new-dl">Download .md</button>
             </div>
@@ -944,8 +936,8 @@ function iNewHtml(): string {
           </details>
 
           <p class="i-new__note">
-            We save your name and email on this device for next time.
-            No mail app? Copy the message or open Gmail after you tap send.
+            We save your name and reply email on this device for next time.
+            Copy the message and open the forum after you tap send.
             Questions? <a href="${FORUM}" target="_blank" rel="noopener">Forum</a>
           </p>
         </form>
@@ -975,9 +967,7 @@ function bindINewForm(): void {
   const sendSubject = document.getElementById("i-new-send-subject");
   const sendLede = document.getElementById("i-new-send-lede");
   const moreOpts = document.getElementById("i-new-more") as HTMLDetailsElement | null;
-  const mailtoLink = document.getElementById("i-new-mailto") as HTMLAnchorElement | null;
-  const gmailLink = document.getElementById("i-new-gmail") as HTMLAnchorElement | null;
-  const outlookLink = document.getElementById("i-new-outlook") as HTMLAnchorElement | null;
+  const forumLink = document.getElementById("i-new-forum") as HTMLAnchorElement | null;
   const shareBtn = document.getElementById("i-new-share") as HTMLButtonElement | null;
 
   const setStatus = (msg: string, kind: "ok" | "err" | "info" = "info") => {
@@ -1184,18 +1174,16 @@ function bindINewForm(): void {
     window.open(gh, "_blank", "noopener");
   });
 
-  const showSendPanel = (parts: MailParts, copied: boolean) => {
+  const showSendPanel = (parts: SendParts, copied: boolean) => {
     if (sendBody) sendBody.value = parts.body;
     if (sendSubject) sendSubject.textContent = parts.subject;
-    if (mailtoLink) mailtoLink.href = parts.mailtoHref;
-    if (gmailLink) gmailLink.href = parts.gmailHref;
-    if (outlookLink) outlookLink.href = parts.outlookHref;
+    if (forumLink) forumLink.href = parts.forumHref;
     if (sendLede) {
       sendLede.textContent = copied
-        ? parts.usedShortMail
-          ? "Message copied. Mail apps often truncate long notes — paste this message if the draft looks short."
-          : "Message copied. Send it with a mail app, Gmail, or paste it yourself — then watch for our reply."
-        : "Copy the message below, then send it with a mail app, Gmail, or paste. Your page isn’t live until we get it.";
+        ? parts.usedShortBody
+          ? "Message copied. Forum links often truncate long notes — paste this message if the draft looks short."
+          : "Message copied. Open the forum and paste if the draft is empty."
+        : "Copy the message below, then open the forum. Your page isn’t live until a steward sees it.";
     }
     if (sendPanel) {
       sendPanel.hidden = false;
@@ -1206,7 +1194,7 @@ function bindINewForm(): void {
   document.getElementById("i-new-copy-msg")?.addEventListener("click", async () => {
     const text = sendBody?.value || "";
     const ok = text ? await copyText(text) : false;
-    setStatus(ok ? "Message copied — paste it into any mail app." : "Couldn’t copy — select the message and copy it yourself.", ok ? "ok" : "err");
+    setStatus(ok ? "Message copied — paste it on the forum." : "Couldn’t copy — select the message and copy it yourself.", ok ? "ok" : "err");
   });
 
   document.getElementById("i-new-dl")?.addEventListener("click", () => {
@@ -1214,7 +1202,7 @@ function bindINewForm(): void {
     if (!data) return;
     persist(data);
     downloadMarkdown(data);
-    setStatus(`Downloaded ${data.slug}.md — attach it if your mail draft is empty.`, "ok");
+    setStatus(`Downloaded ${data.slug}.md — attach it on the forum if the draft is empty.`, "ok");
   });
 
   if (shareBtn && typeof navigator.share === "function") {
@@ -1224,7 +1212,7 @@ function bindINewForm(): void {
       const title = sendSubject?.textContent || "iNi I Page";
       try {
         await navigator.share({ title, text });
-        setStatus("Share sheet opened — pick Mail or Messages to send.", "ok");
+        setStatus("Share sheet opened — pick the forum or Messages.", "ok");
       } catch {
         /* user cancelled */
       }
@@ -1240,7 +1228,7 @@ function bindINewForm(): void {
     }
     persist(data);
     const md = buildIPageMarkdown(data);
-    const parts = buildMailParts({
+    const parts = buildSendParts({
       mode,
       name: data.name,
       slug: data.slug,
@@ -1253,8 +1241,8 @@ function bindINewForm(): void {
     showSendPanel(parts, copied);
     setStatus(
       copied
-        ? "Ready to send. Use Mail app, Gmail, or paste the copied message."
-        : "Ready to send. Copy the message below — a mail app is optional.",
+        ? "Ready. Open the forum, or paste the copied message there."
+        : "Ready. Copy the message below, then open the forum.",
       "ok",
     );
   });
