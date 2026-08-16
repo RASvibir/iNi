@@ -47,6 +47,10 @@ Say who you are in a sentence or two.
 
 ## Links
 
+Any **https** URL is fine — site, social, or elsewhere. No platform allowlist.
+Unsafe schemes (`javascript:`, etc.) are stripped when the page renders.
+A steward publishes the page; that is the spam/phishing gate.
+
 - Example: [your site](https://example.com)
 
 ## Archives

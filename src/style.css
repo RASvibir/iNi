@@ -1257,6 +1257,32 @@ a:hover {
   margin-top: 1rem;
 }
 
+.i-page__share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.65rem;
+  margin-top: 1.15rem;
+}
+
+.i-page__share .btn--share {
+  padding: 0.4rem 0.85rem;
+  font-size: 0.85rem;
+}
+
+.i-page__share-status {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.i-page__share-hint {
+  margin: 0.45rem 0 0;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  max-width: 28rem;
+  line-height: 1.4;
+}
+
 .crown-panel {
   margin: 0 0 1.75rem;
   padding: 1.15rem 1.25rem;

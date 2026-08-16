@@ -1,3 +1,5 @@
+import { escapeAttrUrl, safePublicUrl } from "./urls";
+
 /** Minimal Markdown → safe-ish HTML (no raw HTML passthrough). */
 export function renderMarkdown(src: string): string {
   const lines = src.replace(/\r\n/g, "\n").split("\n");
@@ -23,10 +25,21 @@ export function renderMarkdown(src: string): string {
     t = t.replace(/`([^`]+)`/g, "<code>$1</code>");
     t = t.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
     t = t.replace(/\*([^*]+)\*/g, "<em>$1</em>");
-    t = t.replace(
-      /\[([^\]]+)\]\((https?:[^)\s]+|mailto:[^)\s]+)\)/g,
-      '<a href="$2" rel="noopener">$1</a>',
-    );
+    // Any http(s)/mailto — social or otherwise. Unsafe schemes stay plain text.
+    t = t.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_m, label: string, hrefRaw: string) => {
+      const decoded = hrefRaw
+        .replace(/&amp;/g, "&")
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">");
+      const safe = safePublicUrl(decoded);
+      if (!safe) return label;
+      const external = /^https?:/i.test(safe);
+      const rel = external ? ' rel="noopener noreferrer"' : "";
+      const target = external ? ' target="_blank"' : "";
+      return `<a href="${escapeAttrUrl(safe)}"${rel}${target}>${label}</a>`;
+    });
     return t;
   };
 

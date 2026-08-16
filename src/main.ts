@@ -1,6 +1,7 @@
 import "./style.css";
 import iData from "./i-data.json";
 import { renderMarkdown } from "./markdown";
+import { safePortraitSrc, safePublicUrl } from "./urls";
 
 const SOLOIST = "https://soloist.ai/uxu";
 const UXU_COMMONS = "https://rasvibir.github.io/uXu/";
@@ -44,11 +45,13 @@ function escapeAttr(s: string): string {
 
 /** Resolve site-root portrait paths against Vite base (/iNi/). */
 function resolvePortraitSrc(src: string): string {
-  if (/^https?:\/\//i.test(src)) return src;
-  if (src.startsWith("/")) {
-    return `${BASE.replace(/\/$/, "")}${src}`;
+  const safe = safePortraitSrc(src);
+  if (!safe) return "";
+  if (/^https?:\/\//i.test(safe)) return safe;
+  if (safe.startsWith("/")) {
+    return `${BASE.replace(/\/$/, "")}${safe}`;
   }
-  return `${BASE}${src.replace(/^\//, "")}`;
+  return `${BASE}${safe.replace(/^\//, "")}`;
 }
 
 /** True when Crown is active and the page opted to wear the border. */
@@ -61,6 +64,8 @@ function portraitHtml(
   size: "hero" | "index" = "hero",
 ): string {
   if (!page.portrait) return "";
+  const src = resolvePortraitSrc(page.portrait);
+  if (!src) return "";
   const crowned = wearsCrown(page);
   const classes = [
     "i-portrait",
@@ -72,7 +77,6 @@ function portraitHtml(
   const label = crowned
     ? `${page.name} — I Crown border`
     : page.name;
-  const src = resolvePortraitSrc(page.portrait);
   const crownSeal = crowned
     ? `<span class="i-portrait__seal" aria-hidden="true">${crownIcon(size === "hero" ? "md" : "sm")}</span>`
     : "";
@@ -523,6 +527,12 @@ function iDetailHtml(page: IPage): string {
               <span class="chip">iNi practice welcome</span>
               ${crownReadout(crown, "md")}
             </div>
+            <div class="i-page__share" role="group" aria-label="Share this I Page">
+              <button type="button" class="btn btn--ghost btn--share" id="i-page-copy-link">Copy link</button>
+              <button type="button" class="btn btn--ghost btn--share" id="i-page-share" hidden>Share</button>
+              <span class="i-page__share-status" id="i-page-share-status" aria-live="polite"></span>
+            </div>
+            <p class="i-page__share-hint">This page’s URL — copy or Share into any app. Your own links live in the Links section below.</p>
           </div>
         </div>
       </header>
@@ -539,6 +549,48 @@ function iDetailHtml(page: IPage): string {
 
 function todayISO(): string {
   return new Date().toISOString().slice(0, 10);
+}
+
+/**
+ * One Links line → markdown bullet.
+ * Prefer bare https URLs; keep labeled markdown if the href is already safe.
+ */
+function formatLinkLine(line: string): string | null {
+  const bare = safePublicUrl(line);
+  if (bare) {
+    let label = bare;
+    try {
+      label = new URL(bare).hostname.replace(/^www\./, "") || bare;
+    } catch {
+      /* keep bare */
+    }
+    return `- [${label}](${bare})`;
+  }
+
+  const md = line.match(/^[-*]\s+\[([^\]]+)\]\(([^)\s]+)\)\s*$/);
+  if (md) {
+    const href = safePublicUrl(md[2]);
+    if (!href) return null;
+    return `- [${md[1].trim() || href}](${href})`;
+  }
+
+  const labeled = line.match(/^[-*]\s+(.+)$/);
+  if (labeled) {
+    const inner = safePublicUrl(labeled[1]);
+    if (inner) {
+      let label = inner;
+      try {
+        label = new URL(inner).hostname.replace(/^www\./, "") || inner;
+      } catch {
+        /* keep */
+      }
+      return `- [${label}](${inner})`;
+    }
+    // Non-URL prose under Links — keep as text (steward can edit)
+    return `- ${labeled[1]}`;
+  }
+
+  return `- ${line}`;
 }
 
 function slugifyName(name: string): string {
@@ -576,11 +628,8 @@ function buildIPageMarkdown(data: {
     .split(/\r?\n/)
     .map((l) => l.trim())
     .filter(Boolean)
-    .map((l) => {
-      if (/^https?:\/\//i.test(l)) return `- [${l}](${l})`;
-      if (l.startsWith("- ")) return l;
-      return `- ${l}`;
-    });
+    .map((l) => formatLinkLine(l))
+    .filter(Boolean) as string[];
   const linksBlock =
     linkLines.length > 0 ? linkLines.join("\n") : "- Add a link here";
   const crown = ["none", "active", "suspended"].includes(data.crown_status)
@@ -596,7 +645,7 @@ attested_at: ${data.attested_at}
 tagline: ${yamlQuote(data.tagline)}
 theme: ${data.theme}
 layout: ${data.layout}
-portrait: ${yamlQuote(data.portrait)}
+portrait: ${yamlQuote(safePortraitSrc(data.portrait) || "")}
 contact_email: ${yamlQuote(data.contact_email)}
 crown_status: ${crown}
 crown_blurb: ${yamlQuote(data.crown_blurb)}
@@ -765,6 +814,44 @@ async function copyText(text: string): Promise<boolean> {
   }
 }
 
+/** Absolute URL for a published I Page — what people paste into any social. */
+function iPageShareUrl(slug: string): string {
+  const hash = `#/i/${encodeURIComponent(slug)}`;
+  return `${window.location.origin}${window.location.pathname}${hash}`;
+}
+
+function bindIPageShare(page: IPage): void {
+  const copyBtn = document.getElementById("i-page-copy-link");
+  const shareBtn = document.getElementById("i-page-share") as HTMLButtonElement | null;
+  const status = document.getElementById("i-page-share-status");
+  if (!copyBtn) return;
+
+  const url = iPageShareUrl(page.slug);
+  const title = `I am ${page.name}`;
+  const text = page.tagline ? `${title} — ${page.tagline}` : title;
+
+  const setShareStatus = (msg: string) => {
+    if (status) status.textContent = msg;
+  };
+
+  copyBtn.addEventListener("click", async () => {
+    const ok = await copyText(url);
+    setShareStatus(ok ? "URL copied — paste it anywhere." : "Couldn’t copy — select the address bar instead.");
+  });
+
+  if (shareBtn && typeof navigator.share === "function") {
+    shareBtn.hidden = false;
+    shareBtn.addEventListener("click", async () => {
+      try {
+        await navigator.share({ title, text, url });
+        setShareStatus("Share sheet opened — pick any app.");
+      } catch {
+        /* user cancelled */
+      }
+    });
+  }
+}
+
 function githubNewFileUrl(slug: string, markdown: string): string | null {
   const filename = `content/i/${slug}.md`;
   const url = `${INI_REPO}/new/main?filename=${encodeURIComponent(filename)}&value=${encodeURIComponent(markdown)}`;
@@ -843,11 +930,13 @@ function iNewHtml(): string {
             </label>
             <label class="i-new__field i-new__field--wide">
               <span class="i-new__label">Links</span>
-              <textarea class="i-new__input i-new__textarea" name="links" rows="3" placeholder="One URL per line"></textarea>
+              <textarea class="i-new__input i-new__textarea" name="links" rows="3" placeholder="https://… one URL per line"></textarea>
+              <span class="i-new__hint">Any https URL — site, social, or elsewhere. No platform list; a steward reviews before publish.</span>
             </label>
             <label class="i-new__field i-new__field--wide">
               <span class="i-new__label">Photo link</span>
               <input class="i-new__input" name="portrait" type="url" placeholder="https://… (optional)" />
+              <span class="i-new__hint">http(s) image URL only.</span>
             </label>
           </div>
 
@@ -1323,6 +1412,7 @@ function render(): void {
       : `${headerHtml("i")}<main class="i-view"><section class="section"><div class="section__inner"><h1 class="section__title">Not found</h1><p><a href="#/i">← I Pages</a></p></div></section></main>${footerHtml()}`;
     document.title = page ? `I am ${page.name} · iNi` : "I Page · iNi";
     window.scrollTo(0, 0);
+    if (page) bindIPageShare(page);
     return;
   }
   if (route.view === "i-index") {
