@@ -77,7 +77,7 @@ Soloist and this site are doors into that forum — not a separate membership ap
 
 ## Contact
 
-Questions about iNi practice: **rasip@chloreform.org**
+Questions about iNi practice: [GitHub Discussions](https://github.com/RASvibir/iNi/discussions)
 
 ## Web3
 

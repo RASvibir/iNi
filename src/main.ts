@@ -7,6 +7,7 @@ const UXU_COMMONS = "https://rasvibir.github.io/uXu/";
 const UXU_CREATE = "https://rasvibir.github.io/uXu/#CREATE";
 const INI_REPO = "https://github.com/RASvibir/iNi";
 const FORUM = "https://github.com/RASvibir/iNi/discussions";
+/* I-page intake only. Public chrome uses the forum — not a studio address. */
 const CONTACT = "rasip@chloreform.org";
 const BASE = import.meta.env.BASE_URL || "/";
 
@@ -191,14 +192,12 @@ function headerHtml(active: "home" | "i" = "home"): string {
             ? `
         <a href="#/i">I Pages</a>
         <a href="#/i/new">My profile</a>
-        <a href="#forum">Forum</a>
-        <a href="#contact">Contact</a>`
+        <a href="#forum">Forum</a>`
             : `
         <a href="#/">Home</a>
         <a href="#/i" ${active === "i" ? 'aria-current="page"' : ""}>I Pages</a>
         <a href="#/i/new">My profile</a>
-        <a href="${FORUM}" target="_blank" rel="noopener">Forum</a>
-        <a href="mailto:${CONTACT}">Contact</a>`
+        <a href="${FORUM}" target="_blank" rel="noopener">Forum</a>`
         }
       </nav>
     </div>
@@ -217,7 +216,6 @@ function footerHtml(): string {
         <a href="#/i">I Pages</a>
         · <a href="#/i/new">My profile</a>
         · <a href="${FORUM}" target="_blank" rel="noopener">Forum</a>
-        · <a href="mailto:${CONTACT}">Email</a>
       </p>
     </div>
   </footer>`;
@@ -348,7 +346,6 @@ function homeHtml(): string {
         </p>
         <div class="cta-row">
           <a class="btn btn--primary" href="${FORUM}" target="_blank" rel="noopener">Open forum</a>
-          <a class="btn btn--ghost" href="mailto:${CONTACT}">Email steward</a>
         </div>
       </div>
     </section>
@@ -394,7 +391,7 @@ function homeHtml(): string {
           </details>
           <details>
             <summary>Where is the forum?</summary>
-            <p><a href="${FORUM}" target="_blank" rel="noopener">Open the community forum</a> — free to join, not a membership app. Or <a href="mailto:${CONTACT}">email the steward</a>.</p>
+            <p><a href="${FORUM}" target="_blank" rel="noopener">Open the community forum</a> — free to join, not a membership app.</p>
           </details>
           <details>
             <summary>How do I get an I Page?</summary>
@@ -412,8 +409,7 @@ function homeHtml(): string {
       <div class="section__inner reveal contact-block">
         <p class="section__eyebrow">Reach</p>
         <h2 class="section__title" id="contact-title">Contact</h2>
-        <p>Questions: <a href="mailto:${CONTACT}">${CONTACT}</a></p>
-        <p>Forum: <a href="${FORUM}" target="_blank" rel="noopener">Community chat</a></p>
+        <p>Questions: <a href="${FORUM}" target="_blank" rel="noopener">Community forum</a></p>
         <p>Profile: <a href="#/i/new">Create or update my page</a></p>
       </div>
     </section>
@@ -455,14 +451,13 @@ function iIndexHtml(): string {
       <div class="section__inner">
         <aside class="i-land__forum" aria-labelledby="i-land-forum-title">
           <p class="i-land__forum-eyebrow">Need help?</p>
-          <h2 class="i-land__forum-title" id="i-land-forum-title">Talk or email</h2>
+          <h2 class="i-land__forum-title" id="i-land-forum-title">Talk in the forum</h2>
           <p>
-            Questions about your page or Crown? Ask in the forum or email the
-            steward — we’ll help without the Git maze.
+            Questions about your page or Crown? Ask in the forum —
+            we’ll help without the Git maze.
           </p>
           <p class="i-land__forum-actions">
             <a class="btn btn--primary" href="${FORUM}" target="_blank" rel="noopener">Open forum</a>
-            <a class="btn btn--ghost" href="mailto:${CONTACT}">Email steward</a>
           </p>
         </aside>
       </div>
@@ -484,7 +479,7 @@ function iIndexHtml(): string {
         </ul>
         <p class="i-land__foot">
           <a href="#/i/new">Create / update my page</a>
-          · <a href="mailto:${CONTACT}">Email</a>
+          · <a href="${FORUM}" target="_blank" rel="noopener">Forum</a>
           · <a href="#/">Home</a>
         </p>
       </div>
@@ -922,7 +917,7 @@ function iNewHtml(): string {
               didn’t open, copy the message or use Gmail in the browser.
             </p>
             <p class="i-new__send-meta">
-              To <a href="mailto:${CONTACT}">${CONTACT}</a>
+              To steward inbox
               · <span id="i-new-send-subject"></span>
             </p>
             <label class="i-new__field i-new__field--wide">
@@ -951,7 +946,7 @@ function iNewHtml(): string {
           <p class="i-new__note">
             We save your name and email on this device for next time.
             No mail app? Copy the message or open Gmail after you tap send.
-            Questions? <a href="mailto:${CONTACT}">${CONTACT}</a>
+            Questions? <a href="${FORUM}" target="_blank" rel="noopener">Forum</a>
           </p>
         </form>
       </div>

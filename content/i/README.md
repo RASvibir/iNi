@@ -20,7 +20,6 @@ https://rasvibir.github.io/iNi/#/i
 ## Forum & email
 
 - Forum: https://github.com/RASvibir/iNi/discussions  
-- Steward: rasip@chloreform.org  
 
 ## Builders (optional)
 

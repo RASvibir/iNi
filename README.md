@@ -2,13 +2,11 @@
 
 **Community paper trail for provenance practice beside the [uXu](https://github.com/RASvibir/uXu) archive commons.**
 
-iNi is a name, a protocol, and a community boundary — an “I and I” practice for
-**origin, authorship, lineage, and custody**. Not a company label. Not required
-to use uXu.
+iNi is **set up independently**. It is an open-source provenance practice — origin, authorship, lineage, and custody. It is not required to use uXu, and it is not a studio product.
 
 | Surface | URL | Role |
 |---------|-----|------|
-| **Public notes (primary)** | https://soloist.ai/uxu | Community face — practice, FAQ, contact |
+| **Public notes (primary)** | https://soloist.ai/uxu | Community face — practice, FAQ |
 | **uXu commons** | https://rasvibir.github.io/uXu/ | Archive door → 0?0 · type `INI` |
 | **uXu repo** | https://github.com/RASvibir/uXu | Software, templates, RTFM · MIT |
 | **This repo** | https://github.com/RASvibir/iNi | Charter, articles, **I pages** via PR |
@@ -21,9 +19,9 @@ See [COMMUNITY.md](COMMUNITY.md) for how the provenance community works.
 
 | Layer | Role |
 |-------|------|
-| **uXu** | Public archive commons — site, repo, installable app |
+| **uXu** | Public archive commons — site, repo, installable app (independent) |
 | **0?0** | Root archive interface (console) inside the commons |
-| **iNi** | Opt-in provenance ethic — community by practice |
+| **iNi** | Opt-in provenance ethic — community by practice (independent) |
 
 ## How the provenance community works
 
@@ -78,7 +76,7 @@ Parked. Basename/ENS + IPFS can reuse this site later; not required to start the
 
 ## Contact
 
-**rasip@chloreform.org**
+[GitHub Discussions](https://github.com/RASvibir/iNi/discussions)
 
 ## License
 

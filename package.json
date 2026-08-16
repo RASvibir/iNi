@@ -2,7 +2,8 @@
   "name": "ini-community",
   "private": true,
   "version": "0.1.0",
-  "description": "iNi community site and provenance paper trail beside the uXu archive commons",
+  "description": "iNi community site and provenance paper trail. Set up independently of other products.",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "predev": "node scripts/build-i.mjs",

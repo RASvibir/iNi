@@ -24,7 +24,7 @@ I build shared archive tools so collections stay independent and findable. iNi i
 - [iNi forum](https://github.com/RASvibir/iNi/discussions)
 - [uXu repo](https://github.com/RASvibir/uXu)
 - [iNi community repo](https://github.com/RASvibir/iNi)
-- Contact: [rasip@chloreform.org](mailto:rasip@chloreform.org)
+- Contact: [iNi forum](https://github.com/RASvibir/iNi/discussions)
 
 ## Archives
 

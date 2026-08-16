@@ -7,7 +7,7 @@ Source: community repo charter · mirrored for uXu RTFM
 
 **iNi** is the inner-circle provenance layer beside uXu.
 
-It is a name, a protocol, and a community boundary — not a company label.
+It is a name, a protocol, and a community boundary — set up independently of other studios and products.
 The spelling comes from an “I and I” framing: a shared identity space where
 trusted collaborators and archives agree to treat **origin, authorship,
 lineage, and custody** as first-class responsibilities.
@@ -128,13 +128,13 @@ In your archive `data.json`:
 
 - Not membership theater or a signup badge  
 - Not required to publish on uXu  
-- Not a company or org brand label  
+- Not affiliated with other studios or products — iNi is set up independently  
 - Not a legal chain-of-custody certificate  
 - Not a claim that uXu owns your archive  
 
 ## Contact
 
-Questions about iNi practice: **rasip@chloreform.org**
+Questions about iNi practice: [GitHub Discussions](https://github.com/RASvibir/iNi/discussions)
 
 Primary public notes: **https://soloist.ai/uxu**
 
