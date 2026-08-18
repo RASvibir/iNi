@@ -217,7 +217,7 @@ a:hover {
   position: relative;
   min-height: min(100vh, 52rem);
   display: grid;
-  align-items: end;
+  align-items: center;
   overflow: hidden;
   isolation: isolate;
 }
@@ -1340,7 +1340,7 @@ a:hover {
 .i-page__hero-inner--portrait {
   display: grid;
   gap: 1.5rem 2rem;
-  align-items: end;
+  align-items: center;
 }
 
 @media (min-width: 640px) {
